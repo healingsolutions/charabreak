@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.1.37';
-import { StageOverlay } from './stage-overlay.js?v=0.1.37';
-import { InteractionEngine } from './interaction-engine.js?v=0.1.37';
-import { TextBreaker } from './text-breaker.js?v=0.1.37';
-import { ImageBreaker } from './image-breaker.js?v=0.1.37';
+import { scanGameTargets } from './dom-scanner.js?v=0.1.38';
+import { StageOverlay } from './stage-overlay.js?v=0.1.38';
+import { InteractionEngine } from './interaction-engine.js?v=0.1.38';
+import { TextBreaker } from './text-breaker.js?v=0.1.38';
+import { ImageBreaker } from './image-breaker.js?v=0.1.38';
 
 export class GamingWebCore {
     constructor(config = {}) {
@@ -62,6 +62,13 @@ export class GamingWebCore {
             },
             onRunnerSound: (name, options) => {
                 this.audio?.play(name, options);
+            },
+            onTreasureCollect: (detail) => {
+                this.logger?.log('word_collect', {
+                    stage_name: this.config.stageName,
+                    inventory_count: this.engine?.inventory.length || 0,
+                    ...detail,
+                });
             },
             onRetry: () => {
                 this.restart();

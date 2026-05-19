@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.37';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.38';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -26,14 +26,16 @@ const UI_TEXT = {
     criticalLost: '\u91cd\u8981\u306a\u6587\u5b57\u304c\u58ca\u3055\u308c\u305f\uff01',
     stageFailed: '\u30a2\u30a6\u30c8\uff01\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u6d88\u3048\u305f\uff01',
     lifeLabel: 'LIFE',
-    collectedLabel: '\u96c6\u3081\u305f',
-    collectMission: '\u6587\u5b57BOX\u306b3\u6587\u5b57\u5165\u308c\u3066GOAL\u3078',
-    goalNeedsLetters: '\u6587\u5b57\u3092\u3042\u3068{count}\u500b\u96c6\u3081\u3088\u3046\uff01',
+    collectedLabel: '\u5b88\u3063\u305f\u6587\u5b57',
+    collectMission: 'X\u9577\u62bc\u3057\u30673\u6587\u5b57\u5b88\u3063\u3066GOAL\u3078',
+    goalNeedsLetters: '\u3042\u3068{count}\u6587\u5b57\u3001\u5b88\u308d\u3046\uff01',
     goalReadyWithLetters: '\u6587\u5b57\u304c\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
-    letterBoxTitle: '\u6587\u5b57BOX',
-    letterBoxHint: 'X\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u6301\u3063\u3066\u3001BOX\u3078',
-    letterBoxCarry: '\u6587\u5b57BOX\u307e\u3067\u904b\u307c\u3046\uff01',
-    letterBoxStored: '\u6587\u5b57BOX\u306b\u5165\u3063\u305f\uff01',
+    treasureTitle: '\u5b9d\u7269\u6587\u5b57',
+    treasureEmpty: '\u307e\u3060\u306a\u3057',
+    treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u5b88\u308b',
+    treasureStored: '\u5b9d\u7269\u6587\u5b57\u300c{char}\u300d\u3092\u5b88\u3063\u305f\uff01',
+    treasureNoLetter: '\u8db3\u5143\u306b\u5b88\u308b\u6587\u5b57\u304c\u306a\u3044\uff01',
+    treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
     gameOverTitle: 'GAME OVER',
     retry: '\u3082\u3046\u4e00\u56de',
@@ -42,6 +44,7 @@ const UI_TEXT = {
     gameOverHint: '\u4f55\u5ea6\u3067\u3082\u6311\u6226\u3067\u304d\u308b\u3002\u6587\u5b57\u3092\u5b88\u3063\u3066\u3001\u3082\u3046\u4e00\u5ea6\uff01',
     goalBlocked: '\u5b88\u308b\u6587\u5b57\u3092\u5931\u3063\u305f\u306e\u3067\u30af\u30ea\u30a2\u3067\u304d\u306a\u3044\uff01',
     missileParry: '\u30df\u30b5\u30a4\u30eb\u3092\u5f3e\u304d\u8fd4\u3057\u305f\uff01',
+    bossMissileWarn: '\u4e2d\u30dc\u30b9\u304c\u30df\u30b5\u30a4\u30eb\u3092\u69cb\u3048\u305f\uff01',
     shieldHint: 'Shift\u3067\u76fe\uff01\u30df\u30b5\u30a4\u30eb\u3092\u53d7\u3051\u6b62\u3081\u308b\uff01',
     returnRoute: '\u4e0a\u3078\u623b\u308b',
     returnRouteHint: '\u4e0a\u306e\u6bb5\u3078\u623b\u3063\u305f\uff01',
@@ -56,7 +59,7 @@ const UI_TEXT = {
     actionHop: '\u3059\u3053\u3057\u9003\u3052\u305f\uff01',
     brighten: '\u5c11\u3057\u30da\u30fc\u30b8\u304c\u660e\u308b\u304f\u306a\u3063\u305f\uff01',
     runnerBreak: '\u30c9\u30c3\u30c8\u306e\u5b50\u304c\u6587\u5b57\u3092\u304f\u3060\u3044\u305f\uff01',
-    playerHint: 'Space/Z\u3067\u653b\u6483\u3001X\u3067\u6295\u3052\u308b\u3001Shift/E\u3067\u76fe\uff01',
+    playerHint: 'Space/Z\u3067\u653b\u6483\u3001X\u77ed\u62bc\u3057\u3067\u6295\u3052\u308b\u3001X\u9577\u62bc\u3057\u3067\u5b88\u308b\u3001Shift/E\u3067\u76fe\uff01',
     miss: '\u7a7a\u3092\u305f\u305f\u3044\u305f\uff01',
     chargeReady: '\u529b\u304c\u305f\u307e\u3063\u305f\uff01',
     chargeFull: '\u5927\u632f\u308a\u306e\u4e00\u6483\uff01',
@@ -108,14 +111,17 @@ const ENEMY_MISSILE_LIFETIME = 3600;
 const RETURN_ROUTE_REVEAL_PROGRESS = 0.58;
 const PLAYER_MAX_LIFE = 3;
 const GOAL_REQUIRED_LETTERS = 3;
-const LETTER_BOX_REVEAL_PROGRESS = 0.38;
+const THROW_HOLD_MS = 520;
+const BOSS_MISSILE_WARNING_MS = 560;
+const BOSS_MISSILE_MIN_INTERVAL = 9000;
+const BOSS_MISSILE_MAX_INTERVAL = 14000;
 const RUNNER_CONTROL_DEFS = [
     { control: 'left', label: '\u2190', keys: 'A / \u2190' },
     { control: 'jump', label: '\u2191', keys: 'W / \u2191' },
     { control: 'right', label: '\u2192', keys: 'D / \u2192' },
     { control: 'shield', label: '\u76fe', keys: 'Shift / E' },
     { control: 'lock', label: '\u30ed\u30c3\u30af', keys: 'T / Tab' },
-    { control: 'throw', label: '\u6295\u3052', keys: 'X' },
+    { control: 'throw', label: '\u6295\u3052/\u5b88\u308b', keys: 'X / \u9577\u62bc\u3057' },
     { control: 'attack', label: '\u653b\u6483', keys: 'Space / Z' },
 ];
 
@@ -130,6 +136,7 @@ export class StageOverlay {
         this.onInventoryOpen = options.onInventoryOpen || (() => {});
         this.onBgmToggle = options.onBgmToggle || (() => {});
         this.onStageClear = options.onStageClear || (() => {});
+        this.onTreasureCollect = options.onTreasureCollect || (() => {});
         this.onNavigate = options.onNavigate || ((href) => {
             window.location.href = href;
         });
@@ -146,6 +153,7 @@ export class StageOverlay {
         this.inventoryPanel = null;
         this.missionHud = null;
         this.missionGoal = null;
+        this.missionTreasure = null;
         this.missionProgress = null;
         this.missionStats = null;
         this.goalGate = null;
@@ -167,6 +175,7 @@ export class StageOverlay {
         this.runnerScrollFollowUntil = 0;
         this.lastAttackTapAt = 0;
         this.attackCharge = null;
+        this.throwHold = null;
         this.stageStats = createStageStats();
         this.lastMissionUpdateAt = 0;
         this.stageCleared = false;
@@ -195,9 +204,8 @@ export class StageOverlay {
         this.lockedEnemyId = null;
         this.heldLetter = null;
         this.heldLetterSequence = 0;
-        this.letterBox = null;
-        this.letterBoxSlots = null;
-        this.boxedLetters = [];
+        this.missionTreasure = null;
+        this.treasureLetters = [];
         this.returnRoute = null;
         this.returnRouteCooldownUntil = 0;
         this.playBounds = null;
@@ -369,10 +377,12 @@ export class StageOverlay {
         this.missionHud.innerHTML = `
             <div class="gw-mission-hud__title">${UI_TEXT.missionTitle}</div>
             <div class="gw-mission-hud__goal"></div>
+            <div class="gw-mission-hud__treasure"></div>
             <div class="gw-mission-hud__bar"><span></span></div>
             <dl class="gw-mission-hud__stats"></dl>
         `;
         this.missionGoal = this.missionHud.querySelector('.gw-mission-hud__goal');
+        this.missionTreasure = this.missionHud.querySelector('.gw-mission-hud__treasure');
         this.missionProgress = this.missionHud.querySelector('.gw-mission-hud__bar span');
         this.missionStats = this.missionHud.querySelector('.gw-mission-hud__stats');
         this.root?.appendChild(this.missionHud);
@@ -414,11 +424,18 @@ export class StageOverlay {
             this.missionProgress.style.width = `${progress}%`;
         }
 
+        if (this.missionTreasure) {
+            const letters = this.treasureLettersLabel();
+            this.missionTreasure.innerHTML = `
+                <strong>${UI_TEXT.treasureTitle}</strong>
+                <span>${escapeHtml(letters)}</span>
+            `;
+        }
+
         if (this.missionStats) {
             this.missionStats.innerHTML = `
                 <div><dt>${UI_TEXT.lifeLabel}</dt><dd class="gw-life-hearts" aria-label="${this.playerLife} / ${PLAYER_MAX_LIFE}">${renderLifeHearts(this.playerLife)}</dd></div>
                 <div><dt>${UI_TEXT.progressLabel}</dt><dd>${progress}%</dd></div>
-                <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}</dd></div>
                 <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${protectedCount}</dd></div>
                 <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${this.stageStats.playerBroken}</dd></div>
                 <div><dt>${UI_TEXT.lostLabel}</dt><dd>${this.stageStats.enemyBroken}</dd></div>
@@ -432,7 +449,19 @@ export class StageOverlay {
     }
 
     collectedLetterCount() {
-        return Math.max(0, this.boxedLetters.length);
+        return Math.max(0, this.treasureLetters.length);
+    }
+
+    treasureWord() {
+        return this.treasureLetters.join('');
+    }
+
+    treasureLettersLabel() {
+        if (this.treasureLetters.length === 0) {
+            return `${UI_TEXT.treasureEmpty} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
+        }
+
+        return `${this.treasureLetters.join('\u30fb')} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
     }
 
     bumpStageStat(key, amount = 1) {
@@ -455,7 +484,7 @@ export class StageOverlay {
         this.runnerOnEnemyHit = onEnemyHit || (() => {});
         this.playBounds = this.calculatePlayBounds();
         this.stageStats = createStageStats(this.textBreaker?.countTotalChars?.() || 0);
-        this.boxedLetters = [];
+        this.treasureLetters = [];
         this.endRollItems = this.buildEndRollItems(targets);
         this.endRollSummary = this.buildPageSummary(targets);
         const critical = this.textBreaker?.markImportantChars?.([this.buildCriticalWord(targets)]);
@@ -478,7 +507,6 @@ export class StageOverlay {
         this.mountProjectileLayer();
         this.mountGoalGate();
         this.mountReturnRoute();
-        this.mountLetterBox();
         this.runner = document.createElement('div');
         this.runner.className = 'gw-pixel-runner';
         this.runner.innerHTML = `
@@ -658,6 +686,7 @@ export class StageOverlay {
         this.runnerGamepadKeys.clear();
         this.runnerGamepadButtons.clear();
         this.clearAttackCharge();
+        this.clearThrowHold();
         window.removeEventListener('resize', this.handleViewportResize);
         window.removeEventListener('scroll', this.handleWindowScroll);
         this.brickLayer?.remove();
@@ -681,10 +710,7 @@ export class StageOverlay {
         this.gameOverPanel = null;
         this.returnRoute?.remove();
         this.returnRoute = null;
-        this.letterBox?.remove();
-        this.letterBox = null;
-        this.letterBoxSlots = null;
-        this.boxedLetters = [];
+        this.treasureLetters = [];
         this.endRoll?.remove();
         this.endRoll = null;
         for (const missile of this.enemyMissiles) {
@@ -720,7 +746,6 @@ export class StageOverlay {
         this.updateLinkGates();
         this.updateGoalGate(true);
         this.updateReturnRoute(true);
-        this.updateLetterBox(true);
 
         if (this.runnerState) {
             const bounds = this.currentPlayBounds();
@@ -738,7 +763,6 @@ export class StageOverlay {
         this.updateLinkGates();
         this.updateGoalGate(true);
         this.updateReturnRoute(true);
-        this.updateLetterBox(true);
 
         if (currentTime() < this.runnerScrollFollowUntil) {
             this.runnerState.x = clamp(this.runnerState.x, this.currentPlayBounds().left, this.currentPlayBounds().right - RUNNER_WIDTH);
@@ -776,10 +800,8 @@ export class StageOverlay {
         this.updateMissionHud();
         this.updateGoalGate();
         this.updateReturnRoute();
-        this.updateLetterBox();
         this.checkGateEntry();
         this.checkGoalEntry();
-        this.checkLetterBoxDeposit();
         this.checkReturnRouteEntry();
         this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
     }
@@ -979,93 +1001,6 @@ export class StageOverlay {
         this.updateReturnRoute(true);
     }
 
-    mountLetterBox() {
-        this.letterBox?.remove();
-        this.letterBox = document.createElement('div');
-        this.letterBox.className = 'gw-letter-box';
-        this.letterBox.setAttribute('aria-hidden', 'true');
-        this.letterBox.hidden = true;
-        this.letterBox.innerHTML = `
-            <strong>${UI_TEXT.letterBoxTitle}</strong>
-            <div class="gw-letter-box__slots"></div>
-            <small>${UI_TEXT.letterBoxHint}</small>
-        `;
-        this.letterBoxSlots = this.letterBox.querySelector('.gw-letter-box__slots');
-        this.effectLayer?.appendChild(this.letterBox);
-        this.renderLetterBox();
-        this.updateLetterBox(true);
-    }
-
-    updateLetterBox(force = false) {
-        if (!this.letterBox) {
-            return;
-        }
-
-        const visible = !this.stageCleared
-            && !this.stageFailed
-            && pageScrollProgress() >= LETTER_BOX_REVEAL_PROGRESS;
-        this.letterBox.hidden = !visible;
-        this.letterBox.classList.toggle('gw-letter-box--ready', this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS);
-
-        if (force) {
-            this.renderLetterBox();
-        }
-    }
-
-    renderLetterBox() {
-        if (!this.letterBoxSlots) {
-            return;
-        }
-
-        this.letterBoxSlots.replaceChildren();
-        for (let index = 0; index < GOAL_REQUIRED_LETTERS; index += 1) {
-            const slot = document.createElement('span');
-            slot.className = 'gw-letter-box__slot';
-            slot.textContent = this.boxedLetters[index] || '';
-            slot.classList.toggle('gw-letter-box__slot--filled', Boolean(this.boxedLetters[index]));
-            this.letterBoxSlots.appendChild(slot);
-        }
-    }
-
-    checkLetterBoxDeposit() {
-        if (!this.heldLetter || !this.letterBox || this.letterBox.hidden || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
-            return;
-        }
-
-        const boxRect = this.letterBox.getBoundingClientRect();
-        const runnerRect = this.runnerPhysicsRect();
-        const overlap = rectOverlapArea(boxRect, runnerRect);
-        if (overlap < Math.min(360, boxRect.width * boxRect.height * 0.14)) {
-            return;
-        }
-
-        this.storeHeldLetterInBox();
-    }
-
-    storeHeldLetterInBox() {
-        if (!this.heldLetter || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
-            return false;
-        }
-
-        const char = this.heldLetter.char || '';
-        const rect = this.letterBox?.getBoundingClientRect?.();
-        this.boxedLetters.push(char);
-        this.stageStats.lettersCollected = this.boxedLetters.length;
-        this.dropHeldLetter(true);
-        this.renderLetterBox();
-        this.updateLetterBox(true);
-        this.updateGoalGate(true);
-        this.updateMissionHud(true);
-
-        if (rect) {
-            this.impactBurstAt(rect, this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'soft');
-        }
-
-        this.onRunnerSound('collect', { volume: 0.12, rate: 1.08 });
-        this.showMessage(this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? UI_TEXT.goalReadyWithLetters : UI_TEXT.letterBoxStored, 1300);
-        return true;
-    }
-
     updateReturnRoute(force = false) {
         if (!this.returnRoute) {
             return;
@@ -1176,7 +1111,7 @@ export class StageOverlay {
             countedDefeat: false,
             hitUntil: 0,
             nextAttackAt: currentTime() + (boss ? 1100 : 1700),
-            nextMissileAt: currentTime() + randomBetween(boss ? 1350 : 2200, boss ? 2600 : 4200),
+            nextMissileAt: boss ? currentTime() + randomBetween(BOSS_MISSILE_MIN_INTERVAL, BOSS_MISSILE_MAX_INTERVAL) : Infinity,
             nextTargetPickAt: 0,
             targetRect: null,
             roamUntil: 0,
@@ -1220,9 +1155,9 @@ export class StageOverlay {
                 enemy.roamUntil = time + randomBetween(900, 1500);
             }
 
-            if (!this.stageCleared && !this.stageFailed && time > enemy.nextMissileAt) {
-                this.fireEnemyMissile(enemy);
-                enemy.nextMissileAt = time + randomBetween(enemy.type === 'boss' ? 1700 : 2800, enemy.type === 'boss' ? 3200 : 5200);
+            if (enemy.type === 'boss' && !this.stageCleared && !this.stageFailed && time > enemy.nextMissileAt) {
+                this.warnAndFireBossMissile(enemy);
+                enemy.nextMissileAt = time + randomBetween(BOSS_MISSILE_MIN_INTERVAL, BOSS_MISSILE_MAX_INTERVAL);
             }
 
             this.renderEnemy(enemy);
@@ -1363,40 +1298,64 @@ export class StageOverlay {
         return true;
     }
 
-    pickLetterForBox() {
-        if (this.heldLetter) {
-            if (this.storeHeldLetterInBox()) {
-                return true;
-            }
+    collectTreasureLetter() {
+        if (!this.runnerState) {
+            return false;
+        }
 
-            this.showMessage(UI_TEXT.letterBoxCarry, 1100);
+        if (this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
+            this.showMessage(UI_TEXT.goalReadyWithLetters, 1100);
             this.impactBurstAt(this.runnerHandRect(), 'soft');
             return true;
         }
 
-        const pickupRect = this.runnerPickupRect();
-        const picked = this.textBreaker?.pickCharAtRect(pickupRect, {
-            centerX: this.runnerState.x + RUNNER_WIDTH / 2,
-            centerY: this.runnerState.y + RUNNER_HEIGHT,
-        });
+        let picked = null;
+        let impactRect = this.runnerHandRect();
+
+        if (this.heldLetter) {
+            picked = {
+                char: this.heldLetter.char,
+                rect: impactRect,
+                style: this.heldLetter.style || {},
+            };
+            this.dropHeldLetter(true);
+        } else {
+            const pickupRect = this.runnerPickupRect();
+            picked = this.textBreaker?.pickCharAtRect(pickupRect, {
+                centerX: this.runnerState.x + RUNNER_WIDTH / 2,
+                centerY: this.runnerState.y + RUNNER_HEIGHT,
+            });
+            impactRect = picked?.rect || pickupRect;
+        }
 
         if (!picked?.char) {
-            this.showMessage(UI_TEXT.noFootWord, 1100);
-            this.impactBurstAt(pickupRect, 'soft');
+            this.showMessage(UI_TEXT.treasureNoLetter, 1100);
+            this.impactBurstAt(impactRect, 'soft');
             this.shakeScreen('soft');
+            this.onRunnerSound('uiCancel', { volume: 0.08, rate: 1.05 });
             return true;
         }
 
-        if (this.criticalDestroyed(picked)) {
-            this.bumpStageStat('playerBroken', 1);
-            this.impactBurstAt(picked.rect, 'char');
-            this.shakeScreen('hard');
-            this.failStage('critical_player_pickup');
-            return true;
-        }
-
-        this.holdLetter(picked);
-        this.showMessage(UI_TEXT.letterBoxCarry, 1100);
+        const char = picked.char;
+        this.treasureLetters.push(char);
+        this.stageStats.lettersCollected = this.treasureLetters.length;
+        this.updateGoalGate(true);
+        this.updateMissionHud(true);
+        this.impactBurstAt(impactRect, this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'char');
+        this.shakeScreen(this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'soft');
+        this.onRunnerSound('collect', { volume: 0.13, rate: 1.08 });
+        this.onTreasureCollect({
+            word: char,
+            treasure_letters: this.treasureWord(),
+            letters_collected: this.collectedLetterCount(),
+            letters_required: GOAL_REQUIRED_LETTERS,
+        });
+        this.showMessage(
+            this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS
+                ? UI_TEXT.goalReadyWithLetters
+                : UI_TEXT.treasureStored.replace('{char}', char),
+            1300
+        );
         return true;
     }
 
@@ -1600,8 +1559,27 @@ export class StageOverlay {
         this.projectiles = remaining;
     }
 
+    warnAndFireBossMissile(enemy) {
+        if (!enemy || enemy.type !== 'boss' || enemy.defeated || this.enemyMissiles.length > 0) {
+            return;
+        }
+
+        enemy.element?.classList.add('gw-enemy--missile-ready');
+        this.showMessage(UI_TEXT.bossMissileWarn, 1200);
+        this.onRunnerSound('chargeReady', { volume: 0.07, rate: 0.88 });
+
+        const timer = window.setTimeout(() => {
+            this.timers.delete(timer);
+            enemy.element?.classList.remove('gw-enemy--missile-ready');
+            if (!this.stageCleared && !this.stageFailed && !enemy.defeated && this.enemyMissiles.length === 0) {
+                this.fireEnemyMissile(enemy);
+            }
+        }, this.reducedMotion ? Math.min(BOSS_MISSILE_WARNING_MS, 160) : BOSS_MISSILE_WARNING_MS);
+        this.timers.add(timer);
+    }
+
     fireEnemyMissile(enemy) {
-        if (!this.projectileLayer || !enemy?.element?.isConnected) {
+        if (!this.projectileLayer || !enemy?.element?.isConnected || enemy.type !== 'boss' || this.enemyMissiles.length > 0) {
             return;
         }
 
@@ -1610,7 +1588,7 @@ export class StageOverlay {
         const useCritical = criticalRect
             && criticalRect.bottom > 0
             && criticalRect.top < window.innerHeight
-            && Math.random() < (enemy.type === 'boss' ? 0.72 : 0.5);
+            && Math.random() < 0.45;
         const targetX = useCritical && criticalRect
             ? criticalRect.left + criticalRect.width / 2
             : (this.runnerState?.x || window.innerWidth / 2) + RUNNER_WIDTH / 2;
@@ -1643,7 +1621,7 @@ export class StageOverlay {
             targetCritical: Boolean(useCritical),
         });
 
-        this.onRunnerSound('throwWord', { volume: enemy.type === 'boss' ? 0.12 : 0.08, rate: enemy.type === 'boss' ? 0.86 : 1.16 });
+        this.onRunnerSound('throwWord', { volume: 0.1, rate: 0.86 });
     }
 
     updateEnemyMissiles(delta, time) {
@@ -2151,7 +2129,7 @@ export class StageOverlay {
         this.goalGate.style.width = `${width}px`;
 
         if ((wasHidden || force) && wasHidden) {
-            this.showMessage(hasLetters ? UI_TEXT.goalReady : UI_TEXT.letterBoxHint, 2200);
+            this.showMessage(hasLetters ? UI_TEXT.goalReady : UI_TEXT.treasureHint, 2200);
             this.onRunnerSound('cheer', { volume: 0.12, rate: 1.04 });
         }
 
@@ -2413,6 +2391,8 @@ export class StageOverlay {
             images_damaged: this.stageStats.imagesDamaged,
             letters_collected: this.collectedLetterCount(),
             letters_required: GOAL_REQUIRED_LETTERS,
+            treasure_letters: this.treasureLetters.slice(),
+            treasure_word: this.treasureWord(),
             critical_word: this.criticalWord || '',
             critical_lost: Boolean(this.criticalWordLost),
             player_life: this.playerLife,
@@ -2441,17 +2421,22 @@ export class StageOverlay {
             .filter(Boolean)
             .map((line) => `<p>${escapeHtml(line)}</p>`)
             .join('');
+        const treasureWord = stats.treasure_word || '';
+        const treasureResult = treasureWord
+            ? UI_TEXT.treasureResult.replace('{word}', escapeHtml(treasureWord))
+            : '';
 
         this.endRoll.innerHTML = `
             <div class="gw-end-roll__panel">
                 <h2>${UI_TEXT.stageClear}</h2>
                 <dl class="gw-end-roll__stats">
                     <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${stats.protected_count}</dd></div>
-                    <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${stats.letters_collected}/${stats.letters_required}</dd></div>
+                    <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${escapeHtml(treasureWord || `${stats.letters_collected}/${stats.letters_required}`)}</dd></div>
                     <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${stats.player_broken_count}</dd></div>
                     <div><dt>${UI_TEXT.lostLabel}</dt><dd>${stats.enemy_broken_count}</dd></div>
                     <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${stats.enemy_defeated_count}</dd></div>
                 </dl>
+                ${treasureResult ? `<p class="gw-end-roll__treasure">${treasureResult}</p>` : ''}
                 <section class="gw-end-roll__summary">
                     <h3>${UI_TEXT.summaryTitle}</h3>
                     ${summaryItems}
@@ -2691,6 +2676,9 @@ export class StageOverlay {
         const pad = pads.find((gamepad) => gamepad.connected !== false);
 
         if (!pad) {
+            if (this.throwHold?.source === 'gamepad') {
+                this.clearThrowHold();
+            }
             this.runnerGamepadKeys.clear();
             this.runnerGamepadButtons.clear();
             return;
@@ -2702,7 +2690,7 @@ export class StageOverlay {
         this.setGamepadHeld('jump', Boolean(pad.buttons?.[0]?.pressed || pad.buttons?.[12]?.pressed));
         this.setGamepadHeld('shield', Boolean(pad.buttons?.[6]?.pressed || pad.buttons?.[7]?.pressed));
         this.handleGamepadChargeButton('attack', Boolean(pad.buttons?.[1]?.pressed));
-        this.handleGamepadButton('throw', Boolean(pad.buttons?.[2]?.pressed || pad.buttons?.[5]?.pressed), () => this.runnerThrow());
+        this.handleGamepadThrowButton(Boolean(pad.buttons?.[2]?.pressed || pad.buttons?.[5]?.pressed));
         this.handleGamepadButton('lock', Boolean(pad.buttons?.[3]?.pressed || pad.buttons?.[4]?.pressed), () => this.cycleLockOn());
     }
 
@@ -2729,6 +2717,26 @@ export class StageOverlay {
         this.runnerGamepadButtons.add(control);
         this.releaseScrollPin();
         callback();
+    }
+
+    handleGamepadThrowButton(pressed) {
+        if (pressed) {
+            if (this.runnerGamepadButtons.has('throw')) {
+                return;
+            }
+
+            this.runnerGamepadButtons.add('throw');
+            this.releaseScrollPin();
+            this.startThrowHold('gamepad');
+            return;
+        }
+
+        if (!this.runnerGamepadButtons.has('throw')) {
+            return;
+        }
+
+        this.runnerGamepadButtons.delete('throw');
+        this.finishThrowHold();
     }
 
     handleGamepadChargeButton(control, pressed) {
@@ -2920,6 +2928,71 @@ export class StageOverlay {
         button.classList.toggle('gw-player-control--charge-ready', Boolean(ready));
     }
 
+    startThrowHold(source = 'manual') {
+        if (!this.runnerState || this.throwHold) {
+            return false;
+        }
+
+        const timer = window.setTimeout(() => {
+            if (!this.throwHold) {
+                return;
+            }
+
+            this.throwHold.triggered = true;
+            this.setThrowControlCharging(true, true);
+            this.collectTreasureLetter();
+            this.timers.delete(timer);
+        }, THROW_HOLD_MS);
+
+        this.throwHold = {
+            source,
+            timer,
+            triggered: false,
+        };
+        this.timers.add(timer);
+        this.setThrowControlCharging(true, false);
+        return true;
+    }
+
+    finishThrowHold() {
+        if (!this.throwHold) {
+            return false;
+        }
+
+        const hold = this.throwHold;
+        window.clearTimeout(hold.timer);
+        this.timers.delete(hold.timer);
+        this.throwHold = null;
+        this.setThrowControlCharging(false, false);
+
+        if (hold.triggered) {
+            return true;
+        }
+
+        this.runnerThrow();
+        return true;
+    }
+
+    clearThrowHold() {
+        if (this.throwHold) {
+            window.clearTimeout(this.throwHold.timer);
+            this.timers.delete(this.throwHold.timer);
+        }
+
+        this.throwHold = null;
+        this.setThrowControlCharging(false, false);
+    }
+
+    setThrowControlCharging(charging, ready = false) {
+        const button = this.runnerControls?.querySelector('[data-gw-control="throw"]');
+        if (!button) {
+            return;
+        }
+
+        button.classList.toggle('gw-player-control--charging', Boolean(charging));
+        button.classList.toggle('gw-player-control--charge-ready', Boolean(ready));
+    }
+
     runnerAttack() {
         if (!this.runnerState) {
             return;
@@ -3081,14 +3154,6 @@ export class StageOverlay {
 
         this.runnerState.attackLockedUntil = now + 250;
         this.playRunnerStrike();
-
-        if (this.letterBox && !this.letterBox.hidden && this.collectedLetterCount() < GOAL_REQUIRED_LETTERS && this.pickLetterForBox()) {
-            return;
-        }
-
-        if (this.heldLetter && this.storeHeldLetterInBox()) {
-            return;
-        }
 
         if (this.activeEnemies().length > 0 && this.pickAndThrowAtLock({ autoLock: true })) {
             return;
@@ -3265,7 +3330,7 @@ export class StageOverlay {
             }
 
             if (control === 'throw') {
-                this.runnerThrow();
+                this.startThrowHold('touch');
                 return;
             }
 
@@ -3292,6 +3357,11 @@ export class StageOverlay {
 
             if (control === 'attack') {
                 this.finishAttackCharge();
+                return;
+            }
+
+            if (control === 'throw') {
+                this.finishThrowHold();
                 return;
             }
 
@@ -3333,7 +3403,9 @@ export class StageOverlay {
         }
 
         if (control === 'throw') {
-            this.runnerThrow();
+            if (!event.repeat) {
+                this.startThrowHold('keyboard');
+            }
             return;
         }
 
@@ -3367,7 +3439,13 @@ export class StageOverlay {
             return;
         }
 
-        if (control === 'throw' || control === 'lock') {
+        if (control === 'throw') {
+            event.stopPropagation();
+            this.finishThrowHold();
+            return;
+        }
+
+        if (control === 'lock') {
             return;
         }
 

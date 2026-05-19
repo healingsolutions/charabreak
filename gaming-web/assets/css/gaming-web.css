@@ -309,6 +309,39 @@
     margin-bottom: 7px;
 }
 
+.gw-mission-hud__treasure {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 7px;
+    padding: 6px 7px;
+    border: 2px solid rgba(240, 207, 93, 0.5);
+    border-radius: 6px;
+    background: rgba(255, 249, 230, 0.72);
+}
+
+.gw-mission-hud__treasure strong,
+.gw-mission-hud__treasure span {
+    min-width: 0;
+}
+
+.gw-mission-hud__treasure strong {
+    color: #8a4f44;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.gw-mission-hud__treasure span {
+    color: #16212b;
+    font-size: 14px;
+    font-weight: 900;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .gw-mission-hud__bar {
     height: 7px;
     margin-bottom: 8px;
@@ -555,6 +588,19 @@
 
 .gw-end-roll__summary p:last-child {
     margin-bottom: 0;
+}
+
+.gw-end-roll__treasure {
+    margin: 0 18px 12px;
+    padding: 10px 12px;
+    border: 2px solid rgba(240, 207, 93, 0.5);
+    border-radius: 8px;
+    background: rgba(255, 249, 230, 0.74);
+    color: #16212b;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.45;
+    text-align: center;
 }
 
 .gw-end-roll__viewport {
@@ -837,6 +883,15 @@
     filter: drop-shadow(0 12px 0 rgba(31, 41, 55, 0.2));
 }
 
+.gw-enemy--missile-ready {
+    animation:
+        gw-enemy-float 560ms steps(2, end) infinite,
+        gw-enemy-missile-ready 180ms steps(2, end) infinite;
+    filter:
+        drop-shadow(0 12px 0 rgba(31, 41, 55, 0.2))
+        drop-shadow(0 0 14px rgba(240, 207, 93, 0.76));
+}
+
 .gw-enemy__shadow,
 .gw-enemy__body,
 .gw-enemy__eye,
@@ -1067,7 +1122,7 @@
     bottom: 18px;
     z-index: 4;
     display: grid;
-    grid-template-columns: 48px 48px 48px 54px 64px 64px 74px;
+    grid-template-columns: 48px 48px 48px 54px 64px 74px 74px;
     gap: 8px;
     pointer-events: auto;
     touch-action: none;
@@ -1128,10 +1183,10 @@
 }
 
 .gw-player-control--throw {
-    min-width: 64px;
+    min-width: 74px;
     background: #2f9a8a;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .gw-player-control--shield {
@@ -1842,73 +1897,6 @@
     animation: gw-return-route-active 420ms steps(4, end) forwards;
 }
 
-.gw-letter-box {
-    position: fixed;
-    top: 84px;
-    right: 18px;
-    z-index: 4;
-    width: min(188px, calc(100vw - 36px));
-    padding: 10px;
-    border: 3px solid rgba(240, 207, 93, 0.88);
-    border-radius: 8px;
-    background: rgba(255, 253, 247, 0.94);
-    color: #16212b;
-    font-weight: 900;
-    line-height: 1.15;
-    text-align: center;
-    box-shadow:
-        0 0 0 3px rgba(255, 255, 255, 0.58),
-        0 14px 32px rgba(31, 41, 55, 0.18);
-    pointer-events: none;
-}
-
-.gw-letter-box strong {
-    display: block;
-    margin-bottom: 7px;
-    color: #8a4f44;
-    font-size: 12px;
-}
-
-.gw-letter-box__slots {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-bottom: 7px;
-}
-
-.gw-letter-box__slot {
-    display: grid;
-    place-items: center;
-    min-height: 32px;
-    border: 2px solid rgba(22, 33, 43, 0.22);
-    border-radius: 6px;
-    background: rgba(232, 237, 233, 0.72);
-    color: #16212b;
-    font-size: 18px;
-    line-height: 1;
-}
-
-.gw-letter-box__slot--filled {
-    border-color: rgba(47, 154, 138, 0.72);
-    background: rgba(47, 154, 138, 0.14);
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.54);
-}
-
-.gw-letter-box small {
-    display: block;
-    color: #5c6874;
-    font-size: 10px;
-    line-height: 1.35;
-}
-
-.gw-letter-box--ready {
-    border-color: rgba(47, 154, 138, 0.88);
-    box-shadow:
-        0 0 0 3px rgba(255, 255, 255, 0.58),
-        0 0 22px rgba(47, 154, 138, 0.38),
-        0 14px 32px rgba(31, 41, 55, 0.16);
-}
-
 .gw-crack-field {
     border-radius: 8px;
     overflow: hidden;
@@ -2179,6 +2167,15 @@
     }
     100% {
         transform: scaleX(var(--gw-enemy-face)) translateX(0);
+    }
+}
+
+@keyframes gw-enemy-missile-ready {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-2px) scale(1.06);
     }
 }
 
@@ -2755,18 +2752,6 @@
         grid-template-columns: 40px 40px 40px 44px 52px 52px minmax(58px, 1fr);
         gap: 6px;
         max-width: 374px;
-    }
-
-    .gw-letter-box {
-        top: 164px;
-        right: 12px;
-        width: min(164px, calc(100vw - 24px));
-        padding: 8px;
-    }
-
-    .gw-letter-box__slot {
-        min-height: 28px;
-        font-size: 16px;
     }
 
     .gw-player-control {

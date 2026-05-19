@@ -60,6 +60,12 @@ class GW_REST
     {
         $viewport = isset($params['viewport']) && is_array($params['viewport']) ? $params['viewport'] : array();
         $scroll = isset($params['scroll']) && is_array($params['scroll']) ? $params['scroll'] : array();
+        $treasure_letters = isset($params['treasure_letters']) && is_array($params['treasure_letters'])
+            ? array_map(static fn($letter) => sanitize_text_field((string) $letter), array_filter($params['treasure_letters'], 'is_scalar'))
+            : array();
+        $treasure_word = is_scalar($params['treasure_word'] ?? null)
+            ? (string) $params['treasure_word']
+            : (is_scalar($params['treasure_letters'] ?? null) ? (string) $params['treasure_letters'] : '');
 
         return array(
             'page_url' => esc_url_raw((string) ($params['page_url'] ?? '')),
@@ -75,6 +81,10 @@ class GW_REST
             'enemy_defeated_count' => absint($params['enemy_defeated_count'] ?? 0),
             'gates_broken' => absint($params['gates_broken'] ?? 0),
             'images_damaged' => absint($params['images_damaged'] ?? 0),
+            'letters_collected' => absint($params['letters_collected'] ?? 0),
+            'letters_required' => absint($params['letters_required'] ?? 0),
+            'treasure_letters' => $treasure_letters,
+            'treasure_word' => sanitize_text_field($treasure_word),
             'clear_reason' => sanitize_key((string) ($params['reason'] ?? '')),
             'next_href' => esc_url_raw((string) ($params['next_href'] ?? '')),
             'stage_name' => sanitize_text_field((string) ($params['stage_name'] ?? '')),
