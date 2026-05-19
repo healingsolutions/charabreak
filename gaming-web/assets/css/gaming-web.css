@@ -1068,21 +1068,43 @@
 
 .gw-player-control {
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-width: 48px;
     height: 48px;
-    padding: 0 10px;
+    padding: 5px 8px;
     border: 2px solid rgba(21, 94, 83, 0.42);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.94);
     color: #155e53;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 900;
     line-height: 1;
     box-shadow: 0 10px 20px rgba(31, 41, 55, 0.18);
     cursor: pointer;
     user-select: none;
+}
+
+.gw-player-control__label {
+    display: block;
+    white-space: nowrap;
+}
+
+.gw-player-control__keys {
+    display: block;
+    max-width: 100%;
+    margin-top: 3px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #5c6874;
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
 }
 
 .gw-player-control--attack {
@@ -1110,6 +1132,12 @@
     background: #16212b;
     color: #ffffff;
     font-size: 14px;
+}
+
+.gw-player-control--lock .gw-player-control__keys,
+.gw-player-control--throw .gw-player-control__keys,
+.gw-player-control--shield .gw-player-control__keys {
+    color: rgba(255, 255, 255, 0.78);
 }
 
 .gw-player-control--active,
@@ -1392,55 +1420,58 @@
 }
 
 .gw-pixel-runner__pack {
-    left: 6px;
-    top: 29px;
+    left: 5px;
+    top: 30px;
     z-index: 0;
-    width: 14px;
-    height: 22px;
-    background: #8a4f44;
+    width: 15px;
+    height: 21px;
+    background: #7a5144;
     box-shadow:
-        0 -4px 0 #5d2f37,
-        -3px 4px 0 #5d2f37,
-        3px 6px 0 #bf6b57;
+        3px 0 0 #5d2f37,
+        0 4px 0 #5d2f37,
+        -3px 4px 0 #9b6754,
+        3px 12px 0 #bf6b57;
 }
 
 .gw-pixel-runner__head {
-    left: 13px;
-    top: 5px;
+    left: 11px;
+    top: 4px;
     z-index: 4;
-    width: 26px;
-    height: 24px;
-    background: #f1c766;
+    width: 28px;
+    height: 26px;
+    background: #edbd67;
     box-shadow:
-        -4px 4px 0 #f5d565,
-        4px 4px 0 #d59f4b,
-        0 20px 0 #d59f4b;
+        -4px 0 0 #f6d08b,
+        4px 0 0 #c7833c,
+        0 4px 0 #d59f4b,
+        4px 4px 0 #a86a2f;
 }
 
 .gw-pixel-runner__hair {
-    left: 12px;
-    top: 1px;
+    left: 10px;
+    top: 0;
     z-index: 5;
-    width: 28px;
-    height: 8px;
-    background: #155e53;
+    width: 31px;
+    height: 9px;
+    background: #16685c;
     box-shadow:
-        -3px 5px 0 #155e53,
-        4px 5px 0 #155e53,
-        12px 9px 0 #155e53;
+        0 4px 0 #155e53,
+        -4px 8px 0 #155e53,
+        8px 8px 0 #0f4b45,
+        24px 8px 0 #0f4b45;
 }
 
 .gw-pixel-runner__brow {
-    left: 19px;
-    top: 14px;
+    left: 18px;
+    top: 15px;
     z-index: 6;
-    width: 16px;
+    width: 17px;
     height: 3px;
     background: #374151;
 }
 
 .gw-pixel-runner__eye {
-    top: 17px;
+    top: 18px;
     z-index: 7;
     width: 4px;
     height: 4px;
@@ -1448,7 +1479,7 @@
 }
 
 .gw-pixel-runner__eye--left {
-    left: 21px;
+    left: 20px;
 }
 
 .gw-pixel-runner__eye--right {
@@ -1457,7 +1488,7 @@
 
 .gw-pixel-runner__nose {
     left: 26px;
-    top: 20px;
+    top: 21px;
     z-index: 6;
     width: 4px;
     height: 5px;
@@ -1465,125 +1496,136 @@
 }
 
 .gw-pixel-runner__mouth {
-    left: 23px;
-    top: 26px;
+    left: 22px;
+    top: 27px;
     z-index: 6;
-    width: 11px;
+    width: 12px;
     height: 3px;
     background: #8a4f44;
 }
 
 .gw-pixel-runner__body {
-    left: 13px;
-    top: 30px;
+    left: 12px;
+    top: 31px;
     z-index: 2;
-    width: 27px;
-    height: 21px;
+    width: 29px;
+    height: 20px;
     background: #2f9a8a;
     box-shadow:
-        0 -4px 0 #155e53,
-        4px 4px 0 #8ee6d2,
-        -4px 8px 0 #155e53,
-        4px 13px 0 #155e53;
+        -4px 0 0 #4fc0af,
+        4px 0 0 #155e53,
+        0 4px 0 #155e53,
+        8px 4px 0 #0f4b45,
+        0 12px 0 #155e53;
 }
 
 .gw-pixel-runner__scarf {
-    left: 11px;
-    top: 28px;
+    left: 10px;
+    top: 29px;
     z-index: 5;
-    width: 31px;
-    height: 6px;
+    width: 33px;
+    height: 5px;
     background: #bf6b57;
     box-shadow:
-        22px 5px 0 #8a4f44,
-        26px 9px 0 #8a4f44;
+        24px 4px 0 #8a4f44,
+        28px 8px 0 #8a4f44;
 }
 
 .gw-pixel-runner__belt {
-    left: 13px;
+    left: 12px;
     top: 43px;
     z-index: 6;
-    width: 28px;
+    width: 30px;
     height: 5px;
     background: #374151;
-    box-shadow: 12px 0 0 #f5d565;
+    box-shadow:
+        12px 0 0 #f5d565,
+        18px 0 0 #25312f;
 }
 
 .gw-pixel-runner__arm {
-    top: 30px;
+    top: 32px;
     z-index: 3;
-    width: 8px;
+    width: 9px;
     height: 18px;
-    background: #f5d565;
+    background: #edbd67;
+    box-shadow:
+        0 5px 0 #d59f4b,
+        0 13px 0 #c7833c;
     transform-origin: top center;
 }
 
 .gw-pixel-runner__arm--front {
-    left: 36px;
+    left: 38px;
     animation: gw-pixel-arm-front 420ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner__arm--back {
-    left: 8px;
-    background: #e7bd43;
+    left: 6px;
+    background: #d59f4b;
     animation: gw-pixel-arm-back 420ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner__leg {
-    top: 46px;
+    top: 48px;
     z-index: 1;
-    width: 8px;
-    height: 12px;
-    background: #155e53;
+    width: 9px;
+    height: 11px;
+    background: #1f5f79;
+    box-shadow: 3px 0 0 #164559;
     transform-origin: top center;
 }
 
 .gw-pixel-runner__leg--front {
-    left: 30px;
+    left: 31px;
     animation: gw-pixel-leg-front 420ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner__leg--back {
-    left: 16px;
+    left: 15px;
     animation: gw-pixel-leg-back 420ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner__boot {
-    top: 55px;
+    top: 56px;
     z-index: 2;
-    width: 12px;
+    width: 13px;
     height: 5px;
     background: #374151;
 }
 
 .gw-pixel-runner__boot--front {
-    left: 28px;
+    left: 30px;
     animation: gw-pixel-boot-front 420ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner__boot--back {
-    left: 14px;
+    left: 13px;
     animation: gw-pixel-boot-back 420ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner__hammer {
-    left: 39px;
-    top: 18px;
+    left: 40px;
+    top: 14px;
     z-index: 8;
-    width: 7px;
-    height: 29px;
-    background: #6b7280;
-    transform: rotate(-30deg);
+    width: 6px;
+    height: 34px;
+    background: #7a5144;
+    box-shadow: 3px 0 0 #5d2f37;
+    transform: rotate(-34deg);
     transform-origin: 50% 90%;
 }
 
 .gw-pixel-runner__hammer::before {
     position: absolute;
-    left: -8px;
+    left: -14px;
     top: -8px;
-    width: 23px;
-    height: 10px;
-    background: #374151;
+    width: 34px;
+    height: 8px;
+    background: #6b7280;
+    box-shadow:
+        -5px 4px 0 #374151,
+        18px 4px 0 #9ca3af;
     content: "";
 }
 
@@ -2681,8 +2723,13 @@
     .gw-player-control {
         min-width: 40px;
         height: 44px;
-        padding: 0 7px;
-        font-size: 15px;
+        padding: 4px 5px;
+        font-size: 14px;
+    }
+
+    .gw-player-control__keys {
+        margin-top: 2px;
+        font-size: 8px;
     }
 
     .gw-player-control--lock,

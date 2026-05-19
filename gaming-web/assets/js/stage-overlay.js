@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.30';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.31';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -48,7 +48,7 @@ const UI_TEXT = {
     actionHop: '\u3059\u3053\u3057\u9003\u3052\u305f\uff01',
     brighten: '\u5c11\u3057\u30da\u30fc\u30b8\u304c\u660e\u308b\u304f\u306a\u3063\u305f\uff01',
     runnerBreak: '\u30c9\u30c3\u30c8\u306e\u5b50\u304c\u6587\u5b57\u3092\u304f\u3060\u3044\u305f\uff01',
-    playerHint: '\u6587\u5b57\u306e\u4e0a\u3092\u6b69\u3044\u3066\u3001Space\u9577\u62bc\u3057\u3001X\u3067\u6295\u3052\u308b\u3001Shift\u3067\u76fe\uff01',
+    playerHint: 'Space/Z\u3067\u653b\u6483\u3001X\u3067\u6295\u3052\u308b\u3001Shift/E\u3067\u76fe\uff01',
     miss: '\u7a7a\u3092\u305f\u305f\u3044\u305f\uff01',
     chargeReady: '\u529b\u304c\u305f\u307e\u3063\u305f\uff01',
     chargeFull: '\u5927\u632f\u308a\u306e\u4e00\u6483\uff01',
@@ -99,6 +99,15 @@ const ENEMY_MISSILE_SPEED = 270;
 const ENEMY_MISSILE_LIFETIME = 3600;
 const RETURN_ROUTE_REVEAL_PROGRESS = 0.58;
 const PLAYER_MAX_LIFE = 3;
+const RUNNER_CONTROL_DEFS = [
+    { control: 'left', label: '\u2190', keys: 'A / \u2190' },
+    { control: 'jump', label: '\u2191', keys: 'W / \u2191' },
+    { control: 'right', label: '\u2192', keys: 'D / \u2192' },
+    { control: 'shield', label: '\u76fe', keys: 'Shift / E' },
+    { control: 'lock', label: '\u30ed\u30c3\u30af', keys: 'T / Tab' },
+    { control: 'throw', label: '\u6295\u3052', keys: 'X' },
+    { control: 'attack', label: '\u653b\u6483', keys: 'Space / Z' },
+];
 
 export class StageOverlay {
     constructor(options = {}) {
@@ -3031,22 +3040,17 @@ export class StageOverlay {
         this.runnerControls.setAttribute('role', 'group');
         this.runnerControls.setAttribute('aria-label', 'Player controls');
 
-        const controls = [
-            ['left', '\u2190'],
-            ['jump', '\u2191'],
-            ['right', '\u2192'],
-            ['shield', '\u76fe'],
-            ['lock', '\u30ed\u30c3\u30af'],
-            ['throw', '\u6295\u3052'],
-            ['attack', '\u653b\u6483'],
-        ];
-
-        for (const [control, label] of controls) {
+        for (const { control, label, keys } of RUNNER_CONTROL_DEFS) {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = `gw-player-control gw-player-control--${control}`;
             button.dataset.gwControl = control;
-            button.textContent = label;
+            button.setAttribute('aria-label', `${label}: ${keys}`);
+            button.title = `${label}: ${keys}`;
+            button.innerHTML = `
+                <span class="gw-player-control__label">${label}</span>
+                <kbd class="gw-player-control__keys">${keys}</kbd>
+            `;
             this.bindRunnerControlButton(button, control);
             this.runnerControls.appendChild(button);
         }
