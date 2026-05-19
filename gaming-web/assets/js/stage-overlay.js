@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.44';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.45';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -83,6 +83,11 @@ const UI_TEXT = {
     summaryTitle: '\u30da\u30fc\u30b8\u306e\u8981\u7d04',
     endRollTitle: '\u30da\u30fc\u30b8\u306e\u8a18\u61b6',
     endRollClose: '\u623b\u308b',
+    rewardTitle: '\u30af\u30ea\u30a2\u7279\u5178',
+    rewardLoading: '\u7279\u5178\u3092\u958b\u3044\u3066\u3044\u307e\u3059...',
+    rewardUnavailable: '\u7279\u5178\u306f\u307e\u3060\u958b\u3051\u307e\u305b\u3093\u3002',
+    rewardCoupon: '\u30af\u30fc\u30dd\u30f3\u30b3\u30fc\u30c9',
+    rewardLink: '\u7279\u5178\u30da\u30fc\u30b8\u3078',
     enemyDamage: '\u5b88\u308b\u6587\u5b57\u304c\u524a\u3089\u308c\u305f\uff01',
     bgmOn: 'BGM ON',
     bgmOff: 'BGM OFF',
@@ -134,6 +139,7 @@ export class StageOverlay {
         this.characterName = options.characterName || UI_TEXT.defaultCharacter;
         this.messages = options.messages || {};
         this.importantWords = Array.isArray(options.importantWords) ? options.importantWords : [];
+        this.hasReward = Boolean(options.hasReward);
         this.reducedMotion = Boolean(options.reducedMotion);
         this.onExit = options.onExit || (() => {});
         this.onRetry = options.onRetry || (() => {});
@@ -163,6 +169,7 @@ export class StageOverlay {
         this.goalGate = null;
         this.gameOverPanel = null;
         this.endRoll = null;
+        this.clearRewardPromise = null;
         this.runner = null;
         this.runnerRaf = 0;
         this.runnerTargets = [];
@@ -194,6 +201,7 @@ export class StageOverlay {
         this.endRollItems = [];
         this.endRollSummary = '';
         this.brickLayer = null;
+        this.snowLayer = null;
         this.gateLayer = null;
         this.linkGates = [];
         this.gateCooldownUntil = 0;
@@ -509,6 +517,7 @@ export class StageOverlay {
         }
 
         this.mountBrickRails();
+        this.mountSnowClimbLayer();
         this.mountLinkGates(targets);
         this.mountEnemyLayer();
         this.mountProjectileLayer();
@@ -699,6 +708,8 @@ export class StageOverlay {
         window.removeEventListener('scroll', this.handleWindowScroll);
         this.brickLayer?.remove();
         this.brickLayer = null;
+        this.snowLayer?.remove();
+        this.snowLayer = null;
         this.gateLayer?.remove();
         this.gateLayer = null;
         this.linkGates = [];
@@ -725,6 +736,7 @@ export class StageOverlay {
         this.treasureLetters = [];
         this.endRoll?.remove();
         this.endRoll = null;
+        this.clearRewardPromise = null;
         for (const missile of this.enemyMissiles) {
             missile.element.remove();
         }
@@ -877,6 +889,20 @@ export class StageOverlay {
         `;
         this.effectLayer?.prepend(this.brickLayer);
         this.updateBrickRails();
+    }
+
+    mountSnowClimbLayer() {
+        this.snowLayer?.remove();
+        this.snowLayer = document.createElement('div');
+        this.snowLayer.className = 'gw-snow-climb-layer';
+        const flakes = Array.from({ length: this.reducedMotion ? 8 : 18 }, (_, index) => (
+            `<span class="gw-snow-flake" style="--gw-x:${(index * 17) % 100}vw; --gw-d:${index * 180}ms; --gw-s:${0.72 + (index % 5) * 0.12};"></span>`
+        )).join('');
+        this.snowLayer.innerHTML = `
+            <span class="gw-ice-ledges" aria-hidden="true"></span>
+            ${flakes}
+        `;
+        this.effectLayer?.prepend(this.snowLayer);
     }
 
     updateBrickRails() {
@@ -2460,6 +2486,7 @@ export class StageOverlay {
         this.showMessage(criticalLost ? UI_TEXT.stageFailed : UI_TEXT.gameOverLife, 2800);
         this.shakeScreen('hard');
         this.onRunnerSound('enemyExplode', { volume: 0.16, rate: 0.92 });
+        this.clearRewardPromise = null;
         this.onStageClear(this.stageResult(reason));
         this.updateMissionHud(true);
         this.showGameOver(reason);
@@ -2511,7 +2538,7 @@ export class StageOverlay {
         this.showMessage(burstCount > 0 ? UI_TEXT.stageClearBurst : UI_TEXT.stageClear, 2400);
         this.shakeScreen(burstCount > 0 ? 'hard' : 'medium');
         this.onRunnerSound('stageClear', { volume: 0.075, cheerVolume: 0.06, fadeMs: 620, rate: 1 });
-        this.onStageClear(this.stageResult(reason));
+        this.clearRewardPromise = Promise.resolve(this.onStageClear(this.stageResult(reason))).catch(() => null);
 
         const timer = window.setTimeout(() => {
             this.showEndRoll();
@@ -2676,6 +2703,12 @@ export class StageOverlay {
                     <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${stats.enemy_defeated_count}</dd></div>
                 </dl>
                 ${treasureResult ? `<p class="gw-end-roll__treasure">${treasureResult}</p>` : ''}
+                ${this.hasReward ? `
+                    <section class="gw-end-roll__reward" data-gw-clear-reward>
+                        <h3>${UI_TEXT.rewardTitle}</h3>
+                        <p>${UI_TEXT.rewardLoading}</p>
+                    </section>
+                ` : ''}
                 <section class="gw-end-roll__summary">
                     <h3>${UI_TEXT.summaryTitle}</h3>
                     ${summaryItems}
@@ -2694,6 +2727,7 @@ export class StageOverlay {
         `;
 
         this.root?.appendChild(this.endRoll);
+        this.resolveClearReward();
         this.endRoll.querySelector('.gw-end-roll__close')?.addEventListener('click', (event) => {
             event.preventDefault();
             this.endRoll?.remove();
@@ -2705,6 +2739,50 @@ export class StageOverlay {
             if (this.nextGoalHref) {
                 this.onNavigate(this.nextGoalHref);
             }
+        });
+    }
+
+    resolveClearReward() {
+        const rewardNode = this.endRoll?.querySelector('[data-gw-clear-reward]');
+        if (!rewardNode) {
+            return;
+        }
+
+        const rewardPromise = this.clearRewardPromise || Promise.resolve(null);
+        rewardPromise.then((response) => {
+            if (!rewardNode.isConnected) {
+                return;
+            }
+
+            const reward = response?.reward_unlocked ? response.reward : null;
+            if (!reward) {
+                rewardNode.innerHTML = `
+                    <h3>${UI_TEXT.rewardTitle}</h3>
+                    <p>${UI_TEXT.rewardUnavailable}</p>
+                `;
+                return;
+            }
+
+            const title = reward.title || UI_TEXT.rewardTitle;
+            const message = reward.message || '';
+            const coupon = reward.coupon_code || '';
+            const rewardUrl = safeRewardUrl(reward.reward_url || '');
+            rewardNode.innerHTML = `
+                <h3>${escapeHtml(title)}</h3>
+                ${message ? `<p>${escapeHtml(message)}</p>` : ''}
+                ${coupon ? `<div class="gw-end-roll__coupon"><span>${UI_TEXT.rewardCoupon}</span><code>${escapeHtml(coupon)}</code></div>` : ''}
+                ${rewardUrl ? `<a class="gw-end-roll__reward-link" href="${escapeHtml(rewardUrl)}" target="_blank" rel="noopener">${UI_TEXT.rewardLink}</a>` : ''}
+            `;
+            this.onRunnerSound('collect', { volume: 0.12, rate: 1.08 });
+        }).catch(() => {
+            if (!rewardNode.isConnected) {
+                return;
+            }
+
+            rewardNode.innerHTML = `
+                <h3>${UI_TEXT.rewardTitle}</h3>
+                <p>${UI_TEXT.rewardUnavailable}</p>
+            `;
         });
     }
 
@@ -2881,6 +2959,7 @@ export class StageOverlay {
                 volume: heavy ? 0.09 : 0.055,
                 rate: heavy ? 0.94 : 1.04,
             });
+            this.spawnSnowPuff(this.runnerPhysicsRect(), heavy ? 'medium' : 'soft');
 
             if (heavy) {
                 this.shakeScreen('soft');
@@ -3806,6 +3885,29 @@ export class StageOverlay {
             flash.className = 'gw-impact-flash';
             this.addTemporaryEffect(flash, 180);
         }
+
+        this.spawnSnowPuff(rect, intensity);
+    }
+
+    spawnSnowPuff(rect, intensity = 'soft') {
+        if (this.reducedMotion || !this.effectLayer) {
+            return;
+        }
+
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.bottom || (rect.top + rect.height);
+        const count = intensity === 'hard' ? 12 : (intensity === 'medium' ? 8 : 5);
+        for (let index = 0; index < count; index += 1) {
+            const puff = document.createElement('span');
+            puff.className = 'gw-snow-puff';
+            puff.style.left = `${centerX + randomBetween(-18, 18)}px`;
+            puff.style.top = `${centerY + randomBetween(-8, 8)}px`;
+            puff.style.setProperty('--gw-x', `${randomBetween(-58, 58)}px`);
+            puff.style.setProperty('--gw-y', `${randomBetween(-36, -8)}px`);
+            puff.style.setProperty('--gw-s', `${randomBetween(0.6, intensity === 'hard' ? 1.35 : 1.05)}`);
+            puff.style.setProperty('--gw-d', `${randomBetween(0, 70)}ms`);
+            this.addTemporaryEffect(puff, 620);
+        }
     }
 
     shakeScreen(strength = 'medium') {
@@ -4070,6 +4172,19 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+}
+
+function safeRewardUrl(value) {
+    try {
+        const url = new URL(String(value || ''), window.location.href);
+        if (!['http:', 'https:'].includes(url.protocol)) {
+            return '';
+        }
+
+        return url.href;
+    } catch (error) {
+        return '';
+    }
 }
 
 function randomBetween(min, max) {

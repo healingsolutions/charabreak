@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.1.44';
-import { StageOverlay } from './stage-overlay.js?v=0.1.44';
-import { InteractionEngine } from './interaction-engine.js?v=0.1.44';
-import { TextBreaker } from './text-breaker.js?v=0.1.44';
-import { ImageBreaker } from './image-breaker.js?v=0.1.44';
+import { scanGameTargets } from './dom-scanner.js?v=0.1.45';
+import { StageOverlay } from './stage-overlay.js?v=0.1.45';
+import { InteractionEngine } from './interaction-engine.js?v=0.1.45';
+import { TextBreaker } from './text-breaker.js?v=0.1.45';
+import { ImageBreaker } from './image-breaker.js?v=0.1.45';
 
 export class GamingWebCore {
     constructor(config = {}) {
@@ -43,6 +43,7 @@ export class GamingWebCore {
             characterName: this.config.characterName,
             messages: this.config.messages,
             importantWords: this.config.importantWords || [],
+            hasReward: this.config.hasReward === '1' || this.config.hasReward === true,
             reducedMotion,
             textBreaker: this.textBreaker,
             imageBreaker: this.imageBreaker,
@@ -74,11 +75,11 @@ export class GamingWebCore {
                 this.restart();
             },
             onStageClear: (detail) => {
-                this.logger?.log('stage_soft_clear', {
+                return this.logger?.log('stage_soft_clear', {
                     stage_name: this.config.stageName,
                     inventory_count: this.engine?.inventory.length || 0,
                     ...detail,
-                });
+                }) || Promise.resolve({ skipped: true });
             },
             onExit: () => this.stop(),
             onInventoryOpen: () => {

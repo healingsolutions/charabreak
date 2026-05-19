@@ -13,7 +13,7 @@ Gaming Web adds a light, playful mode to enabled WordPress pages. The MVP keeps 
 - MP3 sound effects for hits, UI, collection, start, exit, jumping, falling, landing, lock-on, throws, and KO moments.
 - Collectible word fragments and a compact inventory panel.
 - Admin settings for global enablement, post types, floating start button visibility, labels, character name, logging, and debug mode.
-- Per-page meta for game mode, important words, and stage name.
+- Per-page meta for game mode, important words, stage name, and clear-only rewards/coupons.
 - REST event endpoint at `/wp-json/gaming-web/v1/event`.
 - Anonymous event table: `wp_gaming_web_events`.
 
@@ -32,6 +32,12 @@ The fixed floating button can be hidden in **Settings > Gaming Web**. Custom mar
 ```
 
 `wordpress-adapter.js` exposes `window.GamingWeb.start()` for non-WordPress wrappers or custom theme scripts after the adapter has loaded.
+
+## Clear Rewards
+
+Each enabled page can define a reward title, message, coupon code, and reward URL in the Gaming Web meta box. Reward details are not printed into the normal page HTML or localized frontend config; they are returned by the REST event response after a successful stage clear.
+
+This MVP hides rewards from ordinary visitors, but high-value production coupons should use server-issued one-time codes or ecommerce/member integration.
 
 ## JavaScript Structure
 

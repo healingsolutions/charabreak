@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Gaming Web
  * Description: Adds a playful temporary game mode to enabled WordPress pages.
- * Version: 0.1.44
+ * Version: 0.1.45
  * Author: Gaming Web MVP
  * Requires at least: 6.0
  * Requires PHP: 7.4
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('GAMING_WEB_VERSION', '0.1.44');
+define('GAMING_WEB_VERSION', '0.1.45');
 define('GAMING_WEB_FILE', __FILE__);
 define('GAMING_WEB_DIR', plugin_dir_path(__FILE__));
 define('GAMING_WEB_URL', plugin_dir_url(__FILE__));

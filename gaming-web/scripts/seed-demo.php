@@ -151,6 +151,11 @@ foreach ($page_titles as $index => $title) {
         '_gaming_web_mode' => 'enabled',
         '_gaming_web_important_words' => implode(', ', $words),
         '_gaming_web_stage_name' => $stage_name,
+        '_gaming_web_reward_enabled' => '1',
+        '_gaming_web_reward_title' => 'GOALした人だけの特典',
+        '_gaming_web_reward_message' => 'ページの奥まで遊んでくれてありがとう。次のステージへ進む前に、小さなごほうびをどうぞ。',
+        '_gaming_web_reward_coupon_code' => 'GW-CLEAR-' . str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
+        '_gaming_web_reward_url' => home_url('/?page_id=2'),
     ));
 
     if ($page_id > 0) {
@@ -168,6 +173,11 @@ for ($index = 1; $index <= 30; $index += 1) {
         '_gaming_web_mode' => 'enabled',
         '_gaming_web_important_words' => implode(', ', $words),
         '_gaming_web_stage_name' => $stage_name,
+        '_gaming_web_reward_enabled' => '1',
+        '_gaming_web_reward_title' => '読破クリア特典',
+        '_gaming_web_reward_message' => 'この投稿を守り抜いた人だけに見える、デモ用のクーポンです。',
+        '_gaming_web_reward_coupon_code' => 'POST-CLEAR-' . str_pad((string) $index, 2, '0', STR_PAD_LEFT),
+        '_gaming_web_reward_url' => home_url('/'),
     ));
 }
 

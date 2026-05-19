@@ -50,10 +50,20 @@ class GW_REST
 
         $logged = GW_Logger::insert_event($session_id, $page_id, $event_type, $event_data);
 
-        return rest_ensure_response(array(
+        $response = array(
             'ok' => true,
             'logged' => $logged,
-        ));
+        );
+
+        if ($event_type === 'stage_soft_clear') {
+            $reward = $this->clear_reward_for_event($page_id, $event_data);
+            if (!empty($reward)) {
+                $response['reward_unlocked'] = true;
+                $response['reward'] = $reward;
+            }
+        }
+
+        return rest_ensure_response($response);
     }
 
     private function sanitize_event_data(array $params): array
@@ -88,6 +98,10 @@ class GW_REST
             'clear_reason' => sanitize_key((string) ($params['reason'] ?? '')),
             'next_href' => esc_url_raw((string) ($params['next_href'] ?? '')),
             'stage_name' => sanitize_text_field((string) ($params['stage_name'] ?? '')),
+            'critical_word' => sanitize_text_field((string) ($params['critical_word'] ?? '')),
+            'critical_lost' => !empty($params['critical_lost']),
+            'player_life' => absint($params['player_life'] ?? 0),
+            'failed' => !empty($params['failed']),
             'timestamp' => sanitize_text_field((string) ($params['timestamp'] ?? '')),
             'viewport' => array(
                 'width' => absint($viewport['width'] ?? 0),
@@ -99,5 +113,45 @@ class GW_REST
             ),
             'inventory_count' => absint($params['inventory_count'] ?? 0),
         );
+    }
+
+    private function clear_reward_for_event(int $page_id, array $event_data): array
+    {
+        if ($page_id <= 0 || !empty($event_data['failed']) || !empty($event_data['critical_lost'])) {
+            return array();
+        }
+
+        if (absint($event_data['letters_collected'] ?? 0) < 3) {
+            return array();
+        }
+
+        if (get_post_meta($page_id, '_gaming_web_reward_enabled', true) !== '1') {
+            return array();
+        }
+
+        $reward = array(
+            'title' => sanitize_text_field((string) get_post_meta($page_id, '_gaming_web_reward_title', true)),
+            'message' => sanitize_textarea_field((string) get_post_meta($page_id, '_gaming_web_reward_message', true)),
+            'coupon_code' => sanitize_text_field((string) get_post_meta($page_id, '_gaming_web_reward_coupon_code', true)),
+            'reward_url' => esc_url_raw((string) get_post_meta($page_id, '_gaming_web_reward_url', true)),
+        );
+
+        $has_content = false;
+        foreach ($reward as $value) {
+            if (trim((string) $value) !== '') {
+                $has_content = true;
+                break;
+            }
+        }
+
+        if (!$has_content) {
+            return array();
+        }
+
+        if ($reward['title'] === '') {
+            $reward['title'] = __('Clear reward', 'gaming-web');
+        }
+
+        return $reward;
     }
 }

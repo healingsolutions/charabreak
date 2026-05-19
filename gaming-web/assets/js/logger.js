@@ -43,10 +43,18 @@ export class GamingWebLogger {
                 'X-WP-Nonce': this.nonce,
             },
             body: JSON.stringify(payload),
+        }).then((response) => {
+            if (!response.ok) {
+                return { ok: false, status: response.status };
+            }
+
+            return response.json().catch(() => ({ ok: true }));
         }).catch((error) => {
             if (this.debug) {
                 console.warn('[Gaming Web] event log failed', error);
             }
+
+            return { ok: false, error: true };
         });
     }
 }

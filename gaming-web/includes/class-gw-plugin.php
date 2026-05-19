@@ -139,6 +139,11 @@ class GW_Plugin
         $mode = in_array($mode, array('inherit', 'enabled', 'disabled'), true) ? $mode : 'inherit';
         $important_words = get_post_meta($post->ID, '_gaming_web_important_words', true);
         $stage_name = get_post_meta($post->ID, '_gaming_web_stage_name', true);
+        $reward_enabled = get_post_meta($post->ID, '_gaming_web_reward_enabled', true);
+        $reward_title = get_post_meta($post->ID, '_gaming_web_reward_title', true);
+        $reward_message = get_post_meta($post->ID, '_gaming_web_reward_message', true);
+        $reward_coupon_code = get_post_meta($post->ID, '_gaming_web_reward_coupon_code', true);
+        $reward_url = get_post_meta($post->ID, '_gaming_web_reward_url', true);
         ?>
         <p>
             <label for="gaming-web-mode"><strong><?php esc_html_e('Page game mode', 'gaming-web'); ?></strong></label>
@@ -155,6 +160,30 @@ class GW_Plugin
         <p>
             <label for="gaming-web-stage-name"><strong><?php esc_html_e('Stage name', 'gaming-web'); ?></strong></label>
             <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="言葉の庭">
+        </p>
+        <hr>
+        <p>
+            <label>
+                <input type="hidden" name="gaming_web_reward_enabled" value="0">
+                <input type="checkbox" name="gaming_web_reward_enabled" value="1" <?php checked($reward_enabled, '1'); ?>>
+                <strong><?php esc_html_e('Show a clear reward', 'gaming-web'); ?></strong>
+            </label>
+        </p>
+        <p>
+            <label for="gaming-web-reward-title"><strong><?php esc_html_e('Reward title', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_reward_title" id="gaming-web-reward-title" class="widefat" value="<?php echo esc_attr($reward_title); ?>" placeholder="クリア特典">
+        </p>
+        <p>
+            <label for="gaming-web-reward-message"><strong><?php esc_html_e('Reward message', 'gaming-web'); ?></strong></label>
+            <textarea name="gaming_web_reward_message" id="gaming-web-reward-message" class="widefat" rows="3" placeholder="GOALした人だけに見えるメッセージ"><?php echo esc_textarea($reward_message); ?></textarea>
+        </p>
+        <p>
+            <label for="gaming-web-reward-coupon-code"><strong><?php esc_html_e('Coupon code', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_reward_coupon_code" id="gaming-web-reward-coupon-code" class="widefat" value="<?php echo esc_attr($reward_coupon_code); ?>" placeholder="CLEAR-THANKS">
+        </p>
+        <p>
+            <label for="gaming-web-reward-url"><strong><?php esc_html_e('Reward URL', 'gaming-web'); ?></strong></label>
+            <input type="url" name="gaming_web_reward_url" id="gaming-web-reward-url" class="widefat" value="<?php echo esc_url($reward_url); ?>" placeholder="https://example.com/special">
         </p>
         <?php
     }
@@ -185,10 +214,20 @@ class GW_Plugin
 
         $important_words = sanitize_textarea_field(wp_unslash((string) ($_POST['gaming_web_important_words'] ?? '')));
         $stage_name = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_stage_name'] ?? '')));
+        $reward_enabled = (string) ($_POST['gaming_web_reward_enabled'] ?? '0') === '1' ? '1' : '0';
+        $reward_title = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_reward_title'] ?? '')));
+        $reward_message = sanitize_textarea_field(wp_unslash((string) ($_POST['gaming_web_reward_message'] ?? '')));
+        $reward_coupon_code = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_reward_coupon_code'] ?? '')));
+        $reward_url = esc_url_raw(wp_unslash((string) ($_POST['gaming_web_reward_url'] ?? '')));
 
         update_post_meta($post_id, '_gaming_web_mode', $mode);
         update_post_meta($post_id, '_gaming_web_important_words', $important_words);
         update_post_meta($post_id, '_gaming_web_stage_name', $stage_name);
+        update_post_meta($post_id, '_gaming_web_reward_enabled', $reward_enabled);
+        update_post_meta($post_id, '_gaming_web_reward_title', $reward_title);
+        update_post_meta($post_id, '_gaming_web_reward_message', $reward_message);
+        update_post_meta($post_id, '_gaming_web_reward_coupon_code', $reward_coupon_code);
+        update_post_meta($post_id, '_gaming_web_reward_url', $reward_url);
     }
 
     private function is_enabled_for_current_post(): bool
@@ -229,6 +268,7 @@ class GW_Plugin
             'showFloatingButton' => GW_Settings::is_truthy(GW_Settings::OPTION_SHOW_FLOATING_BUTTON) ? '1' : '0',
             'characterName' => GW_Settings::get(GW_Settings::OPTION_CHARACTER_NAME),
             'importantWords' => $this->parse_important_words($important_words),
+            'hasReward' => $this->has_clear_reward($post_id) ? '1' : '0',
             'loggingEnabled' => GW_Settings::is_truthy(GW_Settings::OPTION_LOGGING_ENABLED),
             'debug' => GW_Settings::is_truthy(GW_Settings::OPTION_DEBUG),
             'messages' => array(
@@ -248,5 +288,27 @@ class GW_Plugin
         $parts = array_filter($parts, static fn($word) => $word !== '');
 
         return array_values(array_unique($parts));
+    }
+
+    private function has_clear_reward(int $post_id): bool
+    {
+        if ($post_id <= 0 || get_post_meta($post_id, '_gaming_web_reward_enabled', true) !== '1') {
+            return false;
+        }
+
+        $fields = array(
+            '_gaming_web_reward_title',
+            '_gaming_web_reward_message',
+            '_gaming_web_reward_coupon_code',
+            '_gaming_web_reward_url',
+        );
+
+        foreach ($fields as $field) {
+            if (trim((string) get_post_meta($post_id, $field, true)) !== '') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
