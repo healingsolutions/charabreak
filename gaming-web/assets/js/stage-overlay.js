@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.42';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.43';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -38,6 +38,7 @@ const UI_TEXT = {
     treasureStored: '\u300c{char}\u300d\u3092\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19\u306b\u523b\u3093\u3060\uff01',
     treasureNoLetter: '\u8db3\u5143\u306b\u5b88\u308b\u6587\u5b57\u304c\u306a\u3044\uff01',
     treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
+    placedLetterBreak: '\u7f6\u3044\u305f\u6587\u5b57\u3092\u5d29\u3057\u305f\uff01',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
     gameOverTitle: 'GAME OVER',
     retry: '\u3082\u3046\u4e00\u56de',
@@ -1399,6 +1400,68 @@ export class StageOverlay {
             rect: picked.rect,
             style: picked.placed.style || {},
             target: null,
+        };
+    }
+
+    destroyPlacedLettersAtRect(rect, options = {}) {
+        const limit = options.limit || 1;
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const candidates = [];
+        const remaining = [];
+
+        for (const placed of this.placedLetters) {
+            if (!placed.element?.isConnected) {
+                continue;
+            }
+
+            const placedRect = placed.element.getBoundingClientRect();
+            const overlap = rectOverlapArea(rect, placedRect);
+            if (overlap <= 0) {
+                remaining.push(placed);
+                continue;
+            }
+
+            const placedCenterX = placedRect.left + placedRect.width / 2;
+            const placedCenterY = placedRect.top + placedRect.height / 2;
+            candidates.push({
+                placed,
+                rect: rectFromDom(placedRect),
+                distance: Math.hypot(centerX - placedCenterX, (centerY - placedCenterY) * 1.25),
+                overlap,
+            });
+        }
+
+        candidates.sort((a, b) => a.distance - b.distance || b.overlap - a.overlap);
+        const destroyed = candidates.slice(0, limit);
+        const survivors = candidates.slice(limit).map((candidate) => candidate.placed);
+
+        this.placedLetters = remaining.concat(survivors);
+
+        for (const item of destroyed) {
+            item.placed.element.classList.remove('gw-held-letter--placed');
+            item.placed.element.classList.add('gw-held-letter--breaking');
+            this.removeLater(item.placed.element, 220);
+        }
+
+        if (destroyed.length === 0) {
+            return null;
+        }
+
+        return {
+            count: destroyed.length,
+            chars: destroyed.map((item) => item.placed.char),
+            items: destroyed.map((item) => ({
+                char: item.placed.char,
+                rect: item.rect,
+                target: null,
+                critical: false,
+                criticalWord: '',
+            })),
+            critical: false,
+            criticalWord: '',
+            target: null,
+            rect: unionRects(destroyed.map((item) => item.rect)) || rect,
         };
     }
 
@@ -3197,6 +3260,16 @@ export class StageOverlay {
             return;
         }
 
+        const placedBreak = this.destroyPlacedLettersAtRect(attackRect, { limit: 1 });
+        if (placedBreak?.count > 0) {
+            this.bumpStageStat('playerBroken', placedBreak.count);
+            this.impactBurstAt(placedBreak.rect, 'char');
+            this.shakeScreen('medium');
+            this.runnerOnTextBreak?.(placedBreak);
+            this.showMessage(UI_TEXT.placedLetterBreak, 1200);
+            return;
+        }
+
         const charBreak = this.textBreaker?.destroyAtRect(attackRect, { limit: 1, source: 'player' });
         if (charBreak?.count > 0) {
             this.bumpStageStat('playerBroken', charBreak.count);
@@ -3270,6 +3343,16 @@ export class StageOverlay {
         });
         if (enemyHit?.count > 0) {
             this.runnerOnEnemyHit?.(enemyHit);
+            return;
+        }
+
+        const placedBreak = this.destroyPlacedLettersAtRect(chargedRect, { limit: full ? 4 : 2 });
+        if (placedBreak?.count > 0) {
+            this.bumpStageStat('playerBroken', placedBreak.count);
+            this.impactBurstAt(placedBreak.rect, intensity);
+            this.shakeScreen(full ? 'hard' : 'medium');
+            this.runnerOnTextBreak?.(placedBreak);
+            this.showMessage(UI_TEXT.placedLetterBreak, 1200);
             return;
         }
 
@@ -3879,6 +3962,27 @@ function rectFromDom(rect) {
         bottom: rect.bottom,
         width: rect.width,
         height: rect.height,
+    };
+}
+
+function unionRects(rects = []) {
+    const usable = rects.filter(Boolean);
+    if (usable.length === 0) {
+        return null;
+    }
+
+    const left = Math.min(...usable.map((rect) => rect.left));
+    const top = Math.min(...usable.map((rect) => rect.top));
+    const right = Math.max(...usable.map((rect) => rect.right));
+    const bottom = Math.max(...usable.map((rect) => rect.bottom));
+
+    return {
+        left,
+        top,
+        right,
+        bottom,
+        width: right - left,
+        height: bottom - top,
     };
 }
 

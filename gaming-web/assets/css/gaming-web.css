@@ -808,6 +808,10 @@
     animation: gw-held-letter-place 180ms steps(3, end);
 }
 
+.gw-held-letter--breaking {
+    animation: gw-held-letter-break 220ms steps(4, end) forwards;
+}
+
 .gw-held-letter--treasure-store {
     z-index: 7;
     transition:
@@ -2388,6 +2392,21 @@
     }
     100% {
         transform: translate(-50%, -50%) translateY(0) scale(1);
+    }
+}
+
+@keyframes gw-held-letter-break {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    52% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(-12deg) scale(1.32);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(18px) rotate(18deg) scale(0.24);
     }
 }
 
