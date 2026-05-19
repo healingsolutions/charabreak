@@ -1,0 +1,213 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class GW_Plugin
+{
+    private static ?GW_Plugin $instance = null;
+    private GW_Settings $settings;
+    private GW_REST $rest;
+
+    public static function instance(): GW_Plugin
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    public static function activate(): void
+    {
+        GW_Settings::add_default_options();
+        GW_Logger::create_table();
+    }
+
+    private function __construct()
+    {
+        $this->settings = new GW_Settings();
+        $this->rest = new GW_REST();
+    }
+
+    public function init(): void
+    {
+        $this->settings->init();
+        $this->rest->init();
+
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
+        add_filter('script_loader_tag', array($this, 'mark_adapter_as_module'), 10, 3);
+        add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
+        add_action('save_post', array($this, 'save_meta_box'));
+    }
+
+    public function enqueue_frontend_assets(): void
+    {
+        if (!is_singular() || !$this->is_enabled_for_current_post()) {
+            return;
+        }
+
+        wp_enqueue_style(
+            'gaming-web',
+            GAMING_WEB_URL . 'assets/css/gaming-web.css',
+            array(),
+            GAMING_WEB_VERSION
+        );
+
+        wp_enqueue_script(
+            'gaming-web-adapter',
+            GAMING_WEB_URL . 'assets/js/wordpress-adapter.js',
+            array(),
+            GAMING_WEB_VERSION,
+            true
+        );
+
+        wp_localize_script('gaming-web-adapter', 'GamingWebConfig', $this->frontend_config());
+    }
+
+    public function mark_adapter_as_module(string $tag, string $handle, string $src): string
+    {
+        if ($handle !== 'gaming-web-adapter') {
+            return $tag;
+        }
+
+        return sprintf(
+            '<script type="module" src="%s" id="%s-js"></script>' . "\n",
+            esc_url($src),
+            esc_attr($handle)
+        );
+    }
+
+    public function add_meta_boxes(): void
+    {
+        foreach (array('page', 'post') as $post_type) {
+            add_meta_box(
+                'gaming-web-meta',
+                __('Gaming Web', 'gaming-web'),
+                array($this, 'render_meta_box'),
+                $post_type,
+                'side',
+                'default'
+            );
+        }
+    }
+
+    public function render_meta_box(WP_Post $post): void
+    {
+        wp_nonce_field('gaming_web_save_meta', 'gaming_web_meta_nonce');
+
+        $mode = get_post_meta($post->ID, '_gaming_web_mode', true);
+        $mode = in_array($mode, array('inherit', 'enabled', 'disabled'), true) ? $mode : 'inherit';
+        $important_words = get_post_meta($post->ID, '_gaming_web_important_words', true);
+        $stage_name = get_post_meta($post->ID, '_gaming_web_stage_name', true);
+        ?>
+        <p>
+            <label for="gaming-web-mode"><strong><?php esc_html_e('Page game mode', 'gaming-web'); ?></strong></label>
+            <select name="gaming_web_mode" id="gaming-web-mode" class="widefat">
+                <option value="inherit" <?php selected($mode, 'inherit'); ?>><?php esc_html_e('Inherit global setting', 'gaming-web'); ?></option>
+                <option value="enabled" <?php selected($mode, 'enabled'); ?>><?php esc_html_e('Enable on this page', 'gaming-web'); ?></option>
+                <option value="disabled" <?php selected($mode, 'disabled'); ?>><?php esc_html_e('Disable on this page', 'gaming-web'); ?></option>
+            </select>
+        </p>
+        <p>
+            <label for="gaming-web-important-words"><strong><?php esc_html_e('Important words', 'gaming-web'); ?></strong></label>
+            <textarea name="gaming_web_important_words" id="gaming-web-important-words" class="widefat" rows="3" placeholder="光, 記憶, 余白"><?php echo esc_textarea($important_words); ?></textarea>
+        </p>
+        <p>
+            <label for="gaming-web-stage-name"><strong><?php esc_html_e('Stage name', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="言葉の庭">
+        </p>
+        <?php
+    }
+
+    public function save_meta_box(int $post_id): void
+    {
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if (!isset($_POST['gaming_web_meta_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['gaming_web_meta_nonce'])), 'gaming_web_save_meta')) {
+            return;
+        }
+
+        $post_type = get_post_type($post_id);
+        if (!in_array($post_type, array('page', 'post'), true)) {
+            return;
+        }
+
+        if (!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        $mode = sanitize_key((string) ($_POST['gaming_web_mode'] ?? 'inherit'));
+        if (!in_array($mode, array('inherit', 'enabled', 'disabled'), true)) {
+            $mode = 'inherit';
+        }
+
+        $important_words = sanitize_textarea_field(wp_unslash((string) ($_POST['gaming_web_important_words'] ?? '')));
+        $stage_name = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_stage_name'] ?? '')));
+
+        update_post_meta($post_id, '_gaming_web_mode', $mode);
+        update_post_meta($post_id, '_gaming_web_important_words', $important_words);
+        update_post_meta($post_id, '_gaming_web_stage_name', $stage_name);
+    }
+
+    private function is_enabled_for_current_post(): bool
+    {
+        $post = get_post();
+        if (!$post instanceof WP_Post) {
+            return false;
+        }
+
+        if (!GW_Settings::is_truthy(GW_Settings::OPTION_ENABLED)) {
+            return false;
+        }
+
+        $enabled_types = GW_Settings::get(GW_Settings::OPTION_POST_TYPES);
+        $enabled_types = is_array($enabled_types) ? $enabled_types : array();
+        if (!in_array($post->post_type, $enabled_types, true)) {
+            return false;
+        }
+
+        return get_post_meta($post->ID, '_gaming_web_mode', true) !== 'disabled';
+    }
+
+    private function frontend_config(): array
+    {
+        $post = get_post();
+        $post_id = $post instanceof WP_Post ? $post->ID : 0;
+        $stage_name = $post_id ? get_post_meta($post_id, '_gaming_web_stage_name', true) : '';
+        $important_words = $post_id ? get_post_meta($post_id, '_gaming_web_important_words', true) : '';
+
+        return array(
+            'enabled' => true,
+            'restUrl' => esc_url_raw(rest_url('gaming-web/v1/event')),
+            'nonce' => wp_create_nonce('wp_rest'),
+            'pageId' => $post_id,
+            'pageUrl' => $post_id ? get_permalink($post_id) : home_url('/'),
+            'stageName' => $stage_name ?: get_the_title($post_id),
+            'buttonLabel' => GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL),
+            'characterName' => GW_Settings::get(GW_Settings::OPTION_CHARACTER_NAME),
+            'importantWords' => $this->parse_important_words($important_words),
+            'loggingEnabled' => GW_Settings::is_truthy(GW_Settings::OPTION_LOGGING_ENABLED),
+            'debug' => GW_Settings::is_truthy(GW_Settings::OPTION_DEBUG),
+            'messages' => array(
+                'start' => 'このページ、ちょっと触ってみる？',
+                'hint' => '叩くと何か出るかも',
+                'collect' => '言葉のかけらを見つけた！',
+                'clear' => '少しページが明るくなった！',
+            ),
+        );
+    }
+
+    private function parse_important_words(string $words): array
+    {
+        $parts = preg_split('/[,、\n]/u', $words);
+        $parts = is_array($parts) ? $parts : array();
+        $parts = array_map('trim', $parts);
+        $parts = array_filter($parts, static fn($word) => $word !== '');
+
+        return array_values(array_unique($parts));
+    }
+}

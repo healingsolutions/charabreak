@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Gaming Web character">
+  <defs>
+    <linearGradient id="body" x1="16" y1="18" x2="112" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8ee6d2"/>
+      <stop offset="1" stop-color="#2f9a8a"/>
+    </linearGradient>
+    <linearGradient id="spark" x1="37" y1="29" x2="93" y2="88" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff7c2"/>
+      <stop offset="1" stop-color="#f5d565"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="66" r="46" fill="url(#body)"/>
+  <path d="M64 16l8 20 20 8-20 8-8 20-8-20-20-8 20-8 8-20z" fill="url(#spark)"/>
+  <circle cx="48" cy="69" r="6" fill="#163b3a"/>
+  <circle cx="81" cy="69" r="6" fill="#163b3a"/>
+  <path d="M50 88c9 9 20 9 29 0" fill="none" stroke="#163b3a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M20 58c-10 4-14 13-9 21M108 58c10 4 14 13 9 21" fill="none" stroke="#2f9a8a" stroke-width="8" stroke-linecap="round"/>
+</svg>

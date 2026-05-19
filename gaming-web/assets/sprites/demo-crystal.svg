@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="Light crystal demo image">
+  <rect width="960" height="540" fill="#f7fbfa"/>
+  <path d="M0 386c130-88 242-90 336-8 104 91 229 73 374-52 100-86 183-108 250-66v280H0z" fill="#d7efe9"/>
+  <path d="M154 124h652v260H154z" rx="34" fill="#ffffff" stroke="#b9ddd5" stroke-width="10"/>
+  <path d="M480 132l72 132-72 132-72-132z" fill="#7fdac9"/>
+  <path d="M480 132l72 132H408z" fill="#f5d565"/>
+  <path d="M408 264h144l-72 132z" fill="#2f9a8a"/>
+  <circle cx="252" cy="222" r="24" fill="#f5d565"/>
+  <circle cx="710" cy="324" r="34" fill="#8ee6d2"/>
+</svg>

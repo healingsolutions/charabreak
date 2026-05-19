@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="Ribbon path demo image">
+  <rect width="960" height="540" fill="#fffaf0"/>
+  <path d="M0 112c140 54 237 64 291 30 84-53 150-44 199 28 44 65 117 82 220 50 89-28 172-14 250 42v278H0z" fill="#f3e1a3"/>
+  <path d="M126 358c94-130 195-190 303-179 92 9 134 75 207 75 57 0 110-41 198-123" fill="none" stroke="#2f9a8a" stroke-width="42" stroke-linecap="round"/>
+  <path d="M126 358c94-130 195-190 303-179 92 9 134 75 207 75 57 0 110-41 198-123" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="204" cy="340" r="32" fill="#f5d565"/>
+  <circle cx="476" cy="184" r="44" fill="#8ee6d2"/>
+  <circle cx="754" cy="174" r="28" fill="#f5d565"/>
+</svg>
