@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.40';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.42';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -30,11 +30,12 @@ const UI_TEXT = {
     collectMission: 'X\u9577\u62bc\u3057\u3067\u6587\u5b57\u3092\u63b2\u3052\u308b / 3\u79d2\u5b88\u3063\u3066GOAL\u3078',
     goalNeedsLetters: '\u3042\u3068{count}\u6587\u5b57\u3001\u5b88\u308d\u3046\uff01',
     goalReadyWithLetters: '\u6587\u5b57\u304c\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
-    treasureTitle: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57',
+    treasureTitle: '\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19',
     treasureEmpty: '\u307e\u3060\u306a\u3057',
     treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u63b2\u3052\u308b',
     treasureHold: '\u6587\u5b57\u3092\u63b2\u3052\u305f\uff01 3\u79d2\u5b88\u308d\u3046\uff01',
-    treasureStored: '\u300c{char}\u300d\u3092\u5927\u5207\u306a\u6587\u5b57\u306b\u523b\u3093\u3060\uff01',
+    treasurePlaced: '\u6587\u5b57\u3092\u305d\u306e\u5834\u306b\u7f6e\u3044\u305f\uff01',
+    treasureStored: '\u300c{char}\u300d\u3092\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19\u306b\u523b\u3093\u3060\uff01',
     treasureNoLetter: '\u8db3\u5143\u306b\u5b88\u308b\u6587\u5b57\u304c\u306a\u3044\uff01',
     treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
@@ -208,6 +209,7 @@ export class StageOverlay {
         this.lockedEnemyId = null;
         this.heldLetter = null;
         this.heldLetterSequence = 0;
+        this.placedLetters = [];
         this.missionTreasure = null;
         this.treasureLetters = [];
         this.returnRoute = null;
@@ -706,6 +708,10 @@ export class StageOverlay {
             projectile.element.remove();
         }
 
+        for (const placed of this.placedLetters) {
+            placed.element?.remove();
+        }
+        this.placedLetters = [];
         this.dropHeldLetter();
         this.projectileLayer?.remove();
         this.projectileLayer = null;
@@ -1324,10 +1330,11 @@ export class StageOverlay {
             return true;
         } else {
             const pickupRect = this.runnerPickupRect();
-            picked = this.textBreaker?.pickCharAtRect(pickupRect, {
-                centerX: this.runnerState.x + RUNNER_WIDTH / 2,
-                centerY: this.runnerState.y + RUNNER_HEIGHT,
-            });
+            picked = this.pickPlacedLetterAtRect(pickupRect)
+                || this.textBreaker?.pickCharAtRect(pickupRect, {
+                    centerX: this.runnerState.x + RUNNER_WIDTH / 2,
+                    centerY: this.runnerState.y + RUNNER_HEIGHT,
+                });
             impactRect = picked?.rect || pickupRect;
         }
 
@@ -1346,6 +1353,53 @@ export class StageOverlay {
 
         this.scheduleTreasureStore(this.heldLetter?.id || '');
         return true;
+    }
+
+    pickPlacedLetterAtRect(rect) {
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const candidates = [];
+        const remaining = [];
+
+        for (const placed of this.placedLetters) {
+            if (!placed.element?.isConnected) {
+                continue;
+            }
+
+            const placedRect = placed.element.getBoundingClientRect();
+            const overlap = rectOverlapArea(rect, placedRect);
+            if (overlap <= 0) {
+                remaining.push(placed);
+                continue;
+            }
+
+            const placedCenterX = placedRect.left + placedRect.width / 2;
+            const placedCenterY = placedRect.top + placedRect.height / 2;
+            candidates.push({
+                placed,
+                rect: rectFromDom(placedRect),
+                distance: Math.hypot(centerX - placedCenterX, (centerY - placedCenterY) * 1.4),
+                overlap,
+            });
+        }
+
+        candidates.sort((a, b) => a.distance - b.distance || b.overlap - a.overlap);
+        const picked = candidates[0];
+
+        if (!picked) {
+            this.placedLetters = remaining;
+            return null;
+        }
+
+        this.placedLetters = remaining.concat(candidates.slice(1).map((candidate) => candidate.placed));
+        picked.placed.element.remove();
+
+        return {
+            char: picked.placed.char,
+            rect: picked.rect,
+            style: picked.placed.style || {},
+            target: null,
+        };
     }
 
     scheduleTreasureStore(heldId = '') {
@@ -1379,6 +1433,48 @@ export class StageOverlay {
 
         this.treasureStoreTimer = 0;
         this.treasureStoreHeldId = '';
+    }
+
+    placeHeldLetterAtFeet() {
+        if (!this.heldLetter || !this.runnerState) {
+            return false;
+        }
+
+        this.clearTreasureStoreTimer();
+        const held = this.heldLetter;
+        const element = held.element;
+        const x = this.runnerState.x + RUNNER_WIDTH / 2;
+        const y = this.runnerState.y + RUNNER_HEIGHT - Math.max(6, held.height / 2);
+
+        this.heldLetter = null;
+        this.runner?.classList.remove('gw-pixel-runner--holding');
+
+        if (!element) {
+            return false;
+        }
+
+        element.classList.remove('gw-held-letter--drop', 'gw-held-letter--treasure-store');
+        element.classList.add('gw-held-letter--placed');
+        element.style.left = `${x}px`;
+        element.style.top = `${y}px`;
+        element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+        this.placedLetters.push({
+            char: held.char,
+            element,
+            style: held.style || {},
+            width: held.width,
+            height: held.height,
+        });
+
+        while (this.placedLetters.length > 12) {
+            const old = this.placedLetters.shift();
+            old?.element?.remove();
+        }
+
+        this.impactBurstAt(this.runnerPickupRect(), 'soft');
+        this.onRunnerSound('uiMove', { volume: 0.08, rate: 0.96 });
+        this.showMessage(UI_TEXT.treasurePlaced, 900);
+        return true;
     }
 
     storeHeldLetterToTreasure() {
@@ -3046,6 +3142,9 @@ export class StageOverlay {
         this.setThrowControlCharging(false, false);
 
         if (hold.triggered) {
+            if (this.treasureStoreTimer && this.heldLetter?.id === this.treasureStoreHeldId) {
+                this.placeHeldLetterAtFeet();
+            }
             return true;
         }
 
@@ -3770,6 +3869,17 @@ function placeBox(element, rect) {
     element.style.top = `${rect.top}px`;
     element.style.width = `${rect.width}px`;
     element.style.height = `${rect.height}px`;
+}
+
+function rectFromDom(rect) {
+    return {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+    };
 }
 
 function normalizeText(text) {

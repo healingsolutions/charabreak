@@ -802,6 +802,12 @@
     animation: gw-held-letter-drop 220ms steps(3, end) forwards;
 }
 
+.gw-held-letter--placed {
+    z-index: 3;
+    filter: drop-shadow(0 5px 0 rgba(31, 41, 55, 0.16));
+    animation: gw-held-letter-place 180ms steps(3, end);
+}
+
 .gw-held-letter--treasure-store {
     z-index: 7;
     transition:
@@ -2373,6 +2379,15 @@
     100% {
         opacity: 0;
         transform: translate(-50%, -50%) translateY(16px) scale(0.48);
+    }
+}
+
+@keyframes gw-held-letter-place {
+    0% {
+        transform: translate(-50%, -50%) translateY(-12px) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) translateY(0) scale(1);
     }
 }
 
