@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 class GW_Settings
 {
     public const OPTION_ENABLED = 'gaming_web_enabled';
+    public const OPTION_SHOW_FLOATING_BUTTON = 'gaming_web_show_floating_button';
     public const OPTION_POST_TYPES = 'gaming_web_post_types';
     public const OPTION_BUTTON_LABEL = 'gaming_web_button_label';
     public const OPTION_CHARACTER_NAME = 'gaming_web_character_name';
@@ -17,6 +18,7 @@ class GW_Settings
     {
         return array(
             self::OPTION_ENABLED => '1',
+            self::OPTION_SHOW_FLOATING_BUTTON => '1',
             self::OPTION_POST_TYPES => array('page', 'post'),
             self::OPTION_BUTTON_LABEL => 'ゲームモード',
             self::OPTION_CHARACTER_NAME => 'ピコ',
@@ -55,6 +57,12 @@ class GW_Settings
     public function register_settings(): void
     {
         register_setting('gaming_web_settings', self::OPTION_ENABLED, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_checkbox'),
+            'default' => '1',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_SHOW_FLOATING_BUTTON, array(
             'type' => 'string',
             'sanitize_callback' => array($this, 'sanitize_checkbox'),
             'default' => '1',

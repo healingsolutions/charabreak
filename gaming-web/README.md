@@ -12,10 +12,26 @@ Gaming Web adds a light, playful mode to enabled WordPress pages. The MVP keeps 
 - Optional in-game BGM toggle with chiptune Web Audio playback.
 - MP3 sound effects for hits, UI, collection, start, exit, jumping, falling, landing, lock-on, throws, and KO moments.
 - Collectible word fragments and a compact inventory panel.
-- Admin settings for global enablement, post types, labels, character name, logging, and debug mode.
+- Admin settings for global enablement, post types, floating start button visibility, labels, character name, logging, and debug mode.
 - Per-page meta for game mode, important words, and stage name.
 - REST event endpoint at `/wp-json/gaming-web/v1/event`.
 - Anonymous event table: `wp_gaming_web_events`.
+
+## Starting From Page Content
+
+Enabled pages can start game mode from natural in-page copy instead of the fixed lower-right button:
+
+```text
+[gaming_web_start label="このページで遊ぶ"]
+```
+
+The fixed floating button can be hidden in **Settings > Gaming Web**. Custom markup can also trigger the game by adding `data-gaming-web-start`:
+
+```html
+<a href="#gaming-web-start" data-gaming-web-start>このページを触ってみる</a>
+```
+
+`wordpress-adapter.js` exposes `window.GamingWeb.start()` for non-WordPress wrappers or custom theme scripts after the adapter has loaded.
 
 ## JavaScript Structure
 

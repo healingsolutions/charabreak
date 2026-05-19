@@ -1,6 +1,6 @@
-import { GamingWebCore } from './gaming-web-core.js?v=0.1.43';
-import { GamingWebLogger } from './logger.js?v=0.1.43';
-import { AudioManager } from './audio-manager.js?v=0.1.43';
+import { GamingWebCore } from './gaming-web-core.js?v=0.1.44';
+import { GamingWebLogger } from './logger.js?v=0.1.44';
+import { AudioManager } from './audio-manager.js?v=0.1.44';
 
 const config = window.GamingWebConfig || {};
 const RESUME_KEY = 'gaming_web_resume_mode';
@@ -18,12 +18,8 @@ ready(() => {
         debug: config.debug,
     });
 
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'gw-mode-button';
-    button.textContent = config.buttonLabel || '\u30b2\u30fc\u30e0\u30e2\u30fc\u30c9';
-    button.setAttribute('aria-label', button.textContent);
-    document.body.appendChild(button);
+    const floatingButton = shouldShowFloatingButton(config) ? createFloatingButton(config) : null;
+    let lastStartTrigger = null;
 
     const core = new GamingWebCore({
         ...config,
@@ -35,24 +31,91 @@ ready(() => {
         },
         onExit: () => {
             storeResumeMode(false);
-            button.hidden = false;
-            button.focus({ preventScroll: true });
+            setStartTriggersEnabled(true);
+
+            if (floatingButton) {
+                floatingButton.hidden = false;
+            }
+
+            const focusTarget = lastStartTrigger?.isConnected ? lastStartTrigger : floatingButton;
+            focusTarget?.focus?.({ preventScroll: true });
         },
     });
 
-    button.addEventListener('click', () => {
+    function startGame(trigger = null) {
+        if (core.isActive()) {
+            return;
+        }
+
+        lastStartTrigger = trigger;
         storeResumeMode(true);
-        button.hidden = true;
+        setStartTriggersEnabled(false);
+
+        if (floatingButton) {
+            floatingButton.hidden = true;
+        }
+
         core.start();
+    }
+
+    if (floatingButton) {
+        floatingButton.addEventListener('click', () => startGame(floatingButton));
+        document.body.appendChild(floatingButton);
+    }
+
+    document.addEventListener('click', (event) => {
+        const trigger = event.target?.closest?.('[data-gaming-web-start], .gw-inline-start');
+        if (!trigger) {
+            return;
+        }
+
+        event.preventDefault();
+        startGame(trigger);
     });
 
+    window.GamingWeb = {
+        ...(window.GamingWeb || {}),
+        core,
+        config,
+        start: () => startGame(null),
+        stop: () => core.stop(),
+        isActive: () => core.isActive(),
+    };
+
     if (readResumeMode()) {
-        button.hidden = true;
+        setStartTriggersEnabled(false);
+        if (floatingButton) {
+            floatingButton.hidden = true;
+        }
+
         window.setTimeout(() => {
             core.start();
         }, 260);
     }
 });
+
+function createFloatingButton(config) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'gw-mode-button';
+    button.textContent = config.buttonLabel || '\u30b2\u30fc\u30e0\u30e2\u30fc\u30c9';
+    button.setAttribute('aria-label', button.textContent);
+
+    return button;
+}
+
+function setStartTriggersEnabled(enabled) {
+    document.querySelectorAll('[data-gaming-web-start], .gw-inline-start').forEach((trigger) => {
+        trigger.classList.toggle('is-gaming-web-active', !enabled);
+        trigger.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+    });
+}
+
+function shouldShowFloatingButton(config) {
+    return config.showFloatingButton !== false
+        && config.showFloatingButton !== '0'
+        && config.showFloatingButton !== 0;
+}
 
 function ready(callback) {
     if (document.readyState === 'loading') {

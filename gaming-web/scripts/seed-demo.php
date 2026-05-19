@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 update_option('gaming_web_enabled', '1');
+update_option('gaming_web_show_floating_button', '1');
 update_option('gaming_web_post_types', array('page', 'post'));
 update_option('gaming_web_button_label', 'ゲームモード');
 update_option('gaming_web_character_name', 'ピコ');
@@ -54,7 +55,7 @@ if (!function_exists('gw_seed_demo_content')) {
             <h1>' . esc_html($title) . '</h1>
             <p>静かな文章、整った写真、読みやすい余白。ふつうに美しいWebサイトの表面を、ゲームモードで少しずつ攻撃できます。</p>
             <p>壊すためではなく、触って確かめるためのページです。' . esc_html($word_text) . ' が、画面の奥で小さく光っています。</p>
-            <p class="gw-demo-actions"><a href="#' . esc_attr($safe_id) . '">今日の展示を見る</a><a href="' . esc_url(home_url('/?page_id=2')) . '">別ページへ歩く</a><button type="button">小さな合図を鳴らす</button></p>
+            <p class="gw-demo-actions"><a href="#gaming-web-start" class="gw-inline-start" data-gaming-web-start>このページで遊ぶ</a><a href="#' . esc_attr($safe_id) . '">今日の展示を見る</a><a href="' . esc_url(home_url('/?page_id=2')) . '">別ページへ歩く</a><button type="button">小さな合図を鳴らす</button></p>
         </div>
         <figure class="gw-demo-hero__media">
             <img src="' . esc_url($image_url) . '" alt="' . esc_attr($stage_name) . 'の抽象ビジュアル">

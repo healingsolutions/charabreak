@@ -40,6 +40,7 @@ class GW_Plugin
         add_filter('script_loader_tag', array($this, 'mark_adapter_as_module'), 10, 3);
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
         add_action('save_post', array($this, 'save_meta_box'));
+        add_shortcode('gaming_web_start', array($this, 'render_start_shortcode'));
     }
 
     public function enqueue_frontend_assets(): void
@@ -76,6 +77,43 @@ class GW_Plugin
             '<script type="module" src="%s" id="%s-js"></script>' . "\n",
             esc_url($src),
             esc_attr($handle)
+        );
+    }
+
+    public function render_start_shortcode($atts = array()): string
+    {
+        if (!is_singular() || !$this->is_enabled_for_current_post()) {
+            return '';
+        }
+
+        $atts = shortcode_atts(
+            array(
+                'label' => GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL),
+                'class' => '',
+            ),
+            $atts,
+            'gaming_web_start'
+        );
+
+        $label = trim((string) $atts['label']);
+        if ($label === '') {
+            $label = GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL);
+        }
+
+        $classes = array('gw-inline-start');
+        $extra_classes = preg_split('/\s+/', (string) $atts['class']);
+        $extra_classes = is_array($extra_classes) ? $extra_classes : array();
+        foreach ($extra_classes as $class_name) {
+            $class_name = sanitize_html_class($class_name);
+            if ($class_name !== '') {
+                $classes[] = $class_name;
+            }
+        }
+
+        return sprintf(
+            '<a href="#gaming-web-start" class="%s" data-gaming-web-start role="button">%s</a>',
+            esc_attr(implode(' ', array_unique($classes))),
+            esc_html($label)
         );
     }
 
@@ -188,6 +226,7 @@ class GW_Plugin
             'pageUrl' => $post_id ? get_permalink($post_id) : home_url('/'),
             'stageName' => $stage_name ?: get_the_title($post_id),
             'buttonLabel' => GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL),
+            'showFloatingButton' => GW_Settings::is_truthy(GW_Settings::OPTION_SHOW_FLOATING_BUTTON) ? '1' : '0',
             'characterName' => GW_Settings::get(GW_Settings::OPTION_CHARACTER_NAME),
             'importantWords' => $this->parse_important_words($important_words),
             'loggingEnabled' => GW_Settings::is_truthy(GW_Settings::OPTION_LOGGING_ENABLED),

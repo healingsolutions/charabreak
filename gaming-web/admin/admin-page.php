@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 $enabled = GW_Settings::get(GW_Settings::OPTION_ENABLED);
+$show_floating_button = GW_Settings::get(GW_Settings::OPTION_SHOW_FLOATING_BUTTON);
 $post_types = GW_Settings::get(GW_Settings::OPTION_POST_TYPES);
 $post_types = is_array($post_types) ? $post_types : array();
 $button_label = GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL);
@@ -23,6 +24,7 @@ $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
         <?php settings_fields('gaming_web_settings'); ?>
 
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_ENABLED); ?>" value="0">
+        <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_SHOW_FLOATING_BUTTON); ?>" value="0">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_POST_TYPES); ?>[]" value="">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_LOGGING_ENABLED); ?>" value="0">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_DEBUG); ?>" value="0">
@@ -36,6 +38,18 @@ $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
                             <input type="checkbox" name="<?php echo esc_attr(GW_Settings::OPTION_ENABLED); ?>" value="1" <?php checked($enabled, '1'); ?>>
                             <?php esc_html_e('Enabled', 'gaming-web'); ?>
                         </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><?php esc_html_e('Show floating start button', 'gaming-web'); ?></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="<?php echo esc_attr(GW_Settings::OPTION_SHOW_FLOATING_BUTTON); ?>" value="1" <?php checked($show_floating_button, '1'); ?>>
+                            <?php esc_html_e('Display the fixed game start button in the lower-right corner.', 'gaming-web'); ?>
+                        </label>
+                        <p class="description">
+                            <?php esc_html_e('You can hide this and start the game from page content using the [gaming_web_start] shortcode.', 'gaming-web'); ?>
+                        </p>
                     </td>
                 </tr>
                 <tr>

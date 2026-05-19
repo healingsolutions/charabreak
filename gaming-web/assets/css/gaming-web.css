@@ -27,6 +27,49 @@
     outline-offset: 3px;
 }
 
+.gw-inline-start {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    min-height: 2.3em;
+    padding: 0.35em 0.9em;
+    border: 1px solid rgba(31, 122, 109, 0.34);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(229, 248, 243, 0.82));
+    color: #195f56;
+    font-weight: 800;
+    line-height: 1.25;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(21, 68, 62, 0.12);
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+.gw-inline-start::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 0.34em solid transparent;
+    border-bottom: 0.34em solid transparent;
+    border-left: 0.52em solid currentColor;
+}
+
+.gw-inline-start:hover,
+.gw-inline-start:focus-visible {
+    border-color: rgba(31, 122, 109, 0.58);
+    background: #ffffff;
+    color: #123f3a;
+    outline: 3px solid rgba(31, 122, 109, 0.18);
+    outline-offset: 3px;
+    text-decoration: none;
+}
+
+.gw-inline-start.is-gaming-web-active {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
 .gw-game-active {
     cursor: crosshair;
 }
