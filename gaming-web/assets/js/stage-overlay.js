@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.31';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.32';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',

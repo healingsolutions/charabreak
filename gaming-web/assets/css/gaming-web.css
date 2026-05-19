@@ -1605,14 +1605,15 @@
 }
 
 .gw-pixel-runner__hammer {
-    left: 40px;
-    top: 14px;
-    z-index: 8;
+    left: 5px;
+    top: 18px;
+    z-index: 1;
     width: 6px;
     height: 34px;
     background: #7a5144;
     box-shadow: 3px 0 0 #5d2f37;
-    transform: rotate(-34deg);
+    opacity: 0.94;
+    transform: rotate(18deg);
     transform-origin: 50% 90%;
 }
 
@@ -1630,14 +1631,26 @@
 }
 
 .gw-pixel-runner--strike .gw-pixel-runner__hammer {
+    left: 40px;
+    top: 14px;
+    z-index: 8;
+    opacity: 1;
     animation: gw-hammer-strike 260ms steps(3, end);
 }
 
 .gw-pixel-runner--charging .gw-pixel-runner__hammer {
+    left: 38px;
+    top: 13px;
+    z-index: 8;
+    opacity: 1;
     animation: gw-hammer-charge 520ms steps(2, end) infinite;
 }
 
 .gw-pixel-runner--charged-strike .gw-pixel-runner__hammer {
+    left: 40px;
+    top: 14px;
+    z-index: 8;
+    opacity: 1;
     animation: gw-hammer-charged-strike 420ms steps(4, end);
 }
 
