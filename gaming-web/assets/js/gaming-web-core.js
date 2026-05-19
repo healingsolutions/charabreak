@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.1.35';
-import { StageOverlay } from './stage-overlay.js?v=0.1.35';
-import { InteractionEngine } from './interaction-engine.js?v=0.1.35';
-import { TextBreaker } from './text-breaker.js?v=0.1.35';
-import { ImageBreaker } from './image-breaker.js?v=0.1.35';
+import { scanGameTargets } from './dom-scanner.js?v=0.1.37';
+import { StageOverlay } from './stage-overlay.js?v=0.1.37';
+import { InteractionEngine } from './interaction-engine.js?v=0.1.37';
+import { TextBreaker } from './text-breaker.js?v=0.1.37';
+import { ImageBreaker } from './image-breaker.js?v=0.1.37';
 
 export class GamingWebCore {
     constructor(config = {}) {

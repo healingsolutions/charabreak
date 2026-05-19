@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.35';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.37';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -26,6 +26,14 @@ const UI_TEXT = {
     criticalLost: '\u91cd\u8981\u306a\u6587\u5b57\u304c\u58ca\u3055\u308c\u305f\uff01',
     stageFailed: '\u30a2\u30a6\u30c8\uff01\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u6d88\u3048\u305f\uff01',
     lifeLabel: 'LIFE',
+    collectedLabel: '\u96c6\u3081\u305f',
+    collectMission: '\u6587\u5b57BOX\u306b3\u6587\u5b57\u5165\u308c\u3066GOAL\u3078',
+    goalNeedsLetters: '\u6587\u5b57\u3092\u3042\u3068{count}\u500b\u96c6\u3081\u3088\u3046\uff01',
+    goalReadyWithLetters: '\u6587\u5b57\u304c\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
+    letterBoxTitle: '\u6587\u5b57BOX',
+    letterBoxHint: 'X\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u6301\u3063\u3066\u3001BOX\u3078',
+    letterBoxCarry: '\u6587\u5b57BOX\u307e\u3067\u904b\u307c\u3046\uff01',
+    letterBoxStored: '\u6587\u5b57BOX\u306b\u5165\u3063\u305f\uff01',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
     gameOverTitle: 'GAME OVER',
     retry: '\u3082\u3046\u4e00\u56de',
@@ -99,6 +107,8 @@ const ENEMY_MISSILE_SPEED = 270;
 const ENEMY_MISSILE_LIFETIME = 3600;
 const RETURN_ROUTE_REVEAL_PROGRESS = 0.58;
 const PLAYER_MAX_LIFE = 3;
+const GOAL_REQUIRED_LETTERS = 3;
+const LETTER_BOX_REVEAL_PROGRESS = 0.38;
 const RUNNER_CONTROL_DEFS = [
     { control: 'left', label: '\u2190', keys: 'A / \u2190' },
     { control: 'jump', label: '\u2191', keys: 'W / \u2191' },
@@ -185,6 +195,9 @@ export class StageOverlay {
         this.lockedEnemyId = null;
         this.heldLetter = null;
         this.heldLetterSequence = 0;
+        this.letterBox = null;
+        this.letterBoxSlots = null;
+        this.boxedLetters = [];
         this.returnRoute = null;
         this.returnRouteCooldownUntil = 0;
         this.playBounds = null;
@@ -387,9 +400,13 @@ export class StageOverlay {
                 const critical = this.criticalWord
                     ? ` / ${UI_TEXT.criticalGuard}\u300c${this.criticalWord}\u300d`
                     : '';
+                const collected = this.collectedLetterCount();
+                const collection = collected >= GOAL_REQUIRED_LETTERS
+                    ? UI_TEXT.goalReadyWithLetters
+                    : `${UI_TEXT.collectMission} (${collected}/${GOAL_REQUIRED_LETTERS})`;
                 this.missionGoal.textContent = this.goalRevealed
-                    ? `${UI_TEXT.goalReady}${critical}`
-                    : `${UI_TEXT.missionReachGoal} / ${UI_TEXT.missionProtect}${critical}`;
+                    ? `${collection}${critical}`
+                    : `${collection} / ${UI_TEXT.missionProtect}${critical}`;
             }
         }
 
@@ -401,6 +418,7 @@ export class StageOverlay {
             this.missionStats.innerHTML = `
                 <div><dt>${UI_TEXT.lifeLabel}</dt><dd class="gw-life-hearts" aria-label="${this.playerLife} / ${PLAYER_MAX_LIFE}">${renderLifeHearts(this.playerLife)}</dd></div>
                 <div><dt>${UI_TEXT.progressLabel}</dt><dd>${progress}%</dd></div>
+                <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}</dd></div>
                 <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${protectedCount}</dd></div>
                 <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${this.stageStats.playerBroken}</dd></div>
                 <div><dt>${UI_TEXT.lostLabel}</dt><dd>${this.stageStats.enemyBroken}</dd></div>
@@ -411,6 +429,10 @@ export class StageOverlay {
 
     protectedCharCount() {
         return Math.max(0, this.stageStats.totalChars - this.stageStats.enemyBroken);
+    }
+
+    collectedLetterCount() {
+        return Math.max(0, this.boxedLetters.length);
     }
 
     bumpStageStat(key, amount = 1) {
@@ -433,6 +455,7 @@ export class StageOverlay {
         this.runnerOnEnemyHit = onEnemyHit || (() => {});
         this.playBounds = this.calculatePlayBounds();
         this.stageStats = createStageStats(this.textBreaker?.countTotalChars?.() || 0);
+        this.boxedLetters = [];
         this.endRollItems = this.buildEndRollItems(targets);
         this.endRollSummary = this.buildPageSummary(targets);
         const critical = this.textBreaker?.markImportantChars?.([this.buildCriticalWord(targets)]);
@@ -455,6 +478,7 @@ export class StageOverlay {
         this.mountProjectileLayer();
         this.mountGoalGate();
         this.mountReturnRoute();
+        this.mountLetterBox();
         this.runner = document.createElement('div');
         this.runner.className = 'gw-pixel-runner';
         this.runner.innerHTML = `
@@ -657,6 +681,10 @@ export class StageOverlay {
         this.gameOverPanel = null;
         this.returnRoute?.remove();
         this.returnRoute = null;
+        this.letterBox?.remove();
+        this.letterBox = null;
+        this.letterBoxSlots = null;
+        this.boxedLetters = [];
         this.endRoll?.remove();
         this.endRoll = null;
         for (const missile of this.enemyMissiles) {
@@ -692,6 +720,7 @@ export class StageOverlay {
         this.updateLinkGates();
         this.updateGoalGate(true);
         this.updateReturnRoute(true);
+        this.updateLetterBox(true);
 
         if (this.runnerState) {
             const bounds = this.currentPlayBounds();
@@ -709,6 +738,7 @@ export class StageOverlay {
         this.updateLinkGates();
         this.updateGoalGate(true);
         this.updateReturnRoute(true);
+        this.updateLetterBox(true);
 
         if (currentTime() < this.runnerScrollFollowUntil) {
             this.runnerState.x = clamp(this.runnerState.x, this.currentPlayBounds().left, this.currentPlayBounds().right - RUNNER_WIDTH);
@@ -746,8 +776,10 @@ export class StageOverlay {
         this.updateMissionHud();
         this.updateGoalGate();
         this.updateReturnRoute();
+        this.updateLetterBox();
         this.checkGateEntry();
         this.checkGoalEntry();
+        this.checkLetterBoxDeposit();
         this.checkReturnRouteEntry();
         this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
     }
@@ -776,7 +808,7 @@ export class StageOverlay {
             };
         }
 
-        const padding = window.innerWidth < 640 ? 18 : 34;
+        const padding = window.innerWidth < 640 ? 8 : 12;
         const minWidth = Math.min(window.innerWidth - 24, 260);
         let left = Math.max(12, Math.min(...usableRects.map((rect) => rect.left)) - padding);
         let right = Math.min(window.innerWidth - 12, Math.max(...usableRects.map((rect) => rect.right)) + padding);
@@ -945,6 +977,93 @@ export class StageOverlay {
         this.returnRoute.innerHTML = `<span>\u2191</span><small>${UI_TEXT.returnRoute}</small>`;
         this.effectLayer?.appendChild(this.returnRoute);
         this.updateReturnRoute(true);
+    }
+
+    mountLetterBox() {
+        this.letterBox?.remove();
+        this.letterBox = document.createElement('div');
+        this.letterBox.className = 'gw-letter-box';
+        this.letterBox.setAttribute('aria-hidden', 'true');
+        this.letterBox.hidden = true;
+        this.letterBox.innerHTML = `
+            <strong>${UI_TEXT.letterBoxTitle}</strong>
+            <div class="gw-letter-box__slots"></div>
+            <small>${UI_TEXT.letterBoxHint}</small>
+        `;
+        this.letterBoxSlots = this.letterBox.querySelector('.gw-letter-box__slots');
+        this.effectLayer?.appendChild(this.letterBox);
+        this.renderLetterBox();
+        this.updateLetterBox(true);
+    }
+
+    updateLetterBox(force = false) {
+        if (!this.letterBox) {
+            return;
+        }
+
+        const visible = !this.stageCleared
+            && !this.stageFailed
+            && pageScrollProgress() >= LETTER_BOX_REVEAL_PROGRESS;
+        this.letterBox.hidden = !visible;
+        this.letterBox.classList.toggle('gw-letter-box--ready', this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS);
+
+        if (force) {
+            this.renderLetterBox();
+        }
+    }
+
+    renderLetterBox() {
+        if (!this.letterBoxSlots) {
+            return;
+        }
+
+        this.letterBoxSlots.replaceChildren();
+        for (let index = 0; index < GOAL_REQUIRED_LETTERS; index += 1) {
+            const slot = document.createElement('span');
+            slot.className = 'gw-letter-box__slot';
+            slot.textContent = this.boxedLetters[index] || '';
+            slot.classList.toggle('gw-letter-box__slot--filled', Boolean(this.boxedLetters[index]));
+            this.letterBoxSlots.appendChild(slot);
+        }
+    }
+
+    checkLetterBoxDeposit() {
+        if (!this.heldLetter || !this.letterBox || this.letterBox.hidden || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
+            return;
+        }
+
+        const boxRect = this.letterBox.getBoundingClientRect();
+        const runnerRect = this.runnerPhysicsRect();
+        const overlap = rectOverlapArea(boxRect, runnerRect);
+        if (overlap < Math.min(360, boxRect.width * boxRect.height * 0.14)) {
+            return;
+        }
+
+        this.storeHeldLetterInBox();
+    }
+
+    storeHeldLetterInBox() {
+        if (!this.heldLetter || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
+            return false;
+        }
+
+        const char = this.heldLetter.char || '';
+        const rect = this.letterBox?.getBoundingClientRect?.();
+        this.boxedLetters.push(char);
+        this.stageStats.lettersCollected = this.boxedLetters.length;
+        this.dropHeldLetter(true);
+        this.renderLetterBox();
+        this.updateLetterBox(true);
+        this.updateGoalGate(true);
+        this.updateMissionHud(true);
+
+        if (rect) {
+            this.impactBurstAt(rect, this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'soft');
+        }
+
+        this.onRunnerSound('collect', { volume: 0.12, rate: 1.08 });
+        this.showMessage(this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? UI_TEXT.goalReadyWithLetters : UI_TEXT.letterBoxStored, 1300);
+        return true;
     }
 
     updateReturnRoute(force = false) {
@@ -1241,6 +1360,43 @@ export class StageOverlay {
         }, this.reducedMotion ? 40 : 150);
         this.timers.add(timer);
 
+        return true;
+    }
+
+    pickLetterForBox() {
+        if (this.heldLetter) {
+            if (this.storeHeldLetterInBox()) {
+                return true;
+            }
+
+            this.showMessage(UI_TEXT.letterBoxCarry, 1100);
+            this.impactBurstAt(this.runnerHandRect(), 'soft');
+            return true;
+        }
+
+        const pickupRect = this.runnerPickupRect();
+        const picked = this.textBreaker?.pickCharAtRect(pickupRect, {
+            centerX: this.runnerState.x + RUNNER_WIDTH / 2,
+            centerY: this.runnerState.y + RUNNER_HEIGHT,
+        });
+
+        if (!picked?.char) {
+            this.showMessage(UI_TEXT.noFootWord, 1100);
+            this.impactBurstAt(pickupRect, 'soft');
+            this.shakeScreen('soft');
+            return true;
+        }
+
+        if (this.criticalDestroyed(picked)) {
+            this.bumpStageStat('playerBroken', 1);
+            this.impactBurstAt(picked.rect, 'char');
+            this.shakeScreen('hard');
+            this.failStage('critical_player_pickup');
+            return true;
+        }
+
+        this.holdLetter(picked);
+        this.showMessage(UI_TEXT.letterBoxCarry, 1100);
         return true;
     }
 
@@ -1981,7 +2137,10 @@ export class StageOverlay {
         this.goalGate.hidden = false;
         this.goalRevealed = true;
         this.nextGoalHref = this.currentGoalHref();
-        const label = this.nextGoalHref ? UI_TEXT.goalNext : UI_TEXT.goalEnd;
+        const hasLetters = this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS;
+        const label = hasLetters
+            ? (this.nextGoalHref ? UI_TEXT.goalNext : UI_TEXT.goalEnd)
+            : `${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
         this.goalGate.innerHTML = `<span>${UI_TEXT.goalGate}</span><small>${label}</small>`;
 
         const bounds = this.currentPlayBounds();
@@ -1992,7 +2151,7 @@ export class StageOverlay {
         this.goalGate.style.width = `${width}px`;
 
         if ((wasHidden || force) && wasHidden) {
-            this.showMessage(UI_TEXT.goalReady, 2200);
+            this.showMessage(hasLetters ? UI_TEXT.goalReady : UI_TEXT.letterBoxHint, 2200);
             this.onRunnerSound('cheer', { volume: 0.12, rate: 1.04 });
         }
 
@@ -2020,6 +2179,14 @@ export class StageOverlay {
         const goalRect = this.goalGate.getBoundingClientRect();
         const overlap = rectOverlapArea(runnerRect, goalRect);
         if (overlap < Math.min(520, goalRect.width * goalRect.height * 0.18)) {
+            return;
+        }
+
+        if (this.collectedLetterCount() < GOAL_REQUIRED_LETTERS) {
+            const remaining = GOAL_REQUIRED_LETTERS - this.collectedLetterCount();
+            this.gateCooldownUntil = currentTime() + 1000;
+            this.showMessage(UI_TEXT.goalNeedsLetters.replace('{count}', String(remaining)), 1300);
+            this.onRunnerSound('uiCancel', { volume: 0.08, rate: 1.05 });
             return;
         }
 
@@ -2244,6 +2411,8 @@ export class StageOverlay {
             enemy_defeated_count: this.stageStats.enemiesDefeated,
             gates_broken: this.stageStats.gatesBroken,
             images_damaged: this.stageStats.imagesDamaged,
+            letters_collected: this.collectedLetterCount(),
+            letters_required: GOAL_REQUIRED_LETTERS,
             critical_word: this.criticalWord || '',
             critical_lost: Boolean(this.criticalWordLost),
             player_life: this.playerLife,
@@ -2278,6 +2447,7 @@ export class StageOverlay {
                 <h2>${UI_TEXT.stageClear}</h2>
                 <dl class="gw-end-roll__stats">
                     <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${stats.protected_count}</dd></div>
+                    <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${stats.letters_collected}/${stats.letters_required}</dd></div>
                     <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${stats.player_broken_count}</dd></div>
                     <div><dt>${UI_TEXT.lostLabel}</dt><dd>${stats.enemy_broken_count}</dd></div>
                     <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${stats.enemy_defeated_count}</dd></div>
@@ -2334,6 +2504,8 @@ export class StageOverlay {
         const gravity = 920;
         const maxFallSpeed = 470;
         const worldGroundY = runnerGroundY();
+        const previousY = this.runnerState.y;
+        const wasGrounded = this.runnerState.grounded;
         const oldBottom = this.runnerState.y + RUNNER_HEIGHT;
         const bounds = this.currentPlayBounds();
 
@@ -2363,6 +2535,13 @@ export class StageOverlay {
         this.runnerState.y += this.runnerState.vy * delta;
         const runnerRect = this.runnerPhysicsRect();
 
+        if (wasGrounded && !jump && this.runnerAtSideWall(runnerRect)) {
+            this.runnerState.y = previousY;
+            this.runnerState.vy = 0;
+            this.runnerState.grounded = true;
+            return;
+        }
+
         if (this.runnerState.vy >= 0) {
             const landingY = firstLandingY(
                 this.textBreaker?.findLandingY(runnerRect, oldBottom, runnerRect.bottom),
@@ -2386,6 +2565,11 @@ export class StageOverlay {
 
         if (this.runnerState.grounded && !jump) {
             const supportRect = this.runnerPhysicsRect();
+            if (this.runnerAtSideWall(supportRect)) {
+                this.runnerState.vy = 0;
+                return;
+            }
+
             const textSupportY = this.textBreaker?.findSupportY(supportRect);
             const imageSupportY = this.imageBreaker?.findSupportY(supportRect);
             const supportY = firstLandingY(textSupportY, imageSupportY);
@@ -2408,6 +2592,10 @@ export class StageOverlay {
 
     followRunnerFall(delta) {
         if (!this.runnerState || this.runnerState.grounded || this.runnerState.vy <= 40) {
+            return false;
+        }
+
+        if (this.runnerAtSideWall(this.runnerPhysicsRect())) {
             return false;
         }
 
@@ -2574,6 +2762,12 @@ export class StageOverlay {
             width: RUNNER_FOOT_WIDTH,
             height: RUNNER_HEIGHT,
         };
+    }
+
+    runnerAtSideWall(rect = this.runnerPhysicsRect()) {
+        const bounds = this.currentPlayBounds();
+        const margin = Math.max(18, RUNNER_FOOT_WIDTH * 0.5);
+        return rect.left <= bounds.left + margin || rect.right >= bounds.right - margin;
     }
 
     renderRunner(time = currentTime()) {
@@ -2887,6 +3081,14 @@ export class StageOverlay {
 
         this.runnerState.attackLockedUntil = now + 250;
         this.playRunnerStrike();
+
+        if (this.letterBox && !this.letterBox.hidden && this.collectedLetterCount() < GOAL_REQUIRED_LETTERS && this.pickLetterForBox()) {
+            return;
+        }
+
+        if (this.heldLetter && this.storeHeldLetterInBox()) {
+            return;
+        }
 
         if (this.activeEnemies().length > 0 && this.pickAndThrowAtLock({ autoLock: true })) {
             return;
@@ -3436,6 +3638,7 @@ function createStageStats(totalChars = 0) {
         enemiesDefeated: 0,
         gatesBroken: 0,
         imagesDamaged: 0,
+        lettersCollected: 0,
     };
 }
 
