@@ -23,6 +23,7 @@ The local demo can also use the Apollo business consulting Elementor template ki
 Required local plugins:
 
 ```powershell
+docker compose run --rm wpcli theme install hello-elementor --activate
 docker compose run --rm wpcli plugin install elementor elementskit-lite romethemeform --activate
 ```
 
@@ -32,7 +33,7 @@ Place/extract the Apollo kit into `gaming-web/_tmp_apollo`, then import the sele
 docker compose run --rm wpcli eval-file /var/www/html/wp-content/plugins/gaming-web/scripts/import-apollo-kit.php
 ```
 
-The importer creates seven Elementor pages, enables Gaming Web on them, adds clear rewards, and sets `Apollo Business Gaming Demo` as the front page. It does not change the active theme or import site-wide template settings.
+The importer creates seven Elementor pages, enables Gaming Web on them, inserts a visible `ゲームを始める` bar into the Elementor data, adds clear rewards, sets each page to Elementor Canvas, and sets `Apollo Business Gaming Demo` as the front page. It does not import site-wide template settings.
 
 ## Manual Commands
 

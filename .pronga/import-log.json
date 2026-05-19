@@ -2,7 +2,7 @@
   {
     "kit": "apollo-business-consulting-elementor-template-ki-2025-09-02-06-02-15-utc.zip",
     "source": "C:/Users/PC/Downloads/apollo-business-consulting-elementor-template-ki-2025-09-02-06-02-15-utc.zip",
-    "strategy": "Imported selected page templates as Elementor pages without changing the active theme or importing site settings.",
+    "strategy": "Imported selected page templates as Elementor Canvas pages, inserted an in-page Gaming Web start bar, and used Hello Elementor locally to avoid block theme header/footer interference. Site settings were not imported.",
     "templates": [
       "homepage.json",
       "about-us.json",

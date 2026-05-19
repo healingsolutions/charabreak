@@ -27,6 +27,46 @@ $templates = array(
     array('file' => 'contact-us.json', 'title' => 'Apollo Contact Gaming Demo', 'slug' => 'apollo-contact-gaming-demo'),
 );
 
+if (!function_exists('gw_apollo_start_container')) {
+    function gw_apollo_start_container(string $page_title): array
+    {
+        return array(
+            'id' => substr(md5('gw-apollo-start-' . $page_title), 0, 8),
+            'settings' => array(
+                'content_width' => 'full',
+                'flex_direction' => 'row',
+                'flex_justify_content' => 'center',
+                'flex_align_items' => 'center',
+                'padding' => array(
+                    'unit' => 'px',
+                    'top' => '14',
+                    'right' => '18',
+                    'bottom' => '14',
+                    'left' => '18',
+                    'isLinked' => false,
+                ),
+                'background_background' => 'classic',
+                'background_color' => '#071723',
+                '_title' => 'Gaming Web Start Bar',
+            ),
+            'elements' => array(
+                array(
+                    'id' => substr(md5('gw-apollo-start-html-' . $page_title), 0, 8),
+                    'settings' => array(
+                        'html' => '<div class="gw-apollo-start"><div><strong>Interactive Business Demo</strong><span>整ったビジネスサイトを、ゲームとして触って進めます。</span></div><a href="#gaming-web-start" class="gw-inline-start gw-apollo-start__button" data-gaming-web-start>ゲームを始める</a></div>',
+                    ),
+                    'elements' => array(),
+                    'isInner' => false,
+                    'widgetType' => 'html',
+                    'elType' => 'widget',
+                ),
+            ),
+            'isInner' => false,
+            'elType' => 'container',
+        );
+    }
+}
+
 $created_ids = array();
 
 foreach ($templates as $template) {
@@ -61,18 +101,15 @@ foreach ($templates as $template) {
         continue;
     }
 
-    $metadata = isset($json['metadata']) && is_array($json['metadata']) ? $json['metadata'] : array();
-    $page_template = sanitize_key((string) ($metadata['wp_page_template'] ?? 'elementor_header_footer'));
-    if ($page_template === '') {
-        $page_template = 'elementor_header_footer';
-    }
+    $content = $json['content'];
+    array_unshift($content, gw_apollo_start_container($template['title']));
 
     update_post_meta($post_id, '_elementor_edit_mode', 'builder');
     update_post_meta($post_id, '_elementor_template_type', 'wp-page');
     update_post_meta($post_id, '_elementor_version', defined('ELEMENTOR_VERSION') ? ELEMENTOR_VERSION : '4.0.9');
-    update_post_meta($post_id, '_elementor_data', wp_slash(wp_json_encode($json['content'])));
+    update_post_meta($post_id, '_elementor_data', wp_slash(wp_json_encode($content)));
     update_post_meta($post_id, '_elementor_page_settings', array());
-    update_post_meta($post_id, '_wp_page_template', $page_template);
+    update_post_meta($post_id, '_wp_page_template', 'elementor_canvas');
 
     update_post_meta($post_id, '_gaming_web_mode', 'enabled');
     update_post_meta($post_id, '_gaming_web_important_words', 'strategy, growth, trust, insight, value');
