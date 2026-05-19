@@ -356,6 +356,13 @@
     font-weight: 900;
 }
 
+.gw-mission-hud__stats .gw-life-hearts {
+    color: #bf4f57;
+    font-size: 15px;
+    letter-spacing: 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
 .gw-link-gates {
     position: absolute;
     inset: 0;

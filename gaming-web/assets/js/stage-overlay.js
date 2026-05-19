@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.34';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.35';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -399,7 +399,7 @@ export class StageOverlay {
 
         if (this.missionStats) {
             this.missionStats.innerHTML = `
-                <div><dt>${UI_TEXT.lifeLabel}</dt><dd>${'\u25a0'.repeat(Math.max(0, this.playerLife))}${'\u25a1'.repeat(Math.max(0, PLAYER_MAX_LIFE - this.playerLife))}</dd></div>
+                <div><dt>${UI_TEXT.lifeLabel}</dt><dd class="gw-life-hearts" aria-label="${this.playerLife} / ${PLAYER_MAX_LIFE}">${renderLifeHearts(this.playerLife)}</dd></div>
                 <div><dt>${UI_TEXT.progressLabel}</dt><dd>${progress}%</dd></div>
                 <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${protectedCount}</dd></div>
                 <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${this.stageStats.playerBroken}</dd></div>
@@ -3437,6 +3437,12 @@ function createStageStats(totalChars = 0) {
         gatesBroken: 0,
         imagesDamaged: 0,
     };
+}
+
+function renderLifeHearts(life = 0) {
+    const filled = Math.max(0, Math.min(PLAYER_MAX_LIFE, Math.round(life)));
+    const empty = Math.max(0, PLAYER_MAX_LIFE - filled);
+    return `${'\u2665'.repeat(filled)}${'\u2661'.repeat(empty)}`;
 }
 
 function runnerGroundY() {

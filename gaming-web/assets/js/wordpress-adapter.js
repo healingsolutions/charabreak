@@ -1,6 +1,6 @@
-import { GamingWebCore } from './gaming-web-core.js?v=0.1.34';
-import { GamingWebLogger } from './logger.js?v=0.1.34';
-import { AudioManager } from './audio-manager.js?v=0.1.34';
+import { GamingWebCore } from './gaming-web-core.js?v=0.1.35';
+import { GamingWebLogger } from './logger.js?v=0.1.35';
+import { AudioManager } from './audio-manager.js?v=0.1.35';
 
 const config = window.GamingWebConfig || {};
 const RESUME_KEY = 'gaming_web_resume_mode';
