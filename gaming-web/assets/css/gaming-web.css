@@ -280,16 +280,20 @@
     top: 16px;
     left: 16px;
     z-index: 5;
-    width: min(286px, calc(100vw - 32px));
-    padding: 10px 12px;
-    border: 2px solid rgba(22, 33, 43, 0.2);
+    width: min(306px, calc(100vw - 32px));
+    padding: 9px 10px 10px;
+    border: 3px solid #16212b;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.93);
+    background:
+        linear-gradient(180deg, rgba(255, 253, 247, 0.98), rgba(239, 247, 244, 0.96));
     color: #16212b;
     font-size: 12px;
     font-weight: 800;
     line-height: 1.25;
-    box-shadow: 0 12px 26px rgba(31, 41, 55, 0.16);
+    box-shadow:
+        0 0 0 3px rgba(240, 207, 93, 0.64),
+        7px 7px 0 rgba(22, 33, 43, 0.14),
+        0 16px 28px rgba(31, 41, 55, 0.16);
     pointer-events: none;
 }
 
@@ -299,14 +303,25 @@
 }
 
 .gw-mission-hud__title {
-    margin-bottom: 4px;
-    color: #8a4f44;
-    font-size: 11px;
+    margin: -2px -2px 7px;
+    padding: 5px 8px 4px;
+    border-radius: 5px;
+    background: #16212b;
+    color: #f0cf5d;
+    font-size: 10px;
     font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
 }
 
 .gw-mission-hud__goal {
+    padding: 0 2px;
     margin-bottom: 7px;
+    color: #25312f;
+    font-size: 12px;
+    font-weight: 900;
 }
 
 .gw-mission-hud__treasure {
@@ -315,10 +330,12 @@
     justify-content: space-between;
     gap: 8px;
     margin-bottom: 7px;
-    padding: 6px 7px;
-    border: 2px solid rgba(240, 207, 93, 0.5);
+    padding: 7px 8px;
+    border: 2px solid rgba(22, 33, 43, 0.72);
     border-radius: 6px;
-    background: rgba(255, 249, 230, 0.72);
+    background:
+        linear-gradient(90deg, rgba(240, 207, 93, 0.22), rgba(47, 154, 138, 0.14));
+    box-shadow: inset 0 -3px 0 rgba(22, 33, 43, 0.08);
 }
 
 .gw-mission-hud__treasure strong,
@@ -327,7 +344,7 @@
 }
 
 .gw-mission-hud__treasure strong {
-    color: #8a4f44;
+    color: #5d2f37;
     font-size: 10px;
     white-space: nowrap;
 }
@@ -347,7 +364,8 @@
     margin-bottom: 8px;
     overflow: hidden;
     border-radius: 8px;
-    background: rgba(31, 41, 55, 0.12);
+    border: 1px solid rgba(22, 33, 43, 0.48);
+    background: rgba(31, 41, 55, 0.16);
 }
 
 .gw-mission-hud__bar span {
@@ -369,7 +387,8 @@
     min-width: 0;
     padding: 4px 3px;
     border-radius: 6px;
-    background: rgba(47, 154, 138, 0.1);
+    border: 1px solid rgba(22, 33, 43, 0.12);
+    background: rgba(255, 255, 255, 0.62);
     text-align: center;
 }
 
@@ -781,6 +800,16 @@
 
 .gw-held-letter--drop {
     animation: gw-held-letter-drop 220ms steps(3, end) forwards;
+}
+
+.gw-held-letter--treasure-store {
+    z-index: 7;
+    transition:
+        left 360ms steps(8, end),
+        top 360ms steps(8, end),
+        transform 360ms steps(8, end),
+        opacity 360ms steps(5, end);
+    filter: drop-shadow(0 0 12px rgba(240, 207, 93, 0.88));
 }
 
 .gw-word-shot::after {

@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.39';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.40';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -27,14 +27,14 @@ const UI_TEXT = {
     stageFailed: '\u30a2\u30a6\u30c8\uff01\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u6d88\u3048\u305f\uff01',
     lifeLabel: 'LIFE',
     collectedLabel: '\u5b88\u3063\u305f\u6587\u5b57',
-    collectMission: 'X\u9577\u62bc\u3057\u30673\u6587\u5b57\u5b88\u3063\u3066GOAL\u3078',
+    collectMission: 'X\u9577\u62bc\u3057\u3067\u6587\u5b57\u3092\u63b2\u3052\u308b / 3\u79d2\u5b88\u3063\u3066GOAL\u3078',
     goalNeedsLetters: '\u3042\u3068{count}\u6587\u5b57\u3001\u5b88\u308d\u3046\uff01',
     goalReadyWithLetters: '\u6587\u5b57\u304c\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
     treasureTitle: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57',
     treasureEmpty: '\u307e\u3060\u306a\u3057',
-    treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u5b88\u308b',
-    treasureHold: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57\u3092\u6301\u3063\u305f\uff01',
-    treasureStored: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57\u300c{char}\u300d\u3092\u5b88\u3063\u305f\uff01',
+    treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u63b2\u3052\u308b',
+    treasureHold: '\u6587\u5b57\u3092\u63b2\u3052\u305f\uff01 3\u79d2\u5b88\u308d\u3046\uff01',
+    treasureStored: '\u300c{char}\u300d\u3092\u5927\u5207\u306a\u6587\u5b57\u306b\u523b\u3093\u3060\uff01',
     treasureNoLetter: '\u8db3\u5143\u306b\u5b88\u308b\u6587\u5b57\u304c\u306a\u3044\uff01',
     treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
@@ -64,7 +64,7 @@ const UI_TEXT = {
     miss: '\u7a7a\u3092\u305f\u305f\u3044\u305f\uff01',
     chargeReady: '\u529b\u304c\u305f\u307e\u3063\u305f\uff01',
     chargeFull: '\u5927\u632f\u308a\u306e\u4e00\u6483\uff01',
-    missionTitle: '\u6848\u5185\u677f',
+    missionTitle: 'QUEST BOARD',
     missionReachGoal: '\u30da\u30fc\u30b8\u4e0b\u90e8\u306eGOAL\u30b2\u30fc\u30c8\u3078',
     missionProtect: '\u6575\u304b\u3089\u6587\u5b57\u3092\u5b88\u308b',
     goalReady: '\u30b4\u30fc\u30eb\u30b2\u30fc\u30c8\u304c\u958b\u3044\u305f\uff01',
@@ -112,8 +112,8 @@ const ENEMY_MISSILE_LIFETIME = 3600;
 const RETURN_ROUTE_REVEAL_PROGRESS = 0.58;
 const PLAYER_MAX_LIFE = 3;
 const GOAL_REQUIRED_LETTERS = 3;
-const THROW_HOLD_MS = 520;
-const TREASURE_STORE_DELAY_MS = 260;
+const THROW_HOLD_MS = 400;
+const TREASURE_STORE_DELAY_MS = 3000;
 const BOSS_MISSILE_WARNING_MS = 560;
 const BOSS_MISSILE_MIN_INTERVAL = 9000;
 const BOSS_MISSILE_MAX_INTERVAL = 14000;
@@ -178,6 +178,8 @@ export class StageOverlay {
         this.lastAttackTapAt = 0;
         this.attackCharge = null;
         this.throwHold = null;
+        this.treasureStoreTimer = 0;
+        this.treasureStoreHeldId = '';
         this.stageStats = createStageStats();
         this.lastMissionUpdateAt = 0;
         this.stageCleared = false;
@@ -689,6 +691,7 @@ export class StageOverlay {
         this.runnerGamepadButtons.clear();
         this.clearAttackCharge();
         this.clearThrowHold();
+        this.clearTreasureStoreTimer();
         window.removeEventListener('resize', this.handleViewportResize);
         window.removeEventListener('scroll', this.handleWindowScroll);
         this.brickLayer?.remove();
@@ -1315,9 +1318,9 @@ export class StageOverlay {
         let impactRect = this.runnerHandRect();
 
         if (this.heldLetter) {
-            const char = this.heldLetter.char;
-            this.dropHeldLetter(true);
-            this.storeTreasureLetter(char, impactRect);
+            this.showMessage(UI_TEXT.treasureHold, 1200);
+            this.impactBurstAt(impactRect, 'soft');
+            this.scheduleTreasureStore(this.heldLetter.id);
             return true;
         } else {
             const pickupRect = this.runnerPickupRect();
@@ -1341,20 +1344,68 @@ export class StageOverlay {
             messageDuration: 620,
         });
 
-        const heldId = this.heldLetter?.id || '';
+        this.scheduleTreasureStore(this.heldLetter?.id || '');
+        return true;
+    }
+
+    scheduleTreasureStore(heldId = '') {
+        if (!heldId || !this.heldLetter || this.heldLetter.id !== heldId) {
+            return false;
+        }
+
+        this.clearTreasureStoreTimer();
         const timer = window.setTimeout(() => {
             this.timers.delete(timer);
+            this.treasureStoreTimer = 0;
+            this.treasureStoreHeldId = '';
             if (!this.heldLetter || this.heldLetter.id !== heldId) {
                 return;
             }
 
-            const char = this.heldLetter.char;
-            const rect = this.runnerHandRect();
-            this.dropHeldLetter(true);
-            this.storeTreasureLetter(char, rect);
-        }, this.reducedMotion ? Math.min(TREASURE_STORE_DELAY_MS, 80) : TREASURE_STORE_DELAY_MS);
+            this.storeHeldLetterToTreasure();
+        }, this.reducedMotion ? Math.min(TREASURE_STORE_DELAY_MS, 160) : TREASURE_STORE_DELAY_MS);
+
+        this.treasureStoreTimer = timer;
+        this.treasureStoreHeldId = heldId;
         this.timers.add(timer);
         return true;
+    }
+
+    clearTreasureStoreTimer() {
+        if (this.treasureStoreTimer) {
+            window.clearTimeout(this.treasureStoreTimer);
+            this.timers.delete(this.treasureStoreTimer);
+        }
+
+        this.treasureStoreTimer = 0;
+        this.treasureStoreHeldId = '';
+    }
+
+    storeHeldLetterToTreasure() {
+        if (!this.heldLetter) {
+            return false;
+        }
+
+        const held = this.heldLetter;
+        const char = held.char;
+        const element = held.element;
+        const targetRect = this.missionTreasure?.getBoundingClientRect?.();
+        const impactRect = targetRect || this.runnerHandRect();
+
+        this.heldLetter = null;
+        this.runner?.classList.remove('gw-pixel-runner--holding');
+
+        if (element && targetRect && !this.reducedMotion) {
+            element.classList.add('gw-held-letter--treasure-store');
+            element.style.left = `${targetRect.left + targetRect.width / 2}px`;
+            element.style.top = `${targetRect.top + targetRect.height / 2}px`;
+            element.style.transform = 'translate(-50%, -50%) scale(0.58) rotate(0deg)';
+            this.removeLater(element, 380);
+        } else {
+            element?.remove();
+        }
+
+        return this.storeTreasureLetter(char, impactRect);
     }
 
     storeTreasureLetter(char, impactRect = this.runnerHandRect()) {
@@ -1420,6 +1471,7 @@ export class StageOverlay {
             return;
         }
 
+        this.clearTreasureStoreTimer();
         const element = this.heldLetter.element;
         this.heldLetter = null;
         this.runner?.classList.remove('gw-pixel-runner--holding');
@@ -1471,6 +1523,7 @@ export class StageOverlay {
 
         const held = this.heldLetter;
         const power = wordPowerForHeldLetter(held);
+        this.clearTreasureStoreTimer();
         const handRect = this.runnerHandRect();
         const startX = handRect.left + handRect.width / 2;
         const startY = handRect.top + handRect.height / 2;
