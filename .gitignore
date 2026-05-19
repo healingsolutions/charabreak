@@ -6,3 +6,4 @@ wp-content/
 node_modules/
 vendor/
 *.log
+gaming-web/_tmp_apollo/

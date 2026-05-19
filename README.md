@@ -16,6 +16,24 @@ Then open:
 
 The setup script starts Docker, installs WordPress if needed, activates the plugin, enables Gaming Web settings, and seeds 10 pages plus 30 posts of Japanese demo content.
 
+## Apollo Elementor Demo
+
+The local demo can also use the Apollo business consulting Elementor template kit as a polished business-site surface for Gaming Web.
+
+Required local plugins:
+
+```powershell
+docker compose run --rm wpcli plugin install elementor elementskit-lite romethemeform --activate
+```
+
+Place/extract the Apollo kit into `gaming-web/_tmp_apollo`, then import the selected Elementor pages:
+
+```powershell
+docker compose run --rm wpcli eval-file /var/www/html/wp-content/plugins/gaming-web/scripts/import-apollo-kit.php
+```
+
+The importer creates seven Elementor pages, enables Gaming Web on them, adds clear rewards, and sets `Apollo Business Gaming Demo` as the front page. It does not change the active theme or import site-wide template settings.
+
 ## Manual Commands
 
 ```powershell
