@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.32';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.34';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -248,23 +248,11 @@ export class StageOverlay {
         this.inventoryPanel.append(inventoryTitle, this.inventoryList);
         controls.append(this.inventoryToggle, this.bgmToggle, exitButton, this.inventoryPanel);
 
-        const character = document.createElement('div');
-        character.className = 'gw-character';
-        character.innerHTML = '<img src="" alt="">';
-        const characterImage = character.querySelector('img');
-        characterImage.src = window.GamingWebConfig?.characterSprite || '';
-        characterImage.alt = this.characterName;
-
         this.speech = document.createElement('div');
         this.speech.className = 'gw-speech';
         this.speech.setAttribute('aria-live', 'polite');
 
-        const characterName = document.createElement('span');
-        characterName.className = 'gw-character-name';
-        characterName.textContent = this.characterName;
-
-        character.append(characterName, this.speech);
-        this.root.append(this.effectLayer, controls, character);
+        this.root.append(this.effectLayer, controls, this.speech);
         document.body.appendChild(this.root);
 
         this.mountMissionHud();
