@@ -1,4 +1,4 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.38';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.39';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
@@ -30,10 +30,11 @@ const UI_TEXT = {
     collectMission: 'X\u9577\u62bc\u3057\u30673\u6587\u5b57\u5b88\u3063\u3066GOAL\u3078',
     goalNeedsLetters: '\u3042\u3068{count}\u6587\u5b57\u3001\u5b88\u308d\u3046\uff01',
     goalReadyWithLetters: '\u6587\u5b57\u304c\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
-    treasureTitle: '\u5b9d\u7269\u6587\u5b57',
+    treasureTitle: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57',
     treasureEmpty: '\u307e\u3060\u306a\u3057',
     treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u5b88\u308b',
-    treasureStored: '\u5b9d\u7269\u6587\u5b57\u300c{char}\u300d\u3092\u5b88\u3063\u305f\uff01',
+    treasureHold: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57\u3092\u6301\u3063\u305f\uff01',
+    treasureStored: '\u5927\u5207\u306b\u3057\u305f\u3044\u6587\u5b57\u300c{char}\u300d\u3092\u5b88\u3063\u305f\uff01',
     treasureNoLetter: '\u8db3\u5143\u306b\u5b88\u308b\u6587\u5b57\u304c\u306a\u3044\uff01',
     treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
@@ -112,6 +113,7 @@ const RETURN_ROUTE_REVEAL_PROGRESS = 0.58;
 const PLAYER_MAX_LIFE = 3;
 const GOAL_REQUIRED_LETTERS = 3;
 const THROW_HOLD_MS = 520;
+const TREASURE_STORE_DELAY_MS = 260;
 const BOSS_MISSILE_WARNING_MS = 560;
 const BOSS_MISSILE_MIN_INTERVAL = 9000;
 const BOSS_MISSILE_MAX_INTERVAL = 14000;
@@ -1313,12 +1315,10 @@ export class StageOverlay {
         let impactRect = this.runnerHandRect();
 
         if (this.heldLetter) {
-            picked = {
-                char: this.heldLetter.char,
-                rect: impactRect,
-                style: this.heldLetter.style || {},
-            };
+            const char = this.heldLetter.char;
             this.dropHeldLetter(true);
+            this.storeTreasureLetter(char, impactRect);
+            return true;
         } else {
             const pickupRect = this.runnerPickupRect();
             picked = this.textBreaker?.pickCharAtRect(pickupRect, {
@@ -1336,7 +1336,32 @@ export class StageOverlay {
             return true;
         }
 
-        const char = picked.char;
+        this.holdLetter(picked, {
+            message: UI_TEXT.treasureHold,
+            messageDuration: 620,
+        });
+
+        const heldId = this.heldLetter?.id || '';
+        const timer = window.setTimeout(() => {
+            this.timers.delete(timer);
+            if (!this.heldLetter || this.heldLetter.id !== heldId) {
+                return;
+            }
+
+            const char = this.heldLetter.char;
+            const rect = this.runnerHandRect();
+            this.dropHeldLetter(true);
+            this.storeTreasureLetter(char, rect);
+        }, this.reducedMotion ? Math.min(TREASURE_STORE_DELAY_MS, 80) : TREASURE_STORE_DELAY_MS);
+        this.timers.add(timer);
+        return true;
+    }
+
+    storeTreasureLetter(char, impactRect = this.runnerHandRect()) {
+        if (!char || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
+            return false;
+        }
+
         this.treasureLetters.push(char);
         this.stageStats.lettersCollected = this.treasureLetters.length;
         this.updateGoalGate(true);
@@ -1359,7 +1384,7 @@ export class StageOverlay {
         return true;
     }
 
-    holdLetter(picked) {
+    holdLetter(picked, options = {}) {
         this.dropHeldLetter(true);
 
         const element = document.createElement('span');
@@ -1379,12 +1404,14 @@ export class StageOverlay {
             height: Math.max(picked.rect.height, WORD_THROW_SIZE),
         };
 
-        this.bumpStageStat('playerBroken', 1);
+        if (options.countBreak !== false) {
+            this.bumpStageStat('playerBroken', 1);
+        }
         this.runner?.classList.add('gw-pixel-runner--holding');
         this.impactBurstAt(picked.rect, 'char');
         this.shakeScreen('soft');
         this.onRunnerSound('pickupLetter', { volume: 0.28, rate: 1.05 });
-        this.showMessage(UI_TEXT.wordHold, 720);
+        this.showMessage(options.message || UI_TEXT.wordHold, options.messageDuration || 720);
         this.renderHeldLetter();
     }
 

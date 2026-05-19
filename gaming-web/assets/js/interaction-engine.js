@@ -1,4 +1,4 @@
-import { findScannedTarget } from './dom-scanner.js?v=0.1.38';
+import { findScannedTarget } from './dom-scanner.js?v=0.1.39';
 
 const MESSAGE_WORD_COLLECT = '\u8a00\u8449\u306e\u304b\u3051\u3089\u3092\u898b\u3064\u3051\u305f\uff01';
 const MESSAGE_SOFT_CLEAR = '\u5c11\u3057\u30da\u30fc\u30b8\u304c\u660e\u308b\u304f\u306a\u3063\u305f\uff01';
