@@ -1,6 +1,115 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.92';
+import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.10';
 
-const UI_TEXT = {
+const UI_TEXT_EN = {
+    defaultCharacter: 'Pico',
+    exit: 'END',
+    inventoryPrefix: 'W',
+    inventoryTitle: 'Found Words',
+    emptyInventory: 'Nothing yet',
+    start: 'Want to play with this page for a moment?',
+    hint: 'Hit something and something may pop out',
+    headingFallback: 'Heading',
+    headingShake: 'The letters shook!',
+    imageCrack: 'It cracked with a flash!',
+    imageSpin: 'The image tilted and spun!',
+    imageBreak: 'You opened a hole in the image!',
+    iconSpin: 'The icon bounced away!',
+    iconBreak: 'The icon burst apart!',
+    gateReady: 'The link gate is open!',
+    gateCharge: 'Stay on the gate to travel!',
+    gateBreak: 'The gate collapsed!',
+    gateNeedsTextBreak: 'Break the words inside first!',
+    enemyAppear: 'An enemy is aiming at the page!',
+    enemyHit: 'Nice hit!',
+    enemyAttack: 'The page was attacked!',
+    enemyDefeat: 'Enemy driven away!',
+    bossAppear: 'A mid-boss appeared!',
+    bossDefeat: 'Mid-boss stopped!',
+    criticalGuard: 'Guard letters',
+    criticalLost: 'An important letter was destroyed!',
+    stageFailed: 'OUT! A passphrase letter disappeared!',
+    lifeLabel: 'LIFE',
+    collectedLabel: 'Guarded letters',
+    collectMission: 'Hold X to raise a letter / Guard 3+ letters and reach GOAL',
+    goalNeedsLetters: 'Guard {count} more letters!',
+    goalReadyWithLetters: 'You guarded 3+ letters! Go to GOAL!',
+    treasureTitle: 'Guard-letter Target',
+    treasureEmpty: 'None yet',
+    treasureHint: 'Hold X to raise a letter underfoot',
+    treasureHold: 'Letter raised! Guard it for 3 seconds!',
+    treasurePlaced: 'You placed the letter back down!',
+    treasureStored: 'Carved "{char}" into your guard-letter target!',
+    treasureNoLetter: 'No guardable letter underfoot!',
+    treasureResult: 'You protected "{word}", the letters you chose to guard.',
+    placedLetterBreak: 'You broke a placed letter!',
+    playerDamage: 'Damage! Block with your shield!',
+    gameOverTitle: 'GAME OVER',
+    retry: 'Try Again',
+    gameOverCritical: 'A passphrase letter was lost.',
+    gameOverLife: 'You ran out of life.',
+    gameOverHint: 'You can try again anytime. Guard the letters and go once more!',
+    goalBlocked: 'You lost a guarded letter, so the stage cannot be cleared!',
+    missileParry: 'Missile parried!',
+    bossMissileWarn: 'The mid-boss is preparing a missile!',
+    shieldHint: 'Use Shift to shield against missiles!',
+    returnRoute: 'Return Up',
+    returnRouteHint: 'You returned to an upper platform!',
+    lockOn: 'Lock on!',
+    lockHint: 'Press T / Tab to lock on to an enemy!',
+    lockLost: 'Lock lost!',
+    noEnemy: 'No enemy to target!',
+    noFootWord: 'No throwable letter underfoot!',
+    wordHold: 'You picked up a letter!',
+    wordThrow: 'Word thrown!',
+    actionFallback: 'This moves too',
+    actionHop: 'It dodged a little!',
+    accordionOpen: 'The mechanism opened!',
+    accordionClose: 'The mechanism closed!',
+    brighten: 'The page got a little brighter!',
+    runnerBreak: 'The pixel kid smashed a letter!',
+    playerHint: 'Space/W/↑: Jump, J/Z: Attack, K/X: Throw/Guard, L/Shift: Shield',
+    miss: 'You swung through the air!',
+    chargeReady: 'Power charged!',
+    chargeFull: 'Heavy strike!',
+    missionTitle: 'QUEST BOARD',
+    missionReachGoal: 'Reach the GOAL gate near the bottom',
+    missionProtect: 'Protect letters from enemies',
+    goalReady: 'The GOAL gate opened!',
+    goalGate: 'GOAL',
+    goalNext: 'Next page',
+    goalEnd: 'End roll',
+    stageClear: 'STAGE CLEAR!',
+    stageClearBurst: 'CLEAR! Enemies burst away!',
+    protectedLabel: 'Protected',
+    brokenLabel: 'Broken',
+    lostLabel: 'Lost',
+    defeatedLabel: 'Defeated',
+    progressLabel: 'Progress',
+    summaryTitle: 'Page Summary',
+    endRollTitle: 'Page Memory',
+    endRollClose: 'Back',
+    rewardTitle: 'Clear Reward',
+    rewardLoading: 'Opening your reward...',
+    rewardUnavailable: 'The reward is not available yet.',
+    rewardCoupon: 'Coupon code',
+    rewardLink: 'Reward page',
+    enemyDamage: 'A guarded letter was damaged!',
+    bgmOn: 'BGM',
+    bgmOff: 'BGM',
+    controlsToggle: 'CTRL',
+    controlsClose: 'Close',
+    controlGuideTitle: 'QUICK MENU',
+    controlGuideKeys: 'CTRL: Controls / J Hit / K-X Letters / Space Jump / L Shield',
+    controlGuidePad: 'Gamepad supported',
+    introTitle: 'Use the page as your platform',
+    introLead: 'Land on letters, cross images and buttons, and move downward. Guard 3 or more letters to bring the GOAL closer.',
+    introKeys: 'J: Attack / K-X: Pick up or throw letters / L: Shield / Space: Jump',
+    introPad: 'Gamepads are supported too',
+    introStart: 'START',
+    introDrop: 'Dropping in!',
+};
+
+const UI_TEXT_JA = {
     defaultCharacter: '\u30d4\u30b3',
     exit: 'END',
     inventoryPrefix: 'W',
@@ -30,9 +139,9 @@ const UI_TEXT = {
     stageFailed: '\u30a2\u30a6\u30c8\uff01\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u6d88\u3048\u305f\uff01',
     lifeLabel: 'LIFE',
     collectedLabel: '\u5b88\u3063\u305f\u6587\u5b57',
-    collectMission: 'X\u9577\u62bc\u3057\u3067\u6587\u5b57\u3092\u63b2\u3052\u308b / 3\u79d2\u5b88\u3063\u3066GOAL\u3078',
+    collectMission: 'X\u9577\u62bc\u3057\u3067\u6587\u5b57\u3092\u63b2\u3052\u308b / 3\u6587\u5b57\u4ee5\u4e0a\u5b88\u3063\u3066GOAL\u3078',
     goalNeedsLetters: '\u3042\u3068{count}\u6587\u5b57\u3001\u5b88\u308d\u3046\uff01',
-    goalReadyWithLetters: '\u6587\u5b57\u304c\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
+    goalReadyWithLetters: '3\u6587\u5b57\u4ee5\u4e0a\u5b88\u3063\u305f\uff01GOAL\u3078\uff01',
     treasureTitle: '\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19',
     treasureEmpty: '\u307e\u3060\u306a\u3057',
     treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u63b2\u3052\u308b',
@@ -98,10 +207,20 @@ const UI_TEXT = {
     bgmOff: 'BGM',
     controlsToggle: 'CTRL',
     controlsClose: '\u9589\u3058\u308b',
-    controlGuideTitle: 'CONTROL BRIEFING',
-    controlGuideKeys: 'A/D: MOVE  Space/W: JUMP  J: HIT  K/X: THROW/HOLD  L: SHIELD  T: LOCK',
-    controlGuidePad: 'GAMEPAD: Stick / D-pad, A Jump, X Hit, B Throw, LB Shield',
+    controlGuideTitle: 'QUICK MENU',
+    controlGuideKeys: 'CTRL\u3067\u64cd\u4f5c\u8868\u793a / J\u653b\u6483 K\u30fbX\u6587\u5b57 Space\u30b8\u30e3\u30f3\u30d7 L\u76fe',
+    controlGuidePad: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3082OK',
+    introTitle: '\u30da\u30fc\u30b8\u3092\u8db3\u5834\u306b\u3057\u3066\u9032\u3082\u3046',
+    introLead: '\u6587\u5b57\u306b\u7740\u5730\u3057\u3066\u3001\u753b\u50cf\u3084\u30dc\u30bf\u30f3\u3092\u6e21\u308a\u306a\u304c\u3089\u4e0b\u3078\u3002\u5b88\u308a\u305f\u3044\u6587\u5b57\u30923\u3064\u898b\u3064\u3051\u308b\u3068GOAL\u304c\u8fd1\u3065\u304d\u307e\u3059\u3002',
+    introKeys: 'J: \u653b\u6483 / K\u30fbX: \u6587\u5b57\u3092\u6301\u3064\u30fb\u6295\u3052\u308b / L: \u76fe / Space: \u30b8\u30e3\u30f3\u30d7',
+    introPad: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3082\u4f7f\u3048\u307e\u3059',
+    introStart: 'START',
+    introDrop: '\u4e0a\u304b\u3089\u3044\u304f\u3088\uff01',
 };
+
+const UI_TEXT = localizedUiText(UI_TEXT_EN, {
+    ja: UI_TEXT_JA,
+});
 
 const RUNNER_WIDTH = 52;
 const RUNNER_HEIGHT = 58;
@@ -148,8 +267,10 @@ const GOAL_REQUIRED_LETTERS = 3;
 const THROW_HOLD_MS = 400;
 const TREASURE_STORE_DELAY_MS = 3000;
 const BOSS_MISSILE_WARNING_MS = 560;
-const BOSS_MISSILE_MIN_INTERVAL = 9000;
-const BOSS_MISSILE_MAX_INTERVAL = 14000;
+const BOSS_MISSILE_MIN_INTERVAL = 7000;
+const BOSS_MISSILE_MAX_INTERVAL = 11000;
+const INTRO_SEEN_KEY = 'gaming_web_intro_seen_v1';
+const INTRO_DROP_START_Y = -92;
 const RUNNER_CONTROL_DEFS = [
     { control: 'left', label: '\u2190', keys: 'A / \u2190' },
     { control: 'jump', label: '\u2191', keys: 'Space/W/\u2191' },
@@ -204,6 +325,8 @@ export class StageOverlay {
         this.runnerControls = null;
         this.runnerControlsToggle = null;
         this.controlGuide = null;
+        this.introModal = null;
+        this.runnerInputBound = false;
         this.controlsVisible = false;
         this.runnerOnImageHit = null;
         this.runnerOnGateHit = null;
@@ -362,6 +485,7 @@ export class StageOverlay {
         this.missionStats = null;
         this.runnerControlsToggle = null;
         this.controlGuide = null;
+        this.introModal = null;
         this.goalGate = null;
         this.gameOverPanel = null;
         this.endRoll = null;
@@ -478,7 +602,7 @@ export class StageOverlay {
                 const collected = this.collectedLetterCount();
                 const collection = collected >= GOAL_REQUIRED_LETTERS
                     ? UI_TEXT.goalReadyWithLetters
-                    : `${UI_TEXT.collectMission} (${collected}/${GOAL_REQUIRED_LETTERS})`;
+                    : `${UI_TEXT.collectMission} (${collected}/${goalLetterTargetLabel()})`;
                 this.missionGoal.textContent = this.goalRevealed
                     ? `${collection}${critical}`
                     : `${collection} / ${UI_TEXT.missionProtect}${critical}`;
@@ -490,10 +614,13 @@ export class StageOverlay {
         }
 
         if (this.missionTreasure) {
-            const letters = this.normalizedTreasureLetters().join('\u30fb') || '-';
+            const letters = this.normalizedTreasureLetters();
+            const letterLabel = letters.length
+                ? `${letters.join('\u30fb')} ${letters.length}/${goalLetterTargetLabel()}`
+                : `- 0/${goalLetterTargetLabel()}`;
             this.missionTreasure.innerHTML = `
                 <strong>${UI_TEXT.treasureTitle}</strong>
-                <span>${escapeHtml(letters)}</span>
+                <span>${escapeHtml(letterLabel)}</span>
             `;
         }
 
@@ -523,16 +650,15 @@ export class StageOverlay {
     treasureLettersLabel() {
         const letters = this.normalizedTreasureLetters();
         if (letters.length === 0) {
-            return `${UI_TEXT.treasureEmpty} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
+            return `${UI_TEXT.treasureEmpty} ${this.collectedLetterCount()}/${goalLetterTargetLabel()}`;
         }
 
-        return `${letters.join('\u30fb')} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
+        return `${letters.join('\u30fb')} ${this.collectedLetterCount()}/${goalLetterTargetLabel()}`;
     }
 
     normalizedTreasureLetters() {
         return this.treasureLetters
-            .flatMap((letter) => treasureCharsFrom(letter))
-            .slice(0, GOAL_REQUIRED_LETTERS);
+            .flatMap((letter) => treasureCharsFrom(letter));
     }
 
     bumpStageStat(key, amount = 1) {
@@ -618,7 +744,7 @@ export class StageOverlay {
             docX: initialDocX,
             docY: initialDocY,
             vx: 0,
-            vy: 0,
+            vy: Number.isFinite(initialRect.vy) ? initialRect.vy : 0,
             direction: 1,
             grounded: Boolean(initialRect.grounded),
             attackLockedUntil: 0,
@@ -644,47 +770,66 @@ export class StageOverlay {
 
         this.mountRunnerControls();
         this.setRunnerControlsVisible(false);
-        this.showControlGuide();
         window.addEventListener('resize', this.handleViewportResize);
         window.addEventListener('scroll', this.handleWindowScroll, { passive: true });
         window.addEventListener('wheel', this.handleGameWheel, { passive: false, capture: true });
         window.addEventListener('touchmove', this.handleGameTouchMove, { passive: false, capture: true });
-        document.addEventListener('keydown', this.handleRunnerKeyDown, true);
-        document.addEventListener('keyup', this.handleRunnerKeyUp, true);
-        this.showMessage(UI_TEXT.playerHint, 2400);
-        this.runnerLastTime = 0;
-        this.runnerRaf = requestFrame((time) => this.updateRunner(time));
+        this.renderRunner();
+
+        if (this.shouldShowIntroModal()) {
+            this.runner.classList.add('gw-pixel-runner--intro-wait');
+            this.showIntroModal(() => {
+                this.markIntroSeen();
+                this.beginRunnerPlay({ showGuide: false, fromIntro: true });
+            });
+            return;
+        }
+
+        this.beginRunnerPlay({ showGuide: true });
     }
 
     initialRunnerRect() {
         const target = this.initialRunnerTarget();
         const bounds = this.currentPlayBounds();
-        const startTopY = clamp(Math.round(window.innerHeight * 0.16), 82, Math.max(86, runnerGroundY() - RUNNER_HEIGHT - 12));
 
         if (!target) {
             const x = this.initialRunnerX(bounds);
+            const y = this.initialRunnerDropY();
             return {
                 x,
-                y: startTopY,
+                y,
                 docX: x + window.scrollX,
-                docY: startTopY + window.scrollY,
+                docY: y + window.scrollY,
                 grounded: false,
+                vy: this.reducedMotion ? 0 : 70,
             };
         }
 
         const rect = liveRectForTarget(target);
-        const textLandingY = rect.top - RUNNER_HEIGHT + 4;
-        const canStartOnTarget = rect.top >= 96 && rect.top <= window.innerHeight - 112;
-        const y = canStartOnTarget ? textLandingY : Math.min(textLandingY, startTopY);
         const x = this.initialRunnerX(bounds, rect);
+        const y = this.initialRunnerDropY(rect);
 
         return {
             x,
-            y: clamp(y, 28, runnerGroundY()),
+            y,
             docX: x + window.scrollX,
-            docY: clamp(y, 28, runnerGroundY()) + window.scrollY,
-            grounded: canStartOnTarget && Math.abs(y - textLandingY) < 2,
+            docY: y + window.scrollY,
+            grounded: false,
+            vy: this.reducedMotion ? 0 : 70,
         };
+    }
+
+    initialRunnerDropY(targetRect = null) {
+        if (!this.reducedMotion) {
+            return INTRO_DROP_START_Y;
+        }
+
+        const targetTop = targetRect?.top || runnerGroundY();
+        return clamp(
+            Math.min(46, targetTop - RUNNER_HEIGHT - 18),
+            24,
+            Math.max(28, runnerGroundY() - RUNNER_HEIGHT - 12)
+        );
     }
 
     initialRunnerX(bounds = this.currentPlayBounds(), targetRect = null) {
@@ -718,6 +863,91 @@ export class StageOverlay {
         ));
 
         return candidates[0]?.target || null;
+    }
+
+    shouldShowIntroModal() {
+        return !localStorageFlag(INTRO_SEEN_KEY);
+    }
+
+    markIntroSeen() {
+        setLocalStorageFlag(INTRO_SEEN_KEY);
+    }
+
+    showIntroModal(onStart) {
+        this.introModal?.remove();
+        this.introModal = document.createElement('div');
+        this.introModal.className = 'gw-intro-modal';
+        this.introModal.setAttribute('role', 'dialog');
+        this.introModal.setAttribute('aria-modal', 'true');
+        this.introModal.setAttribute('aria-labelledby', 'gw-intro-title');
+        this.introModal.innerHTML = `
+            <div class="gw-intro-modal__panel">
+                <span class="gw-intro-modal__badge">MISSION START</span>
+                <h2 id="gw-intro-title">${UI_TEXT.introTitle}</h2>
+                <p>${UI_TEXT.introLead}</p>
+                <div class="gw-intro-modal__keys">${UI_TEXT.introKeys}</div>
+                <small>${UI_TEXT.introPad}</small>
+                <button type="button" class="gw-intro-modal__start" data-gw-intro-start>${UI_TEXT.introStart}</button>
+            </div>
+        `;
+        this.root?.appendChild(this.introModal);
+
+        const startButton = this.introModal.querySelector('[data-gw-intro-start]');
+        const start = (event) => {
+            event?.preventDefault?.();
+            if (!this.introModal) {
+                return;
+            }
+
+            if (startButton) {
+                startButton.disabled = true;
+            }
+            this.introModal.classList.add('gw-intro-modal--leaving');
+            this.onRunnerSound('uiMove', { volume: 0.11, rate: 1.04 });
+            const timer = window.setTimeout(() => {
+                this.introModal?.remove();
+                this.introModal = null;
+                this.timers.delete(timer);
+                onStart?.();
+            }, this.reducedMotion ? 20 : 160);
+            this.timers.add(timer);
+        };
+
+        startButton?.addEventListener('click', start);
+
+        const focusTimer = window.setTimeout(() => {
+            startButton?.focus?.({ preventScroll: true });
+            this.timers.delete(focusTimer);
+        }, 40);
+        this.timers.add(focusTimer);
+    }
+
+    beginRunnerPlay(options = {}) {
+        if (!this.runner || !this.runnerState || this.runnerRaf) {
+            return;
+        }
+
+        this.runner.classList.remove('gw-pixel-runner--intro-wait');
+        this.runner.classList.add('gw-pixel-runner--intro-drop');
+        const dropTimer = window.setTimeout(() => {
+            this.runner?.classList.remove('gw-pixel-runner--intro-drop');
+            this.timers.delete(dropTimer);
+        }, this.reducedMotion ? 120 : 920);
+        this.timers.add(dropTimer);
+
+        if (!this.runnerInputBound) {
+            document.addEventListener('keydown', this.handleRunnerKeyDown, true);
+            document.addEventListener('keyup', this.handleRunnerKeyUp, true);
+            this.runnerInputBound = true;
+        }
+
+        if (options.showGuide) {
+            this.showControlGuide();
+        }
+
+        this.showMessage(options.fromIntro ? UI_TEXT.introDrop : UI_TEXT.playerHint, options.fromIntro ? 1500 : 1900);
+        this.runnerLastTime = 0;
+        this.runnerRaf = requestFrame((time) => this.updateRunner(time));
     }
 
     buildEndRollItems(targets = []) {
@@ -820,6 +1050,9 @@ export class StageOverlay {
         this.unmountRunnerControls();
         document.removeEventListener('keydown', this.handleRunnerKeyDown, true);
         document.removeEventListener('keyup', this.handleRunnerKeyUp, true);
+        this.runnerInputBound = false;
+        this.introModal?.remove();
+        this.introModal = null;
         this.runnerKeys.clear();
         this.runnerGamepadKeys.clear();
         this.runnerGamepadButtons.clear();
@@ -1081,11 +1314,11 @@ export class StageOverlay {
             '.e-con',
         ].join(',');
         const rawElements = Array.from(document.querySelectorAll(roomSelector))
-            .filter((element) => element instanceof Element && !element.closest('.gw-stage,header,footer,nav'));
+            .filter((element) => element instanceof Element && !isGameIgnoredElement(element));
         const topLevelElements = rawElements.filter((element) => !element.parentElement?.closest(roomSelector));
         const roomElements = topLevelElements.length ? topLevelElements : rawElements;
         const candidates = roomElements
-            .filter((element) => element instanceof Element && !element.closest('.gw-stage,header,footer,nav'))
+            .filter((element) => element instanceof Element && !isGameIgnoredElement(element))
             .map((element) => rectToDocumentObject(element.getBoundingClientRect()))
             .filter((rect) => rect.width > 80 && rect.height > 120 && rect.bottom > 0 && rect.top < pageBottom)
             .sort((a, b) => a.top - b.top || b.height - a.height);
@@ -2055,7 +2288,7 @@ export class StageOverlay {
         const treasureChar = firstTreasureChar(char);
         this.treasureLetters = this.normalizedTreasureLetters();
 
-        if (!treasureChar || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
+        if (!treasureChar) {
             return false;
         }
 
@@ -2074,7 +2307,7 @@ export class StageOverlay {
             letters_required: GOAL_REQUIRED_LETTERS,
         });
         this.showMessage(
-            this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS
+            this.collectedLetterCount() === GOAL_REQUIRED_LETTERS
                 ? UI_TEXT.goalReadyWithLetters
                 : UI_TEXT.treasureStored.replace('{char}', treasureChar),
             1300
@@ -2991,7 +3224,7 @@ export class StageOverlay {
         const hasLetters = this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS;
         const label = hasLetters
             ? (this.nextGoalHref ? UI_TEXT.goalNext : UI_TEXT.goalEnd)
-            : `${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
+            : `${this.collectedLetterCount()}/${goalLetterTargetLabel()}`;
         this.goalGate.innerHTML = `<span>${UI_TEXT.goalGate}</span><small>${label}</small>`;
 
         const bounds = this.currentPlayBounds();
@@ -5366,6 +5599,57 @@ function normalizeText(text) {
     return String(text || '').replace(/\s+/g, ' ').trim();
 }
 
+function localStorageFlag(key) {
+    try {
+        return window.localStorage?.getItem(key) === '1';
+    } catch (error) {
+        return false;
+    }
+}
+
+function setLocalStorageFlag(key) {
+    try {
+        window.localStorage?.setItem(key, '1');
+    } catch (error) {
+        // Storage can be unavailable in private or embedded contexts.
+    }
+}
+
+function localizedUiText(defaults, dictionaries = {}) {
+    const locale = frontendLocale().toLowerCase().replace('_', '-');
+    const language = locale.split('-')[0];
+    const dictionary = dictionaries[locale] || dictionaries[language] || {};
+
+    return {
+        ...defaults,
+        ...dictionary,
+    };
+}
+
+function frontendLocale() {
+    const config = frontendConfigFromDom();
+    return String(
+        config.locale
+        || document.documentElement.getAttribute('lang')
+        || navigator.language
+        || 'en'
+    );
+}
+
+function frontendConfigFromDom() {
+    const configScript = document.getElementById('gaming-web-config');
+    if (!configScript) {
+        return {};
+    }
+
+    try {
+        const parsed = JSON.parse(configScript.textContent || '{}');
+        return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (error) {
+        return {};
+    }
+}
+
 function splitSummarySentences(text) {
     const normalized = normalizeText(text);
     if (!normalized) {
@@ -5394,6 +5678,10 @@ function renderLifeHearts(life = 0) {
     const filled = Math.max(0, Math.min(PLAYER_MAX_LIFE, Math.round(life)));
     const empty = Math.max(0, PLAYER_MAX_LIFE - filled);
     return `${'\u2665'.repeat(filled)}${'\u2661'.repeat(empty)}`;
+}
+
+function goalLetterTargetLabel() {
+    return `${GOAL_REQUIRED_LETTERS}+`;
 }
 
 function runnerGroundY() {
@@ -5839,7 +6127,7 @@ function isPlayableContentElement(element) {
         return false;
     }
 
-    if (element.closest('header,footer,nav')) {
+    if (isGameIgnoredElement(element)) {
         return false;
     }
 

@@ -13,7 +13,7 @@
     border-radius: 8px;
     background: #1f7a6d;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 15px !important;
     font-weight: 700;
     line-height: 1.2;
     box-shadow: 0 10px 26px rgba(21, 68, 62, 0.24);
@@ -90,7 +90,7 @@
 
 .gw-apollo-start strong {
     color: #f0cf5d;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -98,7 +98,7 @@
 .gw-apollo-start span {
     margin-top: 4px;
     color: rgba(255, 255, 255, 0.82);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.45;
 }
@@ -150,7 +150,7 @@
 .gw-demo-kicker {
     margin: 0 0 18px;
     color: #8a4f44;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
     text-transform: uppercase;
 }
@@ -221,7 +221,7 @@
 .gw-demo-hero__media figcaption {
     margin-top: 12px;
     color: #687480;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
 }
 
@@ -318,6 +318,7 @@
     z-index: 2147482999;
     pointer-events: none;
     color: #1f2937;
+    font-size: 14px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -369,19 +370,19 @@
     left: 50%;
     z-index: 5;
     display: grid;
-    grid-template-columns: 72px minmax(130px, 1.2fr) minmax(92px, 0.7fr) auto;
+    grid-template-columns: 80px minmax(180px, 1.2fr) minmax(150px, 0.7fr) auto;
     align-items: center;
     gap: 9px;
-    width: min(760px, calc(100vw - 188px));
-    min-height: 34px;
-    padding: 5px 8px;
+    width: min(960px, calc(100vw - 156px));
+    min-height: 42px;
+    padding: 6px 9px;
     border: 1px solid rgba(78, 220, 207, 0.46);
     border-radius: 0;
     background:
         linear-gradient(90deg, rgba(78, 220, 207, 0.16), transparent 38%, rgba(245, 213, 101, 0.1)),
         rgba(7, 18, 27, 0.56);
     color: rgba(237, 252, 250, 0.94);
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 800;
     line-height: 1;
     box-shadow:
@@ -406,7 +407,7 @@
 .gw-mission-hud__goal {
     min-width: 0;
     color: rgba(237, 252, 250, 0.76);
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 900;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -431,13 +432,13 @@
 
 .gw-mission-hud__treasure strong {
     color: rgba(78, 220, 207, 0.72);
-    font-size: 9px;
+    font-size: 14px;
     white-space: nowrap;
 }
 
 .gw-mission-hud__treasure span {
     color: #f5d565;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 900;
     overflow: hidden;
     text-align: left;
@@ -466,7 +467,7 @@
 
 .gw-mission-hud__stats {
     display: grid;
-    grid-template-columns: repeat(5, minmax(36px, auto));
+    grid-template-columns: repeat(5, minmax(48px, auto));
     gap: 7px;
     margin: 0;
 }
@@ -487,7 +488,7 @@
 
 .gw-mission-hud__stats dt {
     color: rgba(237, 252, 250, 0.5);
-    font-size: 8px;
+    font-size: 14px;
     font-weight: 800;
     line-height: 1;
     text-transform: uppercase;
@@ -504,13 +505,13 @@
 
 .gw-mission-hud__stats div:nth-child(2) dd::after {
     color: rgba(237, 252, 250, 0.46);
-    font-size: 9px;
+    font-size: 14px;
     content: "%";
 }
 
 .gw-mission-hud__stats .gw-life-hearts {
     color: #ff6f8a;
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: 0;
     text-shadow: 0 0 10px rgba(255, 111, 138, 0.32);
 }
@@ -532,7 +533,7 @@
     border-radius: 8px;
     background: rgba(47, 154, 138, 0.14);
     color: #2f9a8a;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1.15;
     text-align: center;
@@ -669,7 +670,7 @@
     display: block;
     margin-top: 5px;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .gw-goal-gate--clear {
@@ -695,10 +696,10 @@
     pointer-events: auto;
 }
 
-.gw-end-roll__panel {
-    width: min(560px, calc(100vw - 36px));
-    max-height: min(680px, calc(100vh - 36px));
-    overflow: hidden;
+.gw-stage .gw-end-roll__panel {
+    width: min(840px, calc(100vw - 36px));
+    max-height: min(820px, calc(100vh - 36px));
+    overflow: auto;
     border: 3px solid rgba(240, 207, 93, 0.92);
     border-radius: 8px;
     background: #fffdf7;
@@ -706,11 +707,14 @@
     box-shadow: 0 22px 70px rgba(0, 0, 0, 0.32);
 }
 
-.gw-end-roll__panel h2 {
+.gw-stage .gw-end-roll__panel h2 {
     margin: 0;
     padding: 16px 18px 10px;
+    color: #16212b !important;
     font-size: 24px;
+    font-weight: 950;
     line-height: 1.2;
+    text-shadow: none;
 }
 
 .gw-end-roll__stats {
@@ -735,7 +739,7 @@
 
 .gw-end-roll__stats dt {
     color: #5c6874;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 800;
 }
 
@@ -753,18 +757,19 @@
     background: rgba(240, 207, 93, 0.14);
 }
 
-.gw-end-roll__summary h3 {
+.gw-stage .gw-end-roll__summary h3 {
     margin: 0 0 7px;
-    color: #8a4f44;
-    font-size: 13px;
+    color: #8a4f44 !important;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1.25;
+    text-shadow: none;
 }
 
-.gw-end-roll__summary p {
+.gw-stage .gw-end-roll__summary p {
     margin: 0 0 6px;
-    color: #16212b;
-    font-size: 13px;
+    color: #16212b !important;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.55;
 }
@@ -796,17 +801,18 @@
     box-shadow: inset 0 -3px 0 rgba(47, 154, 138, 0.1);
 }
 
-.gw-end-roll__reward h3 {
+.gw-stage .gw-end-roll__reward h3 {
     margin: 0 0 7px;
-    color: #155e53;
+    color: #155e53 !important;
     font-size: 14px;
     font-weight: 900;
+    text-shadow: none;
 }
 
-.gw-end-roll__reward p {
+.gw-stage .gw-end-roll__reward p {
     margin: 0 0 9px;
-    color: #16212b;
-    font-size: 13px;
+    color: #16212b !important;
+    font-size: 14px;
     font-weight: 800;
     line-height: 1.55;
 }
@@ -825,7 +831,7 @@
 
 .gw-end-roll__coupon span {
     color: #5c6874;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 900;
 }
 
@@ -837,7 +843,7 @@
     letter-spacing: 0;
 }
 
-.gw-end-roll__reward-link {
+.gw-stage .gw-end-roll__reward-link {
     display: inline-flex;
     align-items: center;
     min-height: 34px;
@@ -845,14 +851,14 @@
     padding: 7px 11px;
     border-radius: 8px;
     background: #2f9a8a;
-    color: #ffffff;
-    font-size: 13px;
+    color: #ffffff !important;
+    font-size: 14px;
     font-weight: 900;
     text-decoration: none;
 }
 
-.gw-end-roll__viewport {
-    height: min(220px, 28vh);
+.gw-stage .gw-end-roll__viewport {
+    height: clamp(280px, 38vh, 430px);
     margin: 0 18px 16px;
     overflow: hidden;
     border: 2px solid rgba(22, 33, 43, 0.12);
@@ -861,22 +867,26 @@
     color: #ffffff;
 }
 
-.gw-end-roll__content {
+.gw-stage .gw-end-roll__content {
     padding: 22px 18px 34px;
     animation: gw-end-roll-scroll 13s linear infinite;
 }
 
-.gw-end-roll__content h3 {
+.gw-stage .gw-end-roll__content h3 {
     margin: 0 0 18px;
-    color: #f5d565;
+    color: #f5d565 !important;
     font-size: 16px;
+    font-weight: 900;
     text-align: center;
+    text-shadow: none;
 }
 
-.gw-end-roll__content p {
+.gw-stage .gw-end-roll__content p {
     margin: 0 0 14px;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-size: 14px;
     line-height: 1.75;
+    text-shadow: none;
 }
 
 .gw-end-roll__actions {
@@ -886,21 +896,21 @@
     padding: 0 18px 18px;
 }
 
-.gw-end-roll__actions button {
+.gw-stage .gw-end-roll__actions button {
     min-height: 38px;
     padding: 8px 13px;
     border: 0;
     border-radius: 8px;
     background: #2f9a8a;
-    color: #ffffff;
+    color: #ffffff !important;
     font-size: 14px;
     font-weight: 900;
     cursor: pointer;
 }
 
-.gw-end-roll__actions .gw-end-roll__close {
+.gw-stage .gw-end-roll__actions .gw-end-roll__close {
     background: #e8ede9;
-    color: #16212b;
+    color: #16212b !important;
 }
 
 .gw-game-over {
@@ -1465,7 +1475,7 @@
     border-radius: 0;
     background: rgba(255, 255, 255, 0.08);
     color: rgba(245, 213, 101, 0.92);
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1;
     cursor: pointer;
@@ -1476,7 +1486,7 @@
     left: 10px;
     top: 6px;
     color: #f5d565;
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0;
@@ -1566,13 +1576,13 @@
     background: rgba(0, 0, 0, 0.32);
     color: #f5d565;
     font-family: inherit;
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1.1;
     letter-spacing: 0;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: normal;
+    overflow: visible;
     text-overflow: clip;
     text-shadow: none;
 }
@@ -1589,7 +1599,7 @@
         linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.08)),
         #16212b;
     color: #f0cf5d;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .gw-player-control--throw {
@@ -1597,7 +1607,7 @@
         linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.06)),
         #2f9a8a;
     color: #ffffff;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .gw-player-control--shield {
@@ -1634,6 +1644,128 @@
     color: #f5d565;
 }
 
+.gw-intro-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 12;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        radial-gradient(circle at 50% 38%, rgba(78, 220, 207, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(4, 10, 18, 0.62), rgba(4, 10, 18, 0.78));
+    pointer-events: auto;
+    backdrop-filter: blur(4px);
+    animation: gw-intro-modal-enter 180ms ease-out;
+}
+
+.gw-stage .gw-intro-modal__panel {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    width: min(520px, calc(100vw - 32px));
+    padding: 22px;
+    border: 1px solid rgba(78, 220, 207, 0.5);
+    background:
+        linear-gradient(135deg, rgba(78, 220, 207, 0.12), transparent 42%, rgba(245, 213, 101, 0.13)),
+        rgba(7, 18, 27, 0.9);
+    color: #edfefa;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+        0 24px 80px rgba(0, 0, 0, 0.36),
+        0 0 34px rgba(78, 220, 207, 0.14);
+}
+
+.gw-stage .gw-intro-modal__panel::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1px solid rgba(245, 213, 101, 0.16);
+    pointer-events: none;
+}
+
+.gw-stage .gw-intro-modal__badge {
+    justify-self: start;
+    padding: 3px 7px;
+    border: 1px solid rgba(245, 213, 101, 0.52);
+    color: #f5d565;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0;
+}
+
+.gw-stage .gw-intro-modal h2 {
+    margin: 0;
+    color: #f4fffb !important;
+    text-shadow:
+        0 0 12px rgba(78, 220, 207, 0.24),
+        0 2px 0 rgba(0, 0, 0, 0.58);
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 950;
+    line-height: 1.1;
+    letter-spacing: 0;
+}
+
+.gw-stage .gw-intro-modal p {
+    margin: 0;
+    color: rgba(237, 252, 250, 0.92) !important;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.48);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.7;
+    letter-spacing: 0;
+}
+
+.gw-stage .gw-intro-modal small {
+    color: rgba(98, 242, 231, 0.92) !important;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.42);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.gw-stage .gw-intro-modal__keys {
+    padding: 10px 12px;
+    border-left: 3px solid #4edccf;
+    background: rgba(4, 10, 18, 0.42);
+    color: #ffe47a !important;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.58);
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.55;
+}
+
+.gw-stage .gw-intro-modal__start {
+    justify-self: center;
+    min-width: 148px;
+    min-height: 46px;
+    padding: 0 22px;
+    border: 1px solid rgba(245, 213, 101, 0.86);
+    background: #f5d565 !important;
+    color: #07121b !important;
+    font-size: 14px;
+    font-weight: 950;
+    letter-spacing: 0;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow:
+        0 0 18px rgba(245, 213, 101, 0.24),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.16);
+}
+
+.gw-stage .gw-intro-modal__start:hover,
+.gw-stage .gw-intro-modal__start:focus-visible {
+    outline: 2px solid rgba(78, 220, 207, 0.5);
+    outline-offset: 3px;
+    filter: brightness(1.05);
+}
+
+.gw-intro-modal--leaving {
+    opacity: 0;
+    transform: scale(1.02);
+    transition: opacity 150ms ease, transform 150ms ease;
+}
+
 .gw-control-guide {
     position: fixed;
     left: 50%;
@@ -1648,7 +1780,7 @@
         linear-gradient(90deg, rgba(78, 220, 207, 0.12), transparent 42%, rgba(245, 213, 101, 0.1)),
         rgba(7, 18, 27, 0.72);
     color: rgba(237, 252, 250, 0.9);
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1.35;
     box-shadow: 0 0 24px rgba(78, 220, 207, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -1661,7 +1793,7 @@
 
 .gw-control-guide strong {
     color: #f5d565;
-    font-size: 10px;
+    font-size: 14px;
     letter-spacing: 0;
 }
 
@@ -1675,7 +1807,7 @@
 
 .gw-control-guide small {
     color: rgba(78, 220, 207, 0.78);
-    font-size: 10px;
+    font-size: 14px;
 }
 
 .gw-control-guide--leaving {
@@ -1689,17 +1821,17 @@
 .gw-stage .gw-inventory-toggle,
 .gw-stage .gw-controls-toggle {
     flex: 0 0 auto;
-    width: 48px;
+    width: 58px;
     min-width: 0;
-    max-width: 48px;
-    height: 28px;
+    max-width: 58px;
+    height: 34px;
     min-height: 0;
-    padding: 0 5px;
+    padding: 0 6px;
     border: 1px solid rgba(78, 220, 207, 0.28);
     border-radius: 0;
     background: rgba(12, 39, 52, 0.72);
     color: rgba(237, 252, 250, 0.86);
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 900;
     line-height: 1.2;
     box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2);
@@ -1708,18 +1840,18 @@
 }
 
 .gw-stage .gw-inventory-toggle {
-    width: 42px;
-    max-width: 42px;
+    width: 52px;
+    max-width: 52px;
 }
 
 .gw-stage .gw-bgm-toggle {
-    width: 44px;
-    max-width: 44px;
+    width: 54px;
+    max-width: 54px;
 }
 
 .gw-stage .gw-controls-toggle {
-    width: 48px;
-    max-width: 48px;
+    width: 58px;
+    max-width: 58px;
 }
 
 .gw-stage .gw-exit-button:hover,
@@ -1761,7 +1893,7 @@
 
 .gw-inventory-title {
     margin-bottom: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
 }
 
@@ -1780,7 +1912,7 @@
     border-radius: 8px;
     background: #eef8f5;
     color: #155e53;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     overflow-wrap: anywhere;
 }
@@ -1802,7 +1934,7 @@
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.94);
     color: #1f2937;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.45;
     box-shadow: 0 12px 26px rgba(31, 41, 55, 0.16);
@@ -1847,6 +1979,16 @@
     image-rendering: pixelated;
     filter: drop-shadow(0 9px 0 rgba(31, 41, 55, 0.12));
     --gw-runner-face: 1;
+}
+
+.gw-pixel-runner--intro-wait {
+    opacity: 0;
+}
+
+.gw-pixel-runner--intro-drop .gw-pixel-runner__sprite {
+    filter:
+        drop-shadow(0 12px 0 rgba(31, 41, 55, 0.12))
+        drop-shadow(0 0 14px rgba(78, 220, 207, 0.2));
 }
 
 .gw-pixel-runner--left {
@@ -2484,7 +2626,7 @@
 .gw-return-route small {
     display: block;
     margin-top: 4px;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .gw-return-route--active {
@@ -2552,7 +2694,7 @@
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.96);
     color: #155e53;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
     line-height: 1.15;
     box-shadow: 0 10px 22px rgba(21, 94, 83, 0.18);
@@ -2580,7 +2722,7 @@
     border-radius: 8px;
     background: #f5d565;
     color: #25312f;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
     line-height: 1.2;
     box-shadow: 0 12px 24px rgba(31, 41, 55, 0.18);
@@ -3191,6 +3333,18 @@
     }
 }
 
+@keyframes gw-intro-modal-enter {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 @keyframes gw-soft-glow {
     0% {
         opacity: 0;
@@ -3396,7 +3550,7 @@
         bottom: 14px;
         min-width: 116px;
         min-height: 42px;
-        font-size: 14px;
+        font-size: 14px !important;
     }
 
     .gw-controls {
@@ -3436,7 +3590,7 @@
     }
 
     .gw-mission-hud__stats dd {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .gw-player-controls {
@@ -3473,19 +3627,19 @@
     .gw-player-control__keys {
         margin-top: 2px;
         padding: 1px 3px;
-        font-size: 8px;
+        font-size: 14px;
     }
 
     .gw-player-control--lock,
     .gw-player-control--shield,
     .gw-player-control--throw {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .gw-speech {
         bottom: 66px;
         max-width: min(320px, calc(100vw - 24px));
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .gw-end-roll__stats {
@@ -3493,13 +3647,15 @@
     }
 
     .gw-end-roll__viewport {
-        height: min(230px, 34vh);
+        height: clamp(280px, 42vh, 390px);
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .gw-mode-button,
     .gw-speech,
+    .gw-intro-modal,
+    .gw-intro-modal--leaving,
     .gw-break-char--breaking,
     .gw-image-breakable,
     .gw-heading-echo,

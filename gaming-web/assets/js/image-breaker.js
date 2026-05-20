@@ -1,3 +1,5 @@
+import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.10';
+
 const IMAGE_TYPES = new Set(['image', 'icon', 'platform', 'action']);
 const IMAGE_BREAK_STAGE = 5;
 const IMAGE_MAX_VISUAL_STAGE = 4;
@@ -361,7 +363,7 @@ function isPlayableImage(element) {
         return false;
     }
 
-    if (element.closest('header,footer,nav,.gw-stage')) {
+    if (isGameIgnoredElement(element)) {
         return false;
     }
 
@@ -373,7 +375,7 @@ function isPlayableIcon(element) {
         return false;
     }
 
-    if (element.closest('header,footer,nav,.gw-stage')) {
+    if (isGameIgnoredElement(element)) {
         return false;
     }
 
@@ -401,7 +403,7 @@ function isPlayablePlatform(element) {
         return false;
     }
 
-    if (element.closest('header,footer,nav,.gw-stage')) {
+    if (isGameIgnoredElement(element)) {
         return false;
     }
 
@@ -418,7 +420,7 @@ function isPlayableActionSupport(element) {
         return false;
     }
 
-    if (element.closest('header,footer,nav,.gw-stage')) {
+    if (isGameIgnoredElement(element)) {
         return false;
     }
 

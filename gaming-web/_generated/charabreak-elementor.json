@@ -1,0 +1,3055 @@
+[
+    {
+        "id": "1848a8fb",
+        "settings": {
+            "html_tag": "header",
+            "content_width": "full",
+            "flex_direction": "row",
+            "flex_align_items": "center",
+            "flex_justify_content": "space-between",
+            "flex_wrap": "wrap",
+            "flex_gap": {
+                "column": "16",
+                "row": "12",
+                "isLinked": false,
+                "unit": "px",
+                "size": 16
+            },
+            "padding": {
+                "unit": "px",
+                "top": "16",
+                "right": "24",
+                "bottom": "16",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#08141f",
+            "_css_classes": "cb-nav",
+            "_title": "section:: 00・グローバルナビ"
+        },
+        "elements": [
+            {
+                "id": "c6c82b4e",
+                "settings": {
+                    "title": "CharaBreak",
+                    "header_size": "h3",
+                    "title_color": "#fbfaf4",
+                    "typography_font_family": "Inter",
+                    "typography_typography": "custom",
+                    "typography_font_weight": "900",
+                    "typography_line_height": {
+                        "unit": "em",
+                        "size": 1.08,
+                        "sizes": []
+                    },
+                    "_title": "title:: CharaBreakロゴ",
+                    "typography_font_size": {
+                        "unit": "px",
+                        "size": 24,
+                        "sizes": []
+                    }
+                },
+                "elements": [],
+                "isInner": false,
+                "widgetType": "heading",
+                "elType": "widget"
+            },
+            {
+                "id": "e0165368",
+                "settings": {
+                    "html_tag": "nav",
+                    "content_width": "full",
+                    "flex_direction": "row",
+                    "flex_wrap": "wrap",
+                    "flex_justify_content": "flex-end",
+                    "flex_gap": {
+                        "column": "8",
+                        "row": "8",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 8
+                    },
+                    "_title": "container:: ナビゲーションリンク"
+                },
+                "elements": [
+                    {
+                        "id": "0bc04ca9",
+                        "settings": {
+                            "text": "Home",
+                            "link": {
+                                "url": "http://localhost:8089/",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#f5d565",
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "#4edccf",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: Home"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "8e334d87",
+                        "settings": {
+                            "text": "Features",
+                            "link": {
+                                "url": "http://localhost:8089/?page_id=315",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#f5d565",
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "#4edccf",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: Features"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "b6b40453",
+                        "settings": {
+                            "text": "Pricing",
+                            "link": {
+                                "url": "http://localhost:8089/?page_id=316",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#f5d565",
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "#4edccf",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: Pricing"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "3a16c59c",
+                        "settings": {
+                            "text": "Demo",
+                            "link": {
+                                "url": "http://localhost:8089/?page_id=317",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#f5d565",
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "#4edccf",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: Demo"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "c35b0e84",
+                        "settings": {
+                            "text": "FAQ",
+                            "link": {
+                                "url": "http://localhost:8089/?page_id=318",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#f5d565",
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "#4edccf",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: FAQ"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "5aabd5ac",
+                        "settings": {
+                            "text": "Play",
+                            "link": {
+                                "url": "#gaming-web-start",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#08141f",
+                            "background_background": "classic",
+                            "background_color": "#f5d565",
+                            "border_border": "solid",
+                            "border_color": "#f5d565",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: Play this page",
+                            "_css_classes": "gw-inline-start"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    },
+    {
+        "id": "251ec1d3",
+        "settings": {
+            "content_width": "boxed",
+            "flex_direction": "row",
+            "flex_wrap": "wrap",
+            "flex_align_items": "center",
+            "flex_gap": {
+                "column": "48",
+                "row": "36",
+                "isLinked": false,
+                "unit": "px",
+                "size": 48
+            },
+            "min_height": {
+                "unit": "vh",
+                "size": 92,
+                "sizes": []
+            },
+            "padding": {
+                "unit": "px",
+                "top": "92",
+                "right": "24",
+                "bottom": "76",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#08141f",
+            "background_overlay_background": "classic",
+            "background_overlay_color": "rgba(8,20,31,0.72)",
+            "background_overlay_image": {
+                "url": "http://localhost:8089/wp-content/uploads/2026/05/multicultural-business-team-headed-by-boss-posing-FFEKMDQ.jpg",
+                "id": 235,
+                "size": "",
+                "alt": "",
+                "source": "library"
+            },
+            "background_overlay_position": "center center",
+            "background_overlay_repeat": "no-repeat",
+            "background_overlay_size": "cover",
+            "_css_classes": "cb-hero cb-site",
+            "_title": "section:: 01・ファーストビュー"
+        },
+        "elements": [
+            {
+                "id": "84c9dbc5",
+                "settings": {
+                    "content_width": "full",
+                    "width": {
+                        "unit": "%",
+                        "size": 58,
+                        "sizes": []
+                    },
+                    "width_tablet": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "width_mobile": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "flex_direction": "column",
+                    "flex_gap": {
+                        "column": "18",
+                        "row": "18",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 18
+                    },
+                    "_title": "container:: ヒーローコピー"
+                },
+                "elements": [
+                    {
+                        "id": "5575e55f",
+                        "settings": {
+                            "title": "PLAYABLE WORDPRESS PLUGIN",
+                            "header_size": "h6",
+                            "title_color": "#4edccf",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: プロダクトカテゴリ",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_letter_spacing": {
+                                "unit": "px",
+                                "size": 0.8,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "d518f2e6",
+                        "settings": {
+                            "title": "読む前に、壊せ。",
+                            "header_size": "h1",
+                            "title_color": "#fbfaf4",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 0.98,
+                                "sizes": []
+                            },
+                            "_title": "title:: メイン見出し",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 72,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "9b1c0a9c",
+                        "settings": {
+                            "editor": "<p>ユーザーは、最初から長い文章を読んでくれません。だからCharaBreakは、読む前の数秒をゲームに変えます。文字を攻撃し、画像を揺らし、ページの上を走り回るうちに、訪問者はいつの間にか本文・見出し・ボタンに触れています。壊すことをコンテンツ化し、サイト滞在時間と記憶に残る体験をつくる、WordPress向けインタラクティブWebプラグインです。</p>",
+                            "text_color": "rgba(251,250,244,0.84)",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 18,
+                                "sizes": []
+                            },
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.8,
+                                "sizes": []
+                            },
+                            "_title": "text:: メインリード"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "text-editor",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "9edb9bf8",
+                        "settings": {
+                            "content_width": "full",
+                            "flex_direction": "row",
+                            "flex_wrap": "wrap",
+                            "flex_gap": {
+                                "column": "12",
+                                "row": "12",
+                                "isLinked": true,
+                                "unit": "px",
+                                "size": 12
+                            },
+                            "_title": "container:: ヒーローCTAボタン"
+                        },
+                        "elements": [
+                            {
+                                "id": "2b753094",
+                                "settings": {
+                                    "text": "Free Download",
+                                    "link": {
+                                        "url": "https://github.com/healingsolutions/charabreak",
+                                        "is_external": "on",
+                                        "nofollow": "",
+                                        "custom_attributes": ""
+                                    },
+                                    "align": "left",
+                                    "typography_font_family": "Inter",
+                                    "typography_typography": "custom",
+                                    "typography_font_size": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "typography_font_weight": "900",
+                                    "typography_text_transform": "uppercase",
+                                    "button_text_color": "#08141f",
+                                    "background_background": "classic",
+                                    "background_color": "#f5d565",
+                                    "border_border": "solid",
+                                    "border_color": "#f5d565",
+                                    "border_width": {
+                                        "unit": "px",
+                                        "top": "1",
+                                        "right": "1",
+                                        "bottom": "1",
+                                        "left": "1",
+                                        "isLinked": false
+                                    },
+                                    "border_radius": {
+                                        "unit": "px",
+                                        "top": "8",
+                                        "right": "8",
+                                        "bottom": "8",
+                                        "left": "8",
+                                        "isLinked": false
+                                    },
+                                    "text_padding": {
+                                        "unit": "px",
+                                        "top": "16",
+                                        "right": "22",
+                                        "bottom": "16",
+                                        "left": "22",
+                                        "isLinked": false
+                                    },
+                                    "_title": "button:: 無料ダウンロード"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "button",
+                                "elType": "widget"
+                            },
+                            {
+                                "id": "bdbd1d16",
+                                "settings": {
+                                    "text": "Break This Page",
+                                    "link": {
+                                        "url": "#gaming-web-start",
+                                        "is_external": "",
+                                        "nofollow": "",
+                                        "custom_attributes": ""
+                                    },
+                                    "align": "left",
+                                    "typography_font_family": "Inter",
+                                    "typography_typography": "custom",
+                                    "typography_font_size": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "typography_font_weight": "900",
+                                    "typography_text_transform": "uppercase",
+                                    "button_text_color": "#f5d565",
+                                    "background_background": "classic",
+                                    "background_color": "#102335",
+                                    "border_border": "solid",
+                                    "border_color": "#4edccf",
+                                    "border_width": {
+                                        "unit": "px",
+                                        "top": "1",
+                                        "right": "1",
+                                        "bottom": "1",
+                                        "left": "1",
+                                        "isLinked": false
+                                    },
+                                    "border_radius": {
+                                        "unit": "px",
+                                        "top": "8",
+                                        "right": "8",
+                                        "bottom": "8",
+                                        "left": "8",
+                                        "isLinked": false
+                                    },
+                                    "text_padding": {
+                                        "unit": "px",
+                                        "top": "16",
+                                        "right": "22",
+                                        "bottom": "16",
+                                        "left": "22",
+                                        "isLinked": false
+                                    },
+                                    "_title": "button:: このページで遊ぶ",
+                                    "_css_classes": "gw-inline-start"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "button",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            },
+            {
+                "id": "f57c37ab",
+                "settings": {
+                    "content_width": "full",
+                    "width": {
+                        "unit": "%",
+                        "size": 34,
+                        "sizes": []
+                    },
+                    "width_tablet": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "width_mobile": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "padding": {
+                        "unit": "px",
+                        "top": "30",
+                        "right": "30",
+                        "bottom": "30",
+                        "left": "30",
+                        "isLinked": false
+                    },
+                    "background_background": "classic",
+                    "background_color": "rgba(251,250,244,0.92)",
+                    "border_border": "solid",
+                    "border_color": "rgba(78,220,207,0.48)",
+                    "border_width": {
+                        "unit": "px",
+                        "top": "1",
+                        "right": "1",
+                        "bottom": "1",
+                        "left": "1",
+                        "isLinked": false
+                    },
+                    "border_radius": {
+                        "unit": "px",
+                        "top": "8",
+                        "right": "8",
+                        "bottom": "8",
+                        "left": "8",
+                        "isLinked": false
+                    },
+                    "_title": "container:: ヒーロービジュアル"
+                },
+                "elements": [
+                    {
+                        "id": "8e409495",
+                        "settings": {
+                            "image": {
+                                "url": "http://localhost:8089/wp-content/plugins/gaming-web/assets/sprites/character-placeholder.svg",
+                                "id": 0,
+                                "size": "",
+                                "alt": "",
+                                "source": "url"
+                            },
+                            "image_size": "full",
+                            "_title": "image:: CharaBreakキャラクター",
+                            "width": {
+                                "unit": "%",
+                                "size": 46,
+                                "sizes": []
+                            },
+                            "align": "center"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "image",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "683d4da5",
+                        "settings": {
+                            "title": "Serious page. Playable content.",
+                            "header_size": "h3",
+                            "title_color": "#08141f",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: 壊せるサイト訴求",
+                            "align": "center",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 28,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "55895036",
+                        "settings": {
+                            "editor": "<p>きちんと作り込まれたWebサイトほど、ゲームとして触れた時のギャップが強くなります。おしゃれなページなのに壊せる。その違和感が、思わず誰かに見せたくなる体験になります。</p>",
+                            "text_color": "#18222d",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 16,
+                                "sizes": []
+                            },
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.8,
+                                "sizes": []
+                            },
+                            "_title": "text:: ビジュアル説明",
+                            "align": "center"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "text-editor",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    },
+    {
+        "id": "e34596cb",
+        "settings": {
+            "content_width": "boxed",
+            "flex_direction": "column",
+            "padding": {
+                "unit": "px",
+                "top": "92",
+                "right": "24",
+                "bottom": "96",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#fbfaf4",
+            "_title": "section:: 02・コンセプト"
+        },
+        "elements": [
+            {
+                "id": "17cd32d1",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "column",
+                    "flex_gap": {
+                        "column": "10",
+                        "row": "10",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 10
+                    },
+                    "width": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "_title": "container:: セクション見出し"
+                },
+                "elements": [
+                    {
+                        "id": "e81f669a",
+                        "settings": {
+                            "title": "Concept",
+                            "header_size": "h6",
+                            "title_color": "#2f9a8a",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: Concept",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_text_transform": "uppercase",
+                            "typography_letter_spacing": {
+                                "unit": "px",
+                                "size": 0.8,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "e0ee0bae",
+                        "settings": {
+                            "title": "読まれない時代の、読むきっかけを作る。",
+                            "header_size": "h2",
+                            "title_color": "#08141f",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: 読まれない時代の、読むきっかけを作る。",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 42,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "8f0a8cfd",
+                        "settings": {
+                            "editor": "<p>広告もLPも、最初の壁は「読まれない」ことです。CharaBreakは文章をいきなり読ませるのではなく、ページそのものを遊べる対象に変えます。触る、攻撃する、守る、進む。その行為の中で、訪問者は自然に言葉へ接触していきます。</p>",
+                            "text_color": "#607080",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 17,
+                                "sizes": []
+                            },
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.8,
+                                "sizes": []
+                            },
+                            "_title": "text:: 広告もLPも、最初の壁は「読まれない」ことです。"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "text-editor",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            },
+            {
+                "id": "96c0a42c",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "row",
+                    "flex_wrap": "wrap",
+                    "flex_gap": {
+                        "column": "24",
+                        "row": "24",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 24
+                    },
+                    "padding": {
+                        "unit": "px",
+                        "top": "24",
+                        "right": "0",
+                        "bottom": "0",
+                        "left": "0",
+                        "isLinked": false
+                    },
+                    "_title": "container:: カードグリッド"
+                },
+                "elements": [
+                    {
+                        "id": "5e40b858",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード1・滞在時間を体験に変える"
+                        },
+                        "elements": [
+                            {
+                                "id": "9b7d8074",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-stopwatch",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "滞在時間を体験に変える",
+                                    "description_text": "ただ長く滞在させるのではなく、ページを探索する理由を作ります。訪問者はゲームとして遊びながら、結果的に見出し・本文・CTAを何度も目にします。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#4edccf",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: 滞在時間を体験に変える"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "37ecc8ef",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード2・読む前の抵抗を下げる"
+                        },
+                        "elements": [
+                            {
+                                "id": "bb84c536",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-hand-sparkles",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "読む前の抵抗を下げる",
+                                    "description_text": "「理解してください」ではなく「触ってみてください」から始めることで、難しい説明や長い文章への心理的な距離を縮めます。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#f5d565",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: 読む前の抵抗を下げる"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "0a662083",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード3・ファンになる余白を作る"
+                        },
+                        "elements": [
+                            {
+                                "id": "1b7763bb",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-users",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "ファンになる余白を作る",
+                                    "description_text": "ゲーム性、爽快感、クリア特典、ページ移動の驚きが、ブランドを覚える理由になります。情報接触を、記憶に残る遊びへ変えます。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#ff7a66",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: ファンになる余白を作る"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    },
+    {
+        "id": "4e989095",
+        "settings": {
+            "content_width": "boxed",
+            "flex_direction": "column",
+            "padding": {
+                "unit": "px",
+                "top": "92",
+                "right": "24",
+                "bottom": "96",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#08141f",
+            "_title": "section:: 03・ビジネス価値"
+        },
+        "elements": [
+            {
+                "id": "db149be8",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "column",
+                    "flex_gap": {
+                        "column": "10",
+                        "row": "10",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 10
+                    },
+                    "width": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "_title": "container:: セクション見出し"
+                },
+                "elements": [
+                    {
+                        "id": "cfb190eb",
+                        "settings": {
+                            "title": "Interactive Web",
+                            "header_size": "h6",
+                            "title_color": "#4edccf",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: Interactive Web",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_text_transform": "uppercase",
+                            "typography_letter_spacing": {
+                                "unit": "px",
+                                "size": 0.8,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "b77f5317",
+                        "settings": {
+                            "title": "壊すことを、マーケティング施策にする。",
+                            "header_size": "h2",
+                            "title_color": "#fbfaf4",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: 壊すことを、マーケティング施策にする。",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 42,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "6cc551f5",
+                        "settings": {
+                            "editor": "<p>CharaBreakは単なるミニゲームではありません。Webサイトの上に、滞在・回遊・読了・特典導線を生むインタラクティブレイヤーを追加します。ビジネスサイトの信頼感はそのままに、遊べる驚きでファンをつかみます。</p>",
+                            "text_color": "rgba(251,250,244,0.82)",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 17,
+                                "sizes": []
+                            },
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.8,
+                                "sizes": []
+                            },
+                            "_title": "text:: CharaBreakは単なるミニゲームではありま"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "text-editor",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            },
+            {
+                "id": "97d70b44",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "row",
+                    "flex_wrap": "wrap",
+                    "flex_gap": {
+                        "column": "24",
+                        "row": "24",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 24
+                    },
+                    "padding": {
+                        "unit": "px",
+                        "top": "24",
+                        "right": "0",
+                        "bottom": "0",
+                        "left": "0",
+                        "isLinked": false
+                    },
+                    "_title": "container:: カードグリッド"
+                },
+                "elements": [
+                    {
+                        "id": "87672ce1",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "rgba(78,220,207,0.32)",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード1・見られる接点が増える"
+                        },
+                        "elements": [
+                            {
+                                "id": "f6f9ef4e",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-eye",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "見られる接点が増える",
+                                    "description_text": "文字が足場になり、画像が壁になり、リンクがゲートになる。ページの要素そのものが体験に変わるため、通常より多くのコンテンツ接点を作れます。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#4edccf",
+                                    "title_color": "#fbfaf4",
+                                    "description_color": "rgba(251,250,244,0.72)",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: 見られる接点が増える"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "9f83f905",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "rgba(78,220,207,0.32)",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード2・ページ回遊をゲーム化する"
+                        },
+                        "elements": [
+                            {
+                                "id": "188540d2",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-route",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "ページ回遊をゲーム化する",
+                                    "description_text": "リンク先への移動をゲートにすることで、複数ページの閲覧を「次のステージへ進む」感覚に変えられます。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#f5d565",
+                                    "title_color": "#fbfaf4",
+                                    "description_color": "rgba(251,250,244,0.72)",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: ページ回遊をゲーム化する"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "10d0a83b",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "rgba(78,220,207,0.32)",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード3・クリア後の行動につなげる"
+                        },
+                        "elements": [
+                            {
+                                "id": "48c03f13",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-ticket-alt",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "クリア後の行動につなげる",
+                                    "description_text": "クリアした人だけにクーポン、特典ページ、限定メッセージを表示。楽しかった直後の熱量を、登録・購入・問い合わせの手前まで運べます。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#ff7a66",
+                                    "title_color": "#fbfaf4",
+                                    "description_color": "rgba(251,250,244,0.72)",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: クリア後の行動につなげる"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    },
+    {
+        "id": "2db15e08",
+        "settings": {
+            "content_width": "boxed",
+            "flex_direction": "column",
+            "padding": {
+                "unit": "px",
+                "top": "92",
+                "right": "24",
+                "bottom": "96",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#eaf6f3",
+            "_title": "section:: 04・ゲームループ"
+        },
+        "elements": [
+            {
+                "id": "9c5b3a9a",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "column",
+                    "flex_gap": {
+                        "column": "10",
+                        "row": "10",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 10
+                    },
+                    "width": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "_title": "container:: セクション見出し"
+                },
+                "elements": [
+                    {
+                        "id": "b76ce723",
+                        "settings": {
+                            "title": "Game Loop",
+                            "header_size": "h6",
+                            "title_color": "#2f9a8a",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: Game Loop",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_text_transform": "uppercase",
+                            "typography_letter_spacing": {
+                                "unit": "px",
+                                "size": 0.8,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "297e11ea",
+                        "settings": {
+                            "title": "走る、攻撃する、守る、そして読む。",
+                            "header_size": "h2",
+                            "title_color": "#08141f",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: 走る、攻撃する、守る、そして読む。",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 42,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "b1147ef7",
+                        "settings": {
+                            "editor": "<p>プレイヤーはページの上に落ちてきて、文字や画像を足場に進みます。壊した文字、守った文字、敵から守ったページの記憶が、最後に本文の要約と重なります。遊びのあとに、読まれる構造です。</p>",
+                            "text_color": "#607080",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 17,
+                                "sizes": []
+                            },
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.8,
+                                "sizes": []
+                            },
+                            "_title": "text:: プレイヤーはページの上に落ちてきて、文字や画像を"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "text-editor",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            },
+            {
+                "id": "abb00de3",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "row",
+                    "flex_wrap": "wrap",
+                    "flex_gap": {
+                        "column": "24",
+                        "row": "24",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 24
+                    },
+                    "padding": {
+                        "unit": "px",
+                        "top": "24",
+                        "right": "0",
+                        "bottom": "0",
+                        "left": "0",
+                        "isLinked": false
+                    },
+                    "_title": "container:: カードグリッド"
+                },
+                "elements": [
+                    {
+                        "id": "52689bc6",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード1・Start"
+                        },
+                        "elements": [
+                            {
+                                "id": "a7c474bf",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-running",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Start",
+                                    "description_text": "キャラクターが上から落ちてきて、文字の上に着地します。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#4edccf",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Start"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "2d0b7822",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード2・Break"
+                        },
+                        "elements": [
+                            {
+                                "id": "ee09916a",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-bolt",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Break",
+                                    "description_text": "文字を1文字ずつ攻撃し、穴を作って次の足場へ降ります。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#f5d565",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Break"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "1e4a1499",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード3・Guard"
+                        },
+                        "elements": [
+                            {
+                                "id": "1388677e",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-shield-alt",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Guard",
+                                    "description_text": "守りたい文字を3文字以上集め、敵からページを守ります。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#a6e35d",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Guard"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "10151b5d",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード4・Goal"
+                        },
+                        "elements": [
+                            {
+                                "id": "757e8c47",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-flag-checkered",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Goal",
+                                    "description_text": "クリア後は要約、守った文字、特典、次ページへの導線を表示します。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#ff7a66",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Goal"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    },
+    {
+        "id": "98a54f5d",
+        "settings": {
+            "content_width": "boxed",
+            "flex_direction": "row",
+            "flex_wrap": "wrap",
+            "flex_gap": {
+                "column": "24",
+                "row": "24",
+                "isLinked": true,
+                "unit": "px",
+                "size": 24
+            },
+            "padding": {
+                "unit": "px",
+                "top": "92",
+                "right": "24",
+                "bottom": "96",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#08141f",
+            "_title": "section:: 05・料金導線"
+        },
+        "elements": [
+            {
+                "id": "d0ca1664",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "column",
+                    "flex_gap": {
+                        "column": "10",
+                        "row": "10",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 10
+                    },
+                    "width": {
+                        "unit": "%",
+                        "size": 100,
+                        "sizes": []
+                    },
+                    "_title": "container:: セクション見出し"
+                },
+                "elements": [
+                    {
+                        "id": "3882648c",
+                        "settings": {
+                            "title": "Plans",
+                            "header_size": "h6",
+                            "title_color": "#4edccf",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: Plans",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_text_transform": "uppercase",
+                            "typography_letter_spacing": {
+                                "unit": "px",
+                                "size": 0.8,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "9b0b9e11",
+                        "settings": {
+                            "title": "無料で試して、1サイト買い切りで広げる。",
+                            "header_size": "h2",
+                            "title_color": "#fbfaf4",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: 無料で試して、1サイト買い切りで広げる。",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 42,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "1172e41e",
+                        "settings": {
+                            "editor": "<p>無料版は1ページだけゲーム化できる入口。Proではページ数制限を外し、リンクゲートで複数ページを冒険化します。個人制作から企業サイトまで、導入しやすい1サイト単位の販売を想定しています。</p>",
+                            "text_color": "rgba(251,250,244,0.82)",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 17,
+                                "sizes": []
+                            },
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.8,
+                                "sizes": []
+                            },
+                            "_title": "text:: 無料版は1ページだけゲーム化できる入口。Proで"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "text-editor",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            },
+            {
+                "id": "a5b8b0a5",
+                "settings": {
+                    "content_width": "boxed",
+                    "flex_direction": "row",
+                    "flex_wrap": "wrap",
+                    "flex_gap": {
+                        "column": "24",
+                        "row": "24",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 24
+                    },
+                    "padding": {
+                        "unit": "px",
+                        "top": "24",
+                        "right": "0",
+                        "bottom": "0",
+                        "left": "0",
+                        "isLinked": false
+                    },
+                    "_title": "container:: カードグリッド"
+                },
+                "elements": [
+                    {
+                        "id": "c2321ac5",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "rgba(78,220,207,0.32)",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード1・Free"
+                        },
+                        "elements": [
+                            {
+                                "id": "b700c178",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-seedling",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Free",
+                                    "description_text": "1ページだけゲーム化。CharaBreakの楽しさをすぐ試せます。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#4edccf",
+                                    "title_color": "#fbfaf4",
+                                    "description_color": "rgba(251,250,244,0.72)",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Free"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "d4ec7256",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "rgba(78,220,207,0.32)",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード2・Pro / 1 Site"
+                        },
+                        "elements": [
+                            {
+                                "id": "0ddf3497",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-crown",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Pro / 1 Site",
+                                    "description_text": "1サイト買い切り。無制限ページ、複数ページ冒険、特典、分析を開放予定です。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#f5d565",
+                                    "title_color": "#fbfaf4",
+                                    "description_color": "rgba(251,250,244,0.72)",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Pro / 1 Site"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "211d9287",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "rgba(78,220,207,0.32)",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード3・Freemius"
+                        },
+                        "elements": [
+                            {
+                                "id": "45d2edc4",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-globe",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Freemius",
+                                    "description_text": "海外販売、ライセンス、自動アップデート、決済をFreemiusで扱う想定です。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#ff7a66",
+                                    "title_color": "#fbfaf4",
+                                    "description_color": "rgba(251,250,244,0.72)",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Freemius"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    },
+    {
+        "id": "cbecd324",
+        "settings": {
+            "content_width": "boxed",
+            "flex_direction": "column",
+            "flex_align_items": "center",
+            "padding": {
+                "unit": "px",
+                "top": "86",
+                "right": "24",
+                "bottom": "96",
+                "left": "24",
+                "isLinked": false
+            },
+            "background_background": "classic",
+            "background_color": "#08141f",
+            "_css_classes": "cb-footer-cta",
+            "_title": "section:: 99・フッターCTA"
+        },
+        "elements": [
+            {
+                "id": "4bf0e4f8",
+                "settings": {
+                    "title": "まずは1ページ、遊べるWebに変えてみる。",
+                    "header_size": "h2",
+                    "title_color": "#fbfaf4",
+                    "typography_font_family": "Inter",
+                    "typography_typography": "custom",
+                    "typography_font_weight": "900",
+                    "typography_line_height": {
+                        "unit": "em",
+                        "size": 1.08,
+                        "sizes": []
+                    },
+                    "_title": "title:: 最後のCTA見出し",
+                    "typography_font_size": {
+                        "unit": "px",
+                        "size": 40,
+                        "sizes": []
+                    },
+                    "align": "center"
+                },
+                "elements": [],
+                "isInner": false,
+                "widgetType": "heading",
+                "elType": "widget"
+            },
+            {
+                "id": "9a73f5b6",
+                "settings": {
+                    "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
+                    "text_color": "rgba(251,250,244,0.78)",
+                    "typography_font_family": "Inter",
+                    "typography_typography": "custom",
+                    "typography_font_size": {
+                        "unit": "px",
+                        "size": 16,
+                        "sizes": []
+                    },
+                    "typography_line_height": {
+                        "unit": "em",
+                        "size": 1.8,
+                        "sizes": []
+                    },
+                    "_title": "text:: フッターCTA説明",
+                    "align": "center"
+                },
+                "elements": [],
+                "isInner": false,
+                "widgetType": "text-editor",
+                "elType": "widget"
+            },
+            {
+                "id": "67d20743",
+                "settings": {
+                    "content_width": "full",
+                    "flex_direction": "row",
+                    "flex_justify_content": "center",
+                    "flex_wrap": "wrap",
+                    "flex_gap": {
+                        "column": "12",
+                        "row": "12",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 12
+                    },
+                    "_title": "container:: フッターCTAボタン"
+                },
+                "elements": [
+                    {
+                        "id": "c4154601",
+                        "settings": {
+                            "text": "Free Download",
+                            "link": {
+                                "url": "https://github.com/healingsolutions/charabreak",
+                                "is_external": "on",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#08141f",
+                            "background_background": "classic",
+                            "background_color": "#f5d565",
+                            "border_border": "solid",
+                            "border_color": "#f5d565",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: 無料ダウンロード"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "73542f6e",
+                        "settings": {
+                            "text": "Play Demo",
+                            "link": {
+                                "url": "#gaming-web-start",
+                                "is_external": "",
+                                "nofollow": "",
+                                "custom_attributes": ""
+                            },
+                            "align": "left",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 14,
+                                "sizes": []
+                            },
+                            "typography_font_weight": "900",
+                            "typography_text_transform": "uppercase",
+                            "button_text_color": "#f5d565",
+                            "background_background": "classic",
+                            "background_color": "#102335",
+                            "border_border": "solid",
+                            "border_color": "#4edccf",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "text_padding": {
+                                "unit": "px",
+                                "top": "16",
+                                "right": "22",
+                                "bottom": "16",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "_title": "button:: このページで遊ぶ",
+                            "_css_classes": "gw-inline-start"
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "button",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
+            }
+        ],
+        "isInner": false,
+        "elType": "container"
+    }
+]

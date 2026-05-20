@@ -14,6 +14,7 @@ Gaming Web adds a light, playful mode to enabled WordPress pages. The MVP keeps 
 - Collectible word fragments and a compact inventory panel.
 - Admin settings for global enablement, post types, floating start button visibility, labels, character name, logging, and debug mode.
 - Per-page meta for game mode, important words, stage name, and clear-only rewards/coupons.
+- English-first UI strings with bundled Japanese translation support.
 - REST event endpoint at `/wp-json/gaming-web/v1/event`.
 - Anonymous event table: `wp_gaming_web_events`.
 
@@ -22,13 +23,13 @@ Gaming Web adds a light, playful mode to enabled WordPress pages. The MVP keeps 
 Enabled pages can start game mode from natural in-page copy instead of the fixed lower-right button:
 
 ```text
-[gaming_web_start label="このページで遊ぶ"]
+[gaming_web_start label="Play this page"]
 ```
 
 The fixed floating button can be hidden in **Settings > Gaming Web**. Custom markup can also trigger the game by adding `data-gaming-web-start`:
 
 ```html
-<a href="#gaming-web-start" data-gaming-web-start>このページを触ってみる</a>
+<a href="#gaming-web-start" data-gaming-web-start>Play this page</a>
 ```
 
 `wordpress-adapter.js` exposes `window.GamingWeb.start()` for non-WordPress wrappers or custom theme scripts after the adapter has loaded.
@@ -56,9 +57,13 @@ From the workspace root:
 .\scripts\setup-wordpress.ps1
 ```
 
-Open `http://localhost:8089`, click `ゲームモード`, then tap headings, images, paragraphs, buttons, and links.
+Open `http://localhost:8089`, click `Game Mode`, then use page text, images, buttons, and links as playable platforms.
 
 Audio assets live under `assets/audio`. BGM preference is stored in the browser as `gaming_web_bgm_enabled`.
+
+## Internationalization
+
+The plugin source uses English as the base language. Japanese translations are bundled under `languages/`, and the frontend game UI switches text by WordPress/site locale.
 
 Player controls:
 

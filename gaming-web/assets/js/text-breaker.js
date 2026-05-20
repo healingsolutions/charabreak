@@ -1,5 +1,7 @@
+import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.10';
+
 const BREAKABLE_TYPES = new Set(['heading', 'paragraph', 'action']);
-const SKIP_SELECTOR = 'script,style,noscript,svg,canvas,input,textarea,select,.gw-stage,.gw-stage *,.gw-break-char';
+const SKIP_SELECTOR = 'script,style,noscript,svg,canvas,input,textarea,select,.gw-stage,.gw-stage *,.gw-break-char,.cb-nav,.cb-nav *';
 const TEXT_DIRECT_SUPPORT_OVERLAP = 5;
 const TEXT_BRIDGE_GAP_CHARS = 2.8;
 const TEXT_LINE_TOLERANCE = 6;
@@ -331,7 +333,7 @@ export class TextBreaker {
     }
 
     wrapElementText(element) {
-        if (!(element instanceof Element) || element.closest('.gw-stage')) {
+        if (!(element instanceof Element) || isGameIgnoredElement(element)) {
             return;
         }
 
@@ -344,7 +346,7 @@ export class TextBreaker {
                         return NodeFilter.FILTER_REJECT;
                     }
 
-                    if (node.parentElement?.closest(SKIP_SELECTOR)) {
+                    if (node.parentElement?.closest(SKIP_SELECTOR) || isGameIgnoredElement(node.parentElement)) {
                         return NodeFilter.FILTER_REJECT;
                     }
 
@@ -476,7 +478,7 @@ function isContentElement(element) {
         return false;
     }
 
-    if (element.closest('header,footer,nav')) {
+    if (isGameIgnoredElement(element)) {
         return false;
     }
 

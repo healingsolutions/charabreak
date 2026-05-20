@@ -20,8 +20,8 @@ class GW_Settings
             self::OPTION_ENABLED => '1',
             self::OPTION_SHOW_FLOATING_BUTTON => '1',
             self::OPTION_POST_TYPES => array('page', 'post'),
-            self::OPTION_BUTTON_LABEL => 'ゲームモード',
-            self::OPTION_CHARACTER_NAME => 'ピコ',
+            self::OPTION_BUTTON_LABEL => 'Game Mode',
+            self::OPTION_CHARACTER_NAME => 'Pico',
             self::OPTION_LOGGING_ENABLED => '1',
             self::OPTION_DEBUG => '0',
         );
@@ -77,13 +77,13 @@ class GW_Settings
         register_setting('gaming_web_settings', self::OPTION_BUTTON_LABEL, array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
-            'default' => 'ゲームモード',
+            'default' => 'Game Mode',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_CHARACTER_NAME, array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
-            'default' => 'ピコ',
+            'default' => 'Pico',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_LOGGING_ENABLED, array(

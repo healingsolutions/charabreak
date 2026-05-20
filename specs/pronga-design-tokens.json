@@ -1,0 +1,39 @@
+{
+  "brand": {
+    "name": "CharaBreak",
+    "tagline": "Web pages become playable stages."
+  },
+  "colors": {
+    "ink": "#08141f",
+    "inkSoft": "#102335",
+    "cyan": "#4edccf",
+    "gold": "#f5d565",
+    "coral": "#ff7a66",
+    "lime": "#a6e35d",
+    "paper": "#fbfaf4",
+    "mist": "#eaf6f3",
+    "text": "#18222d",
+    "mutedText": "#607080",
+    "border": "#d9e7e3"
+  },
+  "typography": {
+    "fontFamilyBase": "Inter, Noto Sans JP, system-ui, sans-serif",
+    "fontFamilyHeading": "Inter, Noto Sans JP, system-ui, sans-serif",
+    "h1": { "size": "clamp(40px, 7vw, 82px)", "weight": 900, "lineHeight": 0.98 },
+    "h2": { "size": "clamp(28px, 4vw, 48px)", "weight": 900, "lineHeight": 1.08 },
+    "body": { "size": "16px", "lineHeight": 1.8 }
+  },
+  "spacing": {
+    "containerMax": "1120px",
+    "sectionY": "clamp(72px, 9vw, 128px)",
+    "gap": "24px"
+  },
+  "radius": {
+    "card": "8px",
+    "button": "8px"
+  },
+  "shadow": {
+    "card": "0 20px 60px rgba(8, 20, 31, 0.12)",
+    "glow": "0 0 34px rgba(78, 220, 207, 0.18)"
+  }
+}

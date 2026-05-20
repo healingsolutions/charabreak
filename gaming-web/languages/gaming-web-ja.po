@@ -1,0 +1,110 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Gaming Web 0.2.6\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Add a safe, overlay-only playful mode to enabled pages without damaging the real DOM."
+msgstr "実際のDOMを壊さず、有効化したページに安全なオーバーレイ型の遊びモードを追加します。"
+
+msgid "Game Mode"
+msgstr "ゲームモード"
+
+msgid "Pico"
+msgstr "ピコ"
+
+msgid "Enable Gaming Web globally"
+msgstr "Gaming Webを全体で有効化"
+
+msgid "Enabled"
+msgstr "有効"
+
+msgid "Show floating start button"
+msgstr "固定スタートボタンを表示"
+
+msgid "Display the fixed game start button in the lower-right corner."
+msgstr "右下に固定のゲーム開始ボタンを表示します。"
+
+msgid "You can hide this and start the game from page content using the [gaming_web_start] shortcode."
+msgstr "非表示にして、[gaming_web_start] ショートコードでページ本文からゲームを開始することもできます。"
+
+msgid "Enable on post types"
+msgstr "有効化する投稿タイプ"
+
+msgid "Pages"
+msgstr "固定ページ"
+
+msgid "Posts"
+msgstr "投稿"
+
+msgid "Game button label"
+msgstr "ゲームボタンのラベル"
+
+msgid "Primary character name"
+msgstr "メインキャラクター名"
+
+msgid "Enable basic logging"
+msgstr "基本ログを有効化"
+
+msgid "Store anonymous gameplay events"
+msgstr "匿名のゲームプレイイベントを保存します"
+
+msgid "Debug mode"
+msgstr "デバッグモード"
+
+msgid "Log client-side debug messages to the browser console"
+msgstr "ブラウザコンソールにクライアント側デバッグメッセージを出力します"
+
+msgid "Save Gaming Web settings"
+msgstr "Gaming Web設定を保存"
+
+msgid "Page game mode"
+msgstr "ページのゲームモード"
+
+msgid "Inherit global setting"
+msgstr "全体設定を継承"
+
+msgid "Enable on this page"
+msgstr "このページで有効化"
+
+msgid "Disable on this page"
+msgstr "このページで無効化"
+
+msgid "Important words"
+msgstr "重要な言葉"
+
+msgid "Stage name"
+msgstr "ステージ名"
+
+msgid "Show a clear reward"
+msgstr "クリア特典を表示"
+
+msgid "Reward title"
+msgstr "特典タイトル"
+
+msgid "Reward message"
+msgstr "特典メッセージ"
+
+msgid "Coupon code"
+msgstr "クーポンコード"
+
+msgid "Reward URL"
+msgstr "特典URL"
+
+msgid "light, memory, space"
+msgstr "光, 記憶, 余白"
+
+msgid "Garden of Words"
+msgstr "言葉の庭"
+
+msgid "Clear reward"
+msgstr "クリア特典"
+
+msgid "A message only players who reached GOAL can see"
+msgstr "GOALした人だけに見えるメッセージ"
+
+msgid "Invalid event type."
+msgstr "無効なイベント種別です。"

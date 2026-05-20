@@ -106,7 +106,7 @@ class GW_Plugin
 
         $atts = shortcode_atts(
             array(
-                'label' => GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL),
+                'label' => $this->localized_default_option(GW_Settings::OPTION_BUTTON_LABEL),
                 'class' => '',
             ),
             $atts,
@@ -115,7 +115,7 @@ class GW_Plugin
 
         $label = trim((string) $atts['label']);
         if ($label === '') {
-            $label = GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL);
+            $label = $this->localized_default_option(GW_Settings::OPTION_BUTTON_LABEL);
         }
 
         $classes = array('gw-inline-start');
@@ -173,11 +173,11 @@ class GW_Plugin
         </p>
         <p>
             <label for="gaming-web-important-words"><strong><?php esc_html_e('Important words', 'gaming-web'); ?></strong></label>
-            <textarea name="gaming_web_important_words" id="gaming-web-important-words" class="widefat" rows="3" placeholder="光, 記憶, 余白"><?php echo esc_textarea($important_words); ?></textarea>
+            <textarea name="gaming_web_important_words" id="gaming-web-important-words" class="widefat" rows="3" placeholder="<?php esc_attr_e('light, memory, space', 'gaming-web'); ?>"><?php echo esc_textarea($important_words); ?></textarea>
         </p>
         <p>
             <label for="gaming-web-stage-name"><strong><?php esc_html_e('Stage name', 'gaming-web'); ?></strong></label>
-            <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="言葉の庭">
+            <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="<?php esc_attr_e('Garden of Words', 'gaming-web'); ?>">
         </p>
         <hr>
         <p>
@@ -189,11 +189,11 @@ class GW_Plugin
         </p>
         <p>
             <label for="gaming-web-reward-title"><strong><?php esc_html_e('Reward title', 'gaming-web'); ?></strong></label>
-            <input type="text" name="gaming_web_reward_title" id="gaming-web-reward-title" class="widefat" value="<?php echo esc_attr($reward_title); ?>" placeholder="クリア特典">
+            <input type="text" name="gaming_web_reward_title" id="gaming-web-reward-title" class="widefat" value="<?php echo esc_attr($reward_title); ?>" placeholder="<?php esc_attr_e('Clear reward', 'gaming-web'); ?>">
         </p>
         <p>
             <label for="gaming-web-reward-message"><strong><?php esc_html_e('Reward message', 'gaming-web'); ?></strong></label>
-            <textarea name="gaming_web_reward_message" id="gaming-web-reward-message" class="widefat" rows="3" placeholder="GOALした人だけに見えるメッセージ"><?php echo esc_textarea($reward_message); ?></textarea>
+            <textarea name="gaming_web_reward_message" id="gaming-web-reward-message" class="widefat" rows="3" placeholder="<?php esc_attr_e('A message only players who reached GOAL can see', 'gaming-web'); ?>"><?php echo esc_textarea($reward_message); ?></textarea>
         </p>
         <p>
             <label for="gaming-web-reward-coupon-code"><strong><?php esc_html_e('Coupon code', 'gaming-web'); ?></strong></label>
@@ -282,19 +282,15 @@ class GW_Plugin
             'pageId' => $post_id,
             'pageUrl' => $post_id ? get_permalink($post_id) : home_url('/'),
             'stageName' => $stage_name ?: get_the_title($post_id),
-            'buttonLabel' => GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL),
+            'buttonLabel' => $this->localized_default_option(GW_Settings::OPTION_BUTTON_LABEL),
             'showFloatingButton' => GW_Settings::is_truthy(GW_Settings::OPTION_SHOW_FLOATING_BUTTON) ? '1' : '0',
-            'characterName' => GW_Settings::get(GW_Settings::OPTION_CHARACTER_NAME),
+            'characterName' => $this->localized_default_option(GW_Settings::OPTION_CHARACTER_NAME),
             'importantWords' => $this->parse_important_words($important_words),
             'hasReward' => $this->has_clear_reward($post_id) ? '1' : '0',
             'loggingEnabled' => GW_Settings::is_truthy(GW_Settings::OPTION_LOGGING_ENABLED),
             'debug' => GW_Settings::is_truthy(GW_Settings::OPTION_DEBUG),
-            'messages' => array(
-                'start' => 'このページ、ちょっと触ってみる？',
-                'hint' => '叩くと何か出るかも',
-                'collect' => '言葉のかけらを見つけた！',
-                'clear' => '少しページが明るくなった！',
-            ),
+            'locale' => determine_locale(),
+            'messages' => array(),
         );
     }
 
@@ -306,6 +302,21 @@ class GW_Plugin
         $parts = array_filter($parts, static fn($word) => $word !== '');
 
         return array_values(array_unique($parts));
+    }
+
+    private function localized_default_option(string $key): string
+    {
+        $value = (string) GW_Settings::get($key);
+
+        if ($key === GW_Settings::OPTION_BUTTON_LABEL && $value === 'Game Mode') {
+            return __('Game Mode', 'gaming-web');
+        }
+
+        if ($key === GW_Settings::OPTION_CHARACTER_NAME && $value === 'Pico') {
+            return __('Pico', 'gaming-web');
+        }
+
+        return $value;
     }
 
     private function has_clear_reward(int $post_id): bool

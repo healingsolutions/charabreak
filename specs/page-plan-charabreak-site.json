@@ -1,0 +1,52 @@
+{
+  "siteName": "CharaBreak",
+  "status": "publish",
+  "headline": "読む前に、壊せ。",
+  "primaryConversion": "free_download",
+  "secondaryConversion": "play_demo",
+  "audience": [
+    "WordPress site owners",
+    "Elementor creators",
+    "plugin buyers outside Japan",
+    "small teams who want memorable interactive landing pages"
+  ],
+  "tone": "Stylish business website with playful, breakable game-layer contrast",
+  "businessMessage": "Modern visitors often do not read first. CharaBreak turns the pre-reading moment into interactive play, increasing content contact, dwell time, page memory, and multi-page engagement.",
+  "pages": [
+    {
+      "slug": "charabreak",
+      "title": "CharaBreak",
+      "purpose": "Top page and playable product introduction",
+      "sections": ["nav", "hero", "concept", "businessImpact", "gameplay", "pricingPreview", "demoCta", "footer"]
+    },
+    {
+      "slug": "charabreak-features",
+      "title": "Features",
+      "purpose": "Explain core plugin capabilities with editable Elementor-native cards",
+      "sections": ["nav", "hero", "featureGrid", "creatorFlow", "footerCta"]
+    },
+    {
+      "slug": "charabreak-pricing",
+      "title": "Pricing",
+      "purpose": "Show free one-page plan and paid one-site plan through Freemius",
+      "sections": ["nav", "hero", "plans", "comparison", "footerCta"]
+    },
+    {
+      "slug": "charabreak-demo",
+      "title": "Playable Demo",
+      "purpose": "Give visitors a stylish page with enough text, images, icons, and buttons to break",
+      "sections": ["nav", "hero", "playgroundBlocks", "bossHint", "footerCta"]
+    },
+    {
+      "slug": "charabreak-faq",
+      "title": "FAQ",
+      "purpose": "Answer purchase, compatibility, distribution, and business-use questions",
+      "sections": ["nav", "hero", "accordionFaq", "footerCta"]
+    }
+  ],
+  "implementation": {
+    "builder": "Elementor native containers/widgets",
+    "forbidden": ["HTML dump sections", "layout HTML inside text widgets"],
+    "gameStart": "Use Elementor button widgets with gw-inline-start class and #gaming-web-start link"
+  }
+}

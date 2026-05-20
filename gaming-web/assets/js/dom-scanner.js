@@ -31,7 +31,21 @@ const TARGET_SELECTOR = [
     '.ekit-wid-con svg',
     '.ekit-wid-con i',
 ].join(',');
-const IGNORE_SELECTOR = '.gw-mode-button, .gw-stage, .gw-stage *';
+const GAME_IGNORE_SELECTOR = [
+    '.gw-mode-button',
+    '.gw-stage',
+    'header',
+    'footer',
+    'nav',
+    '.cb-nav',
+    '[role="banner"]',
+    '[role="navigation"]',
+    '.elementor-location-header',
+    '.site-header',
+    '.main-header',
+    '.site-navigation',
+    '.main-navigation',
+].join(',');
 
 export function scanGameTargets(root = document, options = {}) {
     const limit = options.limit || 180;
@@ -43,7 +57,7 @@ export function scanGameTargets(root = document, options = {}) {
             continue;
         }
 
-        if (element.matches(IGNORE_SELECTOR) || element.closest('.gw-stage')) {
+        if (isGameIgnoredElement(element)) {
             continue;
         }
 
@@ -69,6 +83,48 @@ export function scanGameTargets(root = document, options = {}) {
     }
 
     return targets;
+}
+
+export function isGameIgnoredElement(element) {
+    return element instanceof Element
+        && (element.matches(GAME_IGNORE_SELECTOR)
+            || Boolean(element.closest(GAME_IGNORE_SELECTOR))
+            || Boolean(closestLikelyHeaderNavBar(element)));
+}
+
+function closestLikelyHeaderNavBar(element) {
+    let node = element;
+
+    while (node && node instanceof Element && node !== document.body && node !== document.documentElement) {
+        if (isLikelyHeaderNavBar(node)) {
+            return node;
+        }
+
+        node = node.parentElement;
+    }
+
+    return null;
+}
+
+function isLikelyHeaderNavBar(element) {
+    if (!(element instanceof Element) || element.classList.contains('gw-stage')) {
+        return false;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const docTop = rect.top + window.scrollY;
+    const interactiveCount = element.querySelectorAll('a[href],button').length;
+
+    if (docTop > 220 || rect.height > 220 || rect.width < Math.min(260, window.innerWidth * 0.45)) {
+        return false;
+    }
+
+    if (interactiveCount >= 3) {
+        return true;
+    }
+
+    const identity = `${element.id || ''} ${element.className || ''} ${element.getAttribute('role') || ''}`;
+    return interactiveCount >= 2 && /\b(nav|menu|header|brand|logo)\b/i.test(identity);
 }
 
 export function findScannedTarget(startNode, targets) {

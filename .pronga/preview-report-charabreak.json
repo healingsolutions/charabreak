@@ -1,0 +1,34 @@
+{
+  "slug": "charabreak",
+  "preview_url": "http://localhost:8089/",
+  "checked_at": "2026-05-20T08:00:00Z",
+  "pages": [
+    { "id": 314, "title": "CharaBreak", "slug": "charabreak" },
+    { "id": 315, "title": "CharaBreak Features", "slug": "charabreak-features" },
+    { "id": 316, "title": "CharaBreak Pricing", "slug": "charabreak-pricing" },
+    { "id": 317, "title": "CharaBreak Playable Demo", "slug": "charabreak-demo" },
+    { "id": 318, "title": "CharaBreak FAQ", "slug": "charabreak-faq" }
+  ],
+  "checks": {
+    "desktop_preview": true,
+    "mobile_preview": true,
+    "main_headline_visible": true,
+    "cta_visible": true,
+    "game_start_verified": true,
+    "elementor_native_validation": true,
+    "html_widgets": 0,
+    "navigator_labels": "section/container/title/text/button labels present",
+    "notes": "Browser preview loaded the CharaBreak homepage, the Break This Page start link opened the Gaming Web overlay, and a 390px mobile viewport had no horizontal overflow."
+  },
+  "screenshots": [
+    "screenshots/charabreak-desktop.png",
+    "screenshots/charabreak-mobile.png"
+  ],
+  "validation_files": [
+    "gaming-web/_generated/charabreak-elementor.json",
+    "gaming-web/_generated/charabreak-features-elementor.json",
+    "gaming-web/_generated/charabreak-pricing-elementor.json",
+    "gaming-web/_generated/charabreak-demo-elementor.json",
+    "gaming-web/_generated/charabreak-faq-elementor.json"
+  ]
+}

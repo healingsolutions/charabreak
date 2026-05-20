@@ -1,0 +1,15 @@
+{
+  "projectRoot": "D:\\Dropbox\\WorksDock\\\u81ea\u793e\u30a2\u30d7\u30ea\\GamingWEB",
+  "wordpressRoot": null,
+  "wpContent": null,
+  "pluginsDir": null,
+  "detectedAt": "2026-05-20T07:45:02.350Z",
+  "previewUrlCandidates": [
+    "http://localhost:8089",
+    "http://localhost:8080",
+    "http://localhost:8000",
+    "http://localhost:8888",
+    "http://localhost"
+  ],
+  "notes": "WordPress is mounted in Docker volumes; use docker compose wpcli commands for site inspection."
+}
