@@ -370,19 +370,19 @@
     left: 50%;
     z-index: 5;
     display: grid;
-    grid-template-columns: 80px minmax(180px, 1.2fr) minmax(150px, 0.7fr) auto;
+    grid-template-columns: 72px minmax(150px, 1.2fr) minmax(112px, 0.7fr) auto;
     align-items: center;
     gap: 9px;
-    width: min(960px, calc(100vw - 156px));
-    min-height: 42px;
-    padding: 6px 9px;
+    width: min(820px, calc(100vw - 170px));
+    min-height: 34px;
+    padding: 5px 8px;
     border: 1px solid rgba(78, 220, 207, 0.46);
     border-radius: 0;
     background:
         linear-gradient(90deg, rgba(78, 220, 207, 0.16), transparent 38%, rgba(245, 213, 101, 0.1)),
         rgba(7, 18, 27, 0.56);
     color: rgba(237, 252, 250, 0.94);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 800;
     line-height: 1;
     box-shadow:
@@ -407,7 +407,7 @@
 .gw-mission-hud__goal {
     min-width: 0;
     color: rgba(237, 252, 250, 0.76);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 900;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -432,7 +432,7 @@
 
 .gw-mission-hud__treasure strong {
     color: rgba(78, 220, 207, 0.72);
-    font-size: 14px;
+    font-size: 10px;
     white-space: nowrap;
 }
 
@@ -467,7 +467,7 @@
 
 .gw-mission-hud__stats {
     display: grid;
-    grid-template-columns: repeat(5, minmax(48px, auto));
+    grid-template-columns: repeat(5, minmax(40px, auto));
     gap: 7px;
     margin: 0;
 }
@@ -488,7 +488,7 @@
 
 .gw-mission-hud__stats dt {
     color: rgba(237, 252, 250, 0.5);
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 800;
     line-height: 1;
     text-transform: uppercase;
@@ -505,7 +505,7 @@
 
 .gw-mission-hud__stats div:nth-child(2) dd::after {
     color: rgba(237, 252, 250, 0.46);
-    font-size: 14px;
+    font-size: 10px;
     content: "%";
 }
 
@@ -533,7 +533,7 @@
     border-radius: 8px;
     background: rgba(47, 154, 138, 0.14);
     color: #2f9a8a;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 900;
     line-height: 1.15;
     text-align: center;
@@ -670,7 +670,7 @@
     display: block;
     margin-top: 5px;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .gw-goal-gate--clear {
@@ -1475,7 +1475,7 @@
     border-radius: 0;
     background: rgba(255, 255, 255, 0.08);
     color: rgba(245, 213, 101, 0.92);
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 900;
     line-height: 1;
     cursor: pointer;
@@ -1486,7 +1486,7 @@
     left: 10px;
     top: 6px;
     color: #f5d565;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0;
@@ -1576,7 +1576,7 @@
     background: rgba(0, 0, 0, 0.32);
     color: #f5d565;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 900;
     line-height: 1.1;
     letter-spacing: 0;
@@ -1599,7 +1599,7 @@
         linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.08)),
         #16212b;
     color: #f0cf5d;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .gw-player-control--throw {
@@ -1607,7 +1607,7 @@
         linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.06)),
         #2f9a8a;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .gw-player-control--shield {
@@ -1689,7 +1689,7 @@
     padding: 3px 7px;
     border: 1px solid rgba(245, 213, 101, 0.52);
     color: #f5d565;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 900;
     letter-spacing: 0;
 }
@@ -1719,7 +1719,7 @@
 .gw-stage .gw-intro-modal small {
     color: rgba(98, 242, 231, 0.92) !important;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.42);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
 }
 
@@ -1780,7 +1780,7 @@
         linear-gradient(90deg, rgba(78, 220, 207, 0.12), transparent 42%, rgba(245, 213, 101, 0.1)),
         rgba(7, 18, 27, 0.72);
     color: rgba(237, 252, 250, 0.9);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 900;
     line-height: 1.35;
     box-shadow: 0 0 24px rgba(78, 220, 207, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -1793,7 +1793,7 @@
 
 .gw-control-guide strong {
     color: #f5d565;
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 0;
 }
 
@@ -1807,7 +1807,7 @@
 
 .gw-control-guide small {
     color: rgba(78, 220, 207, 0.78);
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .gw-control-guide--leaving {
@@ -1821,17 +1821,17 @@
 .gw-stage .gw-inventory-toggle,
 .gw-stage .gw-controls-toggle {
     flex: 0 0 auto;
-    width: 58px;
+    width: 48px;
     min-width: 0;
-    max-width: 58px;
-    height: 34px;
+    max-width: 48px;
+    height: 28px;
     min-height: 0;
-    padding: 0 6px;
+    padding: 0 5px;
     border: 1px solid rgba(78, 220, 207, 0.28);
     border-radius: 0;
     background: rgba(12, 39, 52, 0.72);
     color: rgba(237, 252, 250, 0.86);
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 900;
     line-height: 1.2;
     box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2);
@@ -1840,18 +1840,18 @@
 }
 
 .gw-stage .gw-inventory-toggle {
-    width: 52px;
-    max-width: 52px;
+    width: 42px;
+    max-width: 42px;
 }
 
 .gw-stage .gw-bgm-toggle {
-    width: 54px;
-    max-width: 54px;
+    width: 44px;
+    max-width: 44px;
 }
 
 .gw-stage .gw-controls-toggle {
-    width: 58px;
-    max-width: 58px;
+    width: 48px;
+    max-width: 48px;
 }
 
 .gw-stage .gw-exit-button:hover,
@@ -2626,7 +2626,7 @@
 .gw-return-route small {
     display: block;
     margin-top: 4px;
-    font-size: 14px;
+    font-size: 11px;
 }
 
 .gw-return-route--active {
@@ -3627,13 +3627,13 @@
     .gw-player-control__keys {
         margin-top: 2px;
         padding: 1px 3px;
-        font-size: 14px;
+        font-size: 10px;
     }
 
     .gw-player-control--lock,
     .gw-player-control--shield,
     .gw-player-control--throw {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .gw-speech {
