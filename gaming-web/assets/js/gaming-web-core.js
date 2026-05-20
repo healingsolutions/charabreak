@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.1.46';
-import { StageOverlay } from './stage-overlay.js?v=0.1.46';
-import { InteractionEngine } from './interaction-engine.js?v=0.1.46';
-import { TextBreaker } from './text-breaker.js?v=0.1.46';
-import { ImageBreaker } from './image-breaker.js?v=0.1.46';
+import { scanGameTargets } from './dom-scanner.js?v=0.2.2';
+import { StageOverlay } from './stage-overlay.js?v=0.2.2';
+import { InteractionEngine } from './interaction-engine.js?v=0.2.2';
+import { TextBreaker } from './text-breaker.js?v=0.2.2';
+import { ImageBreaker } from './image-breaker.js?v=0.2.2';
 
 export class GamingWebCore {
     constructor(config = {}) {
@@ -33,7 +33,7 @@ export class GamingWebCore {
         this.audio?.startBgmIfEnabled();
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const targets = scanGameTargets(document, { limit: 180 });
+        const targets = scanGameTargets(document, { limit: 320 });
         this.textBreaker = new TextBreaker();
         this.textBreaker.prepare(targets);
         this.imageBreaker = new ImageBreaker();

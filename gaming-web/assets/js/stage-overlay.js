@@ -1,9 +1,9 @@
-import { liveRectForTarget } from './dom-scanner.js?v=0.1.46';
+import { liveRectForTarget } from './dom-scanner.js?v=0.1.92';
 
 const UI_TEXT = {
     defaultCharacter: '\u30d4\u30b3',
-    exit: '\u7d42\u4e86',
-    inventoryPrefix: '\u3053\u3068\u3070',
+    exit: 'END',
+    inventoryPrefix: 'W',
     inventoryTitle: '\u898b\u3064\u3051\u305f\u8a00\u8449',
     emptyInventory: '\u307e\u3060\u7a7a\u3063\u307d',
     start: '\u3053\u306e\u30da\u30fc\u30b8\u3001\u3061\u3087\u3063\u3068\u89e6\u3063\u3066\u307f\u308b\uff1f',
@@ -13,7 +13,10 @@ const UI_TEXT = {
     imageCrack: '\u304d\u3089\u3063\u3068\u5272\u308c\u3066\u3001\u5149\u3060\u3051\u6b8b\u3063\u305f\uff01',
     imageSpin: '\u753b\u50cf\u304c\u3050\u3089\u3063\u3068\u56de\u3063\u305f\uff01',
     imageBreak: '\u753b\u50cf\u306b\u7a74\u304c\u3042\u3044\u305f\uff01',
+    iconSpin: '\u30a2\u30a4\u30b3\u30f3\u304c\u30ab\u30e9\u30f3\u3068\u8df3\u306d\u305f\uff01',
+    iconBreak: '\u30a2\u30a4\u30b3\u30f3\u304c\u306f\u3058\u3051\u305f\uff01',
     gateReady: '\u30ea\u30f3\u30af\u30b2\u30fc\u30c8\u304c\u958b\u3044\u3066\u3044\u308b\uff01',
+    gateCharge: '\u30b2\u30fc\u30c8\u3067\u3059\u3053\u3057\u5f85\u3064\u3068\u79fb\u52d5\u3067\u304d\u308b\uff01',
     gateBreak: '\u30b2\u30fc\u30c8\u304c\u5d29\u308c\u305f\uff01',
     gateNeedsTextBreak: '\u5148\u306b\u4e2d\u306e\u6587\u5b57\u3092\u653b\u6483\u3057\u3088\u3046\uff01',
     enemyAppear: '\u6575\u304c\u30da\u30fc\u30b8\u3092\u72d9\u3063\u3066\u3044\u308b\uff01',
@@ -38,7 +41,7 @@ const UI_TEXT = {
     treasureStored: '\u300c{char}\u300d\u3092\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19\u306b\u523b\u3093\u3060\uff01',
     treasureNoLetter: '\u8db3\u5143\u306b\u5b88\u308b\u6587\u5b57\u304c\u306a\u3044\uff01',
     treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
-    placedLetterBreak: '\u7f6\u3044\u305f\u6587\u5b57\u3092\u5d29\u3057\u305f\uff01',
+    placedLetterBreak: '\u7f6e\u3044\u305f\u6587\u5b57\u3092\u5d29\u3057\u305f\uff01',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
     gameOverTitle: 'GAME OVER',
     retry: '\u3082\u3046\u4e00\u56de',
@@ -60,9 +63,11 @@ const UI_TEXT = {
     wordThrow: '\u8a00\u8449\u3092\u6295\u3052\u305f\uff01',
     actionFallback: '\u3053\u3053\u3082\u52d5\u304f',
     actionHop: '\u3059\u3053\u3057\u9003\u3052\u305f\uff01',
+    accordionOpen: '\u4ed5\u639b\u3051\u304c\u958b\u3044\u305f\uff01',
+    accordionClose: '\u4ed5\u639b\u3051\u304c\u9589\u3058\u305f\uff01',
     brighten: '\u5c11\u3057\u30da\u30fc\u30b8\u304c\u660e\u308b\u304f\u306a\u3063\u305f\uff01',
     runnerBreak: '\u30c9\u30c3\u30c8\u306e\u5b50\u304c\u6587\u5b57\u3092\u304f\u3060\u3044\u305f\uff01',
-    playerHint: 'Space/Z\u3067\u653b\u6483\u3001X\u77ed\u62bc\u3057\u3067\u6295\u3052\u308b\u3001X\u9577\u62bc\u3057\u3067\u5b88\u308b\u3001Shift/E\u3067\u76fe\uff01',
+    playerHint: 'Space/W/\u2191\u3067\u30b8\u30e3\u30f3\u30d7\u3001J/Z\u3067\u653b\u6483\u3001K/X\u3067\u6295\u3052/\u5b88\u308b\u3001L/Shift\u3067\u76fe\uff01',
     miss: '\u7a7a\u3092\u305f\u305f\u3044\u305f\uff01',
     chargeReady: '\u529b\u304c\u305f\u307e\u3063\u305f\uff01',
     chargeFull: '\u5927\u632f\u308a\u306e\u4e00\u6483\uff01',
@@ -89,8 +94,13 @@ const UI_TEXT = {
     rewardCoupon: '\u30af\u30fc\u30dd\u30f3\u30b3\u30fc\u30c9',
     rewardLink: '\u7279\u5178\u30da\u30fc\u30b8\u3078',
     enemyDamage: '\u5b88\u308b\u6587\u5b57\u304c\u524a\u3089\u308c\u305f\uff01',
-    bgmOn: 'BGM ON',
-    bgmOff: 'BGM OFF',
+    bgmOn: 'BGM',
+    bgmOff: 'BGM',
+    controlsToggle: 'CTRL',
+    controlsClose: '\u9589\u3058\u308b',
+    controlGuideTitle: 'CONTROL BRIEFING',
+    controlGuideKeys: 'A/D: MOVE  Space/W: JUMP  J: HIT  K/X: THROW/HOLD  L: SHIELD  T: LOCK',
+    controlGuidePad: 'GAMEPAD: Stick / D-pad, A Jump, X Hit, B Throw, LB Shield',
 };
 
 const RUNNER_WIDTH = 52;
@@ -108,11 +118,27 @@ const CHARGE_READY_MS = 520;
 const CHARGE_FULL_MS = 1180;
 const CHARGE_MAX_MS = 1500;
 const GOAL_REVEAL_PROGRESS = 0.92;
-const FALL_CAMERA_START_RATIO = 0.68;
-const FALL_CAMERA_TARGET_RATIO = 0.48;
-const FALL_CAMERA_FOLLOW_MS = 180;
-const FALL_CAMERA_MIN_SCROLL_STEP = 5;
-const FALL_CAMERA_MAX_SPEED = 620;
+const ROOM_HEIGHT_RATIO = 0.85;
+const ROOM_OVERLAP_PX = 160;
+const ROOM_MIN_HEIGHT = 360;
+const ROOM_DROP_MARGIN = 42;
+const ROOM_TRANSITION_MIN_MS = 540;
+const ROOM_TRANSITION_MAX_MS = 980;
+const ROOM_DROP_NEXT_MIN_AHEAD_PX = 420;
+const ROOM_DROP_TARGET_MIN_Y = 220;
+const ROOM_DROP_TARGET_MAX_BOTTOM_GAP = 210;
+const ROOM_DROP_LANDING_SEARCH_PX = 520;
+const ROOM_SCREEN_DROP_GATE_GAP = 86;
+const ROOM_TEXT_LINE_TOLERANCE = 8;
+const ROOM_TEXT_BRIDGE_GAP_CHARS = 2.8;
+const CAMERA_FOLLOW_START_RATIO = 0.78;
+const CAMERA_FOLLOW_TARGET_RATIO = 0.7;
+const CAMERA_FOLLOW_MAX_SPEED = 1180;
+const CAMERA_FOLLOW_SPRING = 3.1;
+const CAMERA_FOLLOW_EASE = 8.2;
+const LINK_GATE_DWELL_MS = 980;
+const LINK_GATE_STILL_SPEED = 54;
+const LINK_GATE_MAX_VERTICAL_SPEED = 90;
 const HUD_GATE_SAFE_MARGIN = 12;
 const ENEMY_MISSILE_SPEED = 270;
 const ENEMY_MISSILE_LIFETIME = 3600;
@@ -126,12 +152,12 @@ const BOSS_MISSILE_MIN_INTERVAL = 9000;
 const BOSS_MISSILE_MAX_INTERVAL = 14000;
 const RUNNER_CONTROL_DEFS = [
     { control: 'left', label: '\u2190', keys: 'A / \u2190' },
-    { control: 'jump', label: '\u2191', keys: 'W / \u2191' },
+    { control: 'jump', label: '\u2191', keys: 'Space/W/\u2191' },
     { control: 'right', label: '\u2192', keys: 'D / \u2192' },
-    { control: 'shield', label: '\u76fe', keys: 'Shift / E' },
+    { control: 'shield', label: '\u76fe', keys: 'L/Shift' },
     { control: 'lock', label: '\u30ed\u30c3\u30af', keys: 'T / Tab' },
-    { control: 'throw', label: '\u6295\u3052/\u5b88\u308b', keys: 'X / \u9577\u62bc\u3057' },
-    { control: 'attack', label: '\u653b\u6483', keys: 'Space / Z' },
+    { control: 'throw', label: '\u6295\u3052/\u5b88\u308b', keys: 'K/X\u9577\u62bc\u3057' },
+    { control: 'attack', label: '\u653b\u6483', keys: 'J/Z' },
 ];
 
 export class StageOverlay {
@@ -176,6 +202,9 @@ export class StageOverlay {
         this.runnerState = null;
         this.runnerOnHit = null;
         this.runnerControls = null;
+        this.runnerControlsToggle = null;
+        this.controlGuide = null;
+        this.controlsVisible = false;
         this.runnerOnImageHit = null;
         this.runnerOnGateHit = null;
         this.runnerOnEnemyHit = null;
@@ -184,6 +213,12 @@ export class StageOverlay {
         this.runnerGamepadButtons = new Set();
         this.runnerLastTime = 0;
         this.runnerScrollFollowUntil = 0;
+        this.cameraScrollVelocity = 0;
+        this.previousRootScrollBehavior = '';
+        this.rooms = [];
+        this.roomIndex = 0;
+        this.roomCollisionCache = null;
+        this.roomTransition = null;
         this.lastAttackTapAt = 0;
         this.attackCharge = null;
         this.throwHold = null;
@@ -201,10 +236,11 @@ export class StageOverlay {
         this.endRollItems = [];
         this.endRollSummary = '';
         this.brickLayer = null;
-        this.snowLayer = null;
         this.gateLayer = null;
         this.linkGates = [];
         this.gateCooldownUntil = 0;
+        this.linkGateCharge = null;
+        this.linkGateGauge = null;
         this.enemyLayer = null;
         this.enemies = [];
         this.enemySequence = 0;
@@ -226,6 +262,8 @@ export class StageOverlay {
         this.playBounds = null;
         this.handleViewportResize = this.handleViewportResize.bind(this);
         this.handleWindowScroll = this.handleWindowScroll.bind(this);
+        this.handleGameWheel = this.handleGameWheel.bind(this);
+        this.handleGameTouchMove = this.handleGameTouchMove.bind(this);
         this.handleRunnerKeyDown = this.handleRunnerKeyDown.bind(this);
         this.handleRunnerKeyUp = this.handleRunnerKeyUp.bind(this);
         this.timers = new Set();
@@ -242,6 +280,16 @@ export class StageOverlay {
 
         const controls = document.createElement('div');
         controls.className = 'gw-controls';
+
+        this.runnerControlsToggle = document.createElement('button');
+        this.runnerControlsToggle.type = 'button';
+        this.runnerControlsToggle.className = 'gw-controls-toggle';
+        this.runnerControlsToggle.textContent = UI_TEXT.controlsToggle;
+        this.runnerControlsToggle.setAttribute('aria-pressed', 'false');
+        this.runnerControlsToggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.toggleRunnerControls();
+        });
 
         const exitButton = document.createElement('button');
         exitButton.type = 'button';
@@ -282,7 +330,7 @@ export class StageOverlay {
         this.inventoryList.className = 'gw-inventory-list';
 
         this.inventoryPanel.append(inventoryTitle, this.inventoryList);
-        controls.append(this.inventoryToggle, this.bgmToggle, exitButton, this.inventoryPanel);
+        controls.append(this.runnerControlsToggle, this.inventoryToggle, this.bgmToggle, exitButton, this.inventoryPanel);
 
         this.speech = document.createElement('div');
         this.speech.className = 'gw-speech';
@@ -309,8 +357,11 @@ export class StageOverlay {
         this.effectLayer = null;
         this.missionHud = null;
         this.missionGoal = null;
+        this.missionTreasure = null;
         this.missionProgress = null;
         this.missionStats = null;
+        this.runnerControlsToggle = null;
+        this.controlGuide = null;
         this.goalGate = null;
         this.gameOverPanel = null;
         this.endRoll = null;
@@ -390,10 +441,9 @@ export class StageOverlay {
         this.missionHud.className = 'gw-mission-hud';
         this.missionHud.setAttribute('aria-live', 'polite');
         this.missionHud.innerHTML = `
-            <div class="gw-mission-hud__title">${UI_TEXT.missionTitle}</div>
+            <div class="gw-mission-hud__bar"><span></span></div>
             <div class="gw-mission-hud__goal"></div>
             <div class="gw-mission-hud__treasure"></div>
-            <div class="gw-mission-hud__bar"><span></span></div>
             <dl class="gw-mission-hud__stats"></dl>
         `;
         this.missionGoal = this.missionHud.querySelector('.gw-mission-hud__goal');
@@ -440,7 +490,7 @@ export class StageOverlay {
         }
 
         if (this.missionTreasure) {
-            const letters = this.treasureLettersLabel();
+            const letters = this.normalizedTreasureLetters().join('\u30fb') || '-';
             this.missionTreasure.innerHTML = `
                 <strong>${UI_TEXT.treasureTitle}</strong>
                 <span>${escapeHtml(letters)}</span>
@@ -450,10 +500,9 @@ export class StageOverlay {
         if (this.missionStats) {
             this.missionStats.innerHTML = `
                 <div><dt>${UI_TEXT.lifeLabel}</dt><dd class="gw-life-hearts" aria-label="${this.playerLife} / ${PLAYER_MAX_LIFE}">${renderLifeHearts(this.playerLife)}</dd></div>
-                <div><dt>${UI_TEXT.progressLabel}</dt><dd>${progress}%</dd></div>
+                <div><dt>${UI_TEXT.progressLabel}</dt><dd>${progress}</dd></div>
                 <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${protectedCount}</dd></div>
                 <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${this.stageStats.playerBroken}</dd></div>
-                <div><dt>${UI_TEXT.lostLabel}</dt><dd>${this.stageStats.enemyBroken}</dd></div>
                 <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${this.stageStats.enemiesDefeated}</dd></div>
             `;
         }
@@ -464,19 +513,26 @@ export class StageOverlay {
     }
 
     collectedLetterCount() {
-        return Math.max(0, this.treasureLetters.length);
+        return this.normalizedTreasureLetters().length;
     }
 
     treasureWord() {
-        return this.treasureLetters.join('');
+        return this.normalizedTreasureLetters().join('');
     }
 
     treasureLettersLabel() {
-        if (this.treasureLetters.length === 0) {
+        const letters = this.normalizedTreasureLetters();
+        if (letters.length === 0) {
             return `${UI_TEXT.treasureEmpty} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
         }
 
-        return `${this.treasureLetters.join('\u30fb')} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
+        return `${letters.join('\u30fb')} ${this.collectedLetterCount()}/${GOAL_REQUIRED_LETTERS}`;
+    }
+
+    normalizedTreasureLetters() {
+        return this.treasureLetters
+            .flatMap((letter) => treasureCharsFrom(letter))
+            .slice(0, GOAL_REQUIRED_LETTERS);
     }
 
     bumpStageStat(key, amount = 1) {
@@ -490,7 +546,7 @@ export class StageOverlay {
 
     startRunner(targets, onHit, onTextBreak, onImageHit, onGateHit, onEnemyHit) {
         this.runnerTargets = targets
-            .filter((target) => ['heading', 'paragraph', 'action', 'image'].includes(target.type))
+            .filter((target) => ['heading', 'paragraph', 'action', 'accordion', 'image', 'icon', 'platform'].includes(target.type))
             .filter((target) => isPlayableContentElement(target.element));
         this.runnerOnHit = onHit;
         this.runnerOnTextBreak = onTextBreak || (() => {});
@@ -498,6 +554,10 @@ export class StageOverlay {
         this.runnerOnGateHit = onGateHit || (() => {});
         this.runnerOnEnemyHit = onEnemyHit || (() => {});
         this.playBounds = this.calculatePlayBounds();
+        this.rooms = this.buildRooms();
+        this.roomIndex = this.findRoomIndexForDocY(window.scrollY);
+        this.roomCollisionCache = null;
+        this.roomTransition = null;
         this.stageStats = createStageStats(this.textBreaker?.countTotalChars?.() || 0);
         this.treasureLetters = [];
         this.endRollItems = this.buildEndRollItems(targets);
@@ -517,7 +577,6 @@ export class StageOverlay {
         }
 
         this.mountBrickRails();
-        this.mountSnowClimbLayer();
         this.mountLinkGates(targets);
         this.mountEnemyLayer();
         this.mountProjectileLayer();
@@ -550,52 +609,115 @@ export class StageOverlay {
         `;
         this.effectLayer.appendChild(this.runner);
         const initialRect = this.initialRunnerRect();
+        const initialDocX = typeof initialRect.docX === 'number' ? initialRect.docX : initialRect.x + window.scrollX;
+        const initialDocY = typeof initialRect.docY === 'number' ? initialRect.docY : initialRect.y + window.scrollY;
 
         this.runnerState = {
             x: initialRect.x,
             y: initialRect.y,
+            docX: initialDocX,
+            docY: initialDocY,
             vx: 0,
             vy: 0,
             direction: 1,
-            grounded: true,
+            grounded: Boolean(initialRect.grounded),
             attackLockedUntil: 0,
             lastDustAt: 0,
+            lastFallTrailAt: 0,
             lastLandAt: 0,
-            fallStartY: initialRect.y,
+            fallStartY: initialDocY,
             fallSoundPlayed: false,
             scrollPinned: false,
+            roomIndex: this.findRoomIndexForDocY(initialDocY + RUNNER_HEIGHT),
+            cameraMode: 'room',
+            transitioning: false,
+            cachedPlatforms: null,
         };
+        this.roomIndex = this.runnerState.roomIndex;
+        this.rebuildRoomCollisionCache();
+        this.cameraScrollVelocity = 0;
+        this.previousRootScrollBehavior = document.documentElement.style.scrollBehavior || '';
+        document.documentElement.style.scrollBehavior = 'auto';
 
         this.gateCooldownUntil = currentTime() + 1200;
         this.lastEnemySpawnAt = currentTime();
 
         this.mountRunnerControls();
+        this.setRunnerControlsVisible(false);
+        this.showControlGuide();
         window.addEventListener('resize', this.handleViewportResize);
         window.addEventListener('scroll', this.handleWindowScroll, { passive: true });
+        window.addEventListener('wheel', this.handleGameWheel, { passive: false, capture: true });
+        window.addEventListener('touchmove', this.handleGameTouchMove, { passive: false, capture: true });
         document.addEventListener('keydown', this.handleRunnerKeyDown, true);
         document.addEventListener('keyup', this.handleRunnerKeyUp, true);
-        this.showMessage(UI_TEXT.playerHint, 3600);
+        this.showMessage(UI_TEXT.playerHint, 2400);
         this.runnerLastTime = 0;
         this.runnerRaf = requestFrame((time) => this.updateRunner(time));
     }
 
     initialRunnerRect() {
-        const target = this.visibleRunnerTargets()[0];
+        const target = this.initialRunnerTarget();
+        const bounds = this.currentPlayBounds();
+        const startTopY = clamp(Math.round(window.innerHeight * 0.16), 82, Math.max(86, runnerGroundY() - RUNNER_HEIGHT - 12));
 
         if (!target) {
-            const bounds = this.currentPlayBounds();
+            const x = this.initialRunnerX(bounds);
             return {
-                x: clamp(Math.min(80, Math.max(24, window.innerWidth * 0.12)), bounds.left, bounds.right - RUNNER_WIDTH),
-                y: runnerGroundY(),
+                x,
+                y: startTopY,
+                docX: x + window.scrollX,
+                docY: startTopY + window.scrollY,
+                grounded: false,
             };
         }
 
         const rect = liveRectForTarget(target);
+        const textLandingY = rect.top - RUNNER_HEIGHT + 4;
+        const canStartOnTarget = rect.top >= 96 && rect.top <= window.innerHeight - 112;
+        const y = canStartOnTarget ? textLandingY : Math.min(textLandingY, startTopY);
+        const x = this.initialRunnerX(bounds, rect);
 
         return {
-            x: clamp(rect.left + 6, this.currentPlayBounds().left, this.currentPlayBounds().right - RUNNER_WIDTH),
-            y: clamp(rect.top - RUNNER_HEIGHT + 4, 28, runnerGroundY()),
+            x,
+            y: clamp(y, 28, runnerGroundY()),
+            docX: x + window.scrollX,
+            docY: clamp(y, 28, runnerGroundY()) + window.scrollY,
+            grounded: canStartOnTarget && Math.abs(y - textLandingY) < 2,
         };
+    }
+
+    initialRunnerX(bounds = this.currentPlayBounds(), targetRect = null) {
+        if (targetRect && targetRect.width > 18) {
+            const targetCenter = targetRect.width > 140
+                ? targetRect.left + Math.min(84, Math.max(34, targetRect.width * 0.12))
+                : targetRect.left + targetRect.width / 2;
+            return clamp(targetCenter - RUNNER_WIDTH / 2, bounds.left, bounds.right - RUNNER_WIDTH);
+        }
+
+        const leftInset = window.innerWidth < 640 ? 28 : 72;
+        const preferred = Math.max(bounds.left + 72, leftInset);
+        return clamp(preferred, bounds.left, bounds.right - RUNNER_WIDTH);
+    }
+
+    initialRunnerTarget() {
+        const candidates = this.visibleRunnerTargets()
+            .filter((target) => ['heading', 'paragraph'].includes(target.type))
+            .filter((target) => normalizeText(target.text || target.element?.textContent || '').length > 0)
+            .map((target) => ({
+                target,
+                rect: liveRectForTarget(target),
+                priority: initialRunnerTargetPriority(target),
+            }))
+            .filter((candidate) => candidate.rect.width > 16 && candidate.rect.height > 8);
+
+        candidates.sort((a, b) => (
+            b.priority - a.priority
+            || a.rect.top - b.rect.top
+            || a.rect.left - b.rect.left
+        ));
+
+        return candidates[0]?.target || null;
     }
 
     buildEndRollItems(targets = []) {
@@ -658,7 +780,7 @@ export class StageOverlay {
         const lines = [];
         const title = headings[0] || normalizeText(document.title || '');
         if (title) {
-            lines.push(`このページは「${title}」を中心にしたステージです。`);
+            lines.push(`\u3053\u306e\u30da\u30fc\u30b8\u306f\u300c${title}\u300d\u3092\u4e2d\u5fc3\u306b\u3057\u305f\u30b9\u30c6\u30fc\u30b8\u3067\u3059\u3002`);
         }
 
         lines.push(...sentences.slice(0, 3));
@@ -676,13 +798,13 @@ export class StageOverlay {
             .find((word) => Array.from(word).length >= 2);
 
         if (configured) {
-            return Array.from(configured).slice(0, 6).join('');
+            return Array.from(configured).slice(0, GOAL_REQUIRED_LETTERS).join('');
         }
 
         const heading = targets.find((target) => target.type === 'heading' && normalizeText(target.text || target.element?.textContent || ''));
         const headingText = normalizeText(heading?.text || heading?.element?.textContent || '').replace(/\s+/g, '');
         if (headingText) {
-            return Array.from(headingText).slice(0, 4).join('');
+            return Array.from(headingText).slice(0, GOAL_REQUIRED_LETTERS).join('');
         }
 
         return '';
@@ -704,15 +826,20 @@ export class StageOverlay {
         this.clearAttackCharge();
         this.clearThrowHold();
         this.clearTreasureStoreTimer();
+        document.documentElement.style.scrollBehavior = this.previousRootScrollBehavior || '';
+        this.previousRootScrollBehavior = '';
         window.removeEventListener('resize', this.handleViewportResize);
         window.removeEventListener('scroll', this.handleWindowScroll);
+        window.removeEventListener('wheel', this.handleGameWheel, true);
+        window.removeEventListener('touchmove', this.handleGameTouchMove, true);
         this.brickLayer?.remove();
         this.brickLayer = null;
-        this.snowLayer?.remove();
-        this.snowLayer = null;
         this.gateLayer?.remove();
         this.gateLayer = null;
         this.linkGates = [];
+        this.resetLinkGateCharge();
+        this.linkGateGauge?.remove();
+        this.linkGateGauge = null;
         this.enemyLayer?.remove();
         this.enemyLayer = null;
         this.enemies = [];
@@ -744,6 +871,11 @@ export class StageOverlay {
         this.enemyMissiles = [];
         this.lockedEnemyId = null;
         this.playBounds = null;
+        this.rooms = [];
+        this.roomIndex = 0;
+        this.roomCollisionCache = null;
+        this.roomTransition = null;
+        this.cameraScrollVelocity = 0;
         this.stageCleared = false;
         this.stageFailed = false;
         this.playerLife = PLAYER_MAX_LIFE;
@@ -755,6 +887,9 @@ export class StageOverlay {
         this.endRollSummary = '';
         this.runner = null;
         this.runnerState = null;
+        this.controlGuide?.remove();
+        this.controlGuide = null;
+        this.controlsVisible = false;
         this.runnerTargets = [];
         this.runnerOnHit = null;
         this.runnerOnTextBreak = null;
@@ -766,14 +901,23 @@ export class StageOverlay {
 
     handleViewportResize() {
         this.playBounds = this.calculatePlayBounds();
+        this.rooms = this.buildRooms();
+        if (this.runnerState) {
+            this.roomIndex = this.findRoomIndexForDocY(this.runnerState.docY + RUNNER_HEIGHT);
+            this.runnerState.roomIndex = this.roomIndex;
+            this.rebuildRoomCollisionCache();
+        }
         this.updateBrickRails();
         this.updateLinkGates();
         this.updateGoalGate(true);
         this.updateReturnRoute(true);
+        this.syncPlacedLettersToScroll();
 
         if (this.runnerState) {
             const bounds = this.currentPlayBounds();
-            this.runnerState.x = clamp(this.runnerState.x, bounds.left, bounds.right - RUNNER_WIDTH);
+            this.ensureRunnerDocumentState();
+            this.runnerState.docX = clamp(this.runnerState.docX, bounds.left + window.scrollX, bounds.right + window.scrollX - RUNNER_WIDTH);
+            this.syncRunnerScreenPosition();
         }
     }
 
@@ -787,17 +931,32 @@ export class StageOverlay {
         this.updateLinkGates();
         this.updateGoalGate(true);
         this.updateReturnRoute(true);
+        this.syncPlacedLettersToScroll();
+        this.ensureRunnerDocumentState();
+        this.runnerState.docX = clamp(
+            this.runnerState.docX,
+            this.currentPlayBounds().left + window.scrollX,
+            this.currentPlayBounds().right + window.scrollX - RUNNER_WIDTH
+        );
+        this.syncRunnerScreenPosition();
+    }
 
-        if (currentTime() < this.runnerScrollFollowUntil) {
-            this.runnerState.x = clamp(this.runnerState.x, this.currentPlayBounds().left, this.currentPlayBounds().right - RUNNER_WIDTH);
+    handleGameWheel(event) {
+        if (!this.runnerState) {
             return;
         }
 
-        this.runnerState.x = clamp(this.runnerState.x, this.currentPlayBounds().left, this.currentPlayBounds().right - RUNNER_WIDTH);
-        this.runnerState.vx = 0;
-        this.runnerState.vy = 0;
-        this.runnerState.grounded = true;
-        this.runnerState.scrollPinned = true;
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    handleGameTouchMove(event) {
+        if (!this.runnerState) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     releaseScrollPin() {
@@ -813,21 +972,50 @@ export class StageOverlay {
 
         const delta = this.runnerLastTime ? Math.min((time - this.runnerLastTime) / 1000, 0.05) : 0.016;
         this.runnerLastTime = time;
-        this.updateGamepadControls();
-        this.updateRunnerPhysics(delta);
-        this.maybeSpawnEnemies(time);
-        this.updateEnemies(delta, time);
-        this.syncLockedEnemy();
-        this.updateProjectiles(delta);
-        this.updateEnemyMissiles(delta, time);
-        this.renderRunner(time);
-        this.updateMissionHud();
-        this.updateGoalGate();
-        this.updateReturnRoute();
-        this.checkGateEntry();
-        this.checkGoalEntry();
-        this.checkReturnRouteEntry();
-        this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
+
+        try {
+            if (this.roomTransition) {
+                this.updateRoomDropTransition(time);
+                this.renderRunner(time);
+                this.updateMissionHud();
+                this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
+                return;
+            }
+
+            this.updateGamepadControls();
+            this.updateRunnerPhysics(delta);
+            if (this.roomTransition) {
+                this.renderRunner(time);
+                this.updateMissionHud();
+                this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
+                return;
+            }
+            this.maybeSpawnEnemies(time);
+            this.updateEnemies(delta, time);
+            this.syncLockedEnemy();
+            this.updateProjectiles(delta);
+            this.updateEnemyMissiles(delta, time);
+            this.renderRunner(time);
+            this.updateMissionHud();
+            this.updateGoalGate();
+            this.updateReturnRoute();
+            this.checkGateEntry();
+            this.checkGoalEntry();
+            this.checkReturnRouteEntry();
+        } catch (error) {
+            window.__GamingWebRunnerError = {
+                message: error?.message || String(error),
+                stack: error?.stack || '',
+            };
+
+            if (this.config?.debug && window.console && typeof window.console.error === 'function') {
+                window.console.error('[Gaming Web] Runner loop recovered.', error);
+            }
+        }
+
+        if (this.runner && this.runnerState) {
+            this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
+        }
     }
 
     visibleRunnerTargets() {
@@ -879,6 +1067,173 @@ export class StageOverlay {
         };
     }
 
+    buildRooms() {
+        const pageBottom = pageEndGroundDocY();
+        const maxRoomHeight = Math.max(ROOM_MIN_HEIGHT, Math.round(window.innerHeight * ROOM_HEIGHT_RATIO));
+        const roomSelector = [
+            'main section',
+            'main article',
+            'main .elementor-section',
+            'main .e-con',
+            '.entry-content > section',
+            '.entry-content > article',
+            '.elementor-section',
+            '.e-con',
+        ].join(',');
+        const rawElements = Array.from(document.querySelectorAll(roomSelector))
+            .filter((element) => element instanceof Element && !element.closest('.gw-stage,header,footer,nav'));
+        const topLevelElements = rawElements.filter((element) => !element.parentElement?.closest(roomSelector));
+        const roomElements = topLevelElements.length ? topLevelElements : rawElements;
+        const candidates = roomElements
+            .filter((element) => element instanceof Element && !element.closest('.gw-stage,header,footer,nav'))
+            .map((element) => rectToDocumentObject(element.getBoundingClientRect()))
+            .filter((rect) => rect.width > 80 && rect.height > 120 && rect.bottom > 0 && rect.top < pageBottom)
+            .sort((a, b) => a.top - b.top || b.height - a.height);
+
+        const rooms = [];
+        const addSplitRooms = (top, bottom, source = 'chunk') => {
+            let start = clamp(Math.floor(top), 0, pageBottom);
+            const end = clamp(Math.ceil(bottom), 0, pageBottom);
+            if (end - start < 120) {
+                return;
+            }
+
+            while (end - start > maxRoomHeight * 1.18) {
+                const roomBottom = Math.min(end, start + maxRoomHeight);
+                rooms.push({
+                    top: start,
+                    bottom: roomBottom,
+                    source,
+                });
+                start = Math.max(start + 120, roomBottom - ROOM_OVERLAP_PX);
+            }
+
+            rooms.push({
+                top: start,
+                bottom: end,
+                source,
+            });
+        };
+
+        if (candidates.length) {
+            let coveredUntil = 0;
+            for (const rect of candidates) {
+                const top = Math.max(0, rect.top - 48);
+                const bottom = Math.min(pageBottom, rect.bottom + 88);
+                if (top - coveredUntil > maxRoomHeight * 0.55) {
+                    addSplitRooms(coveredUntil, top + ROOM_OVERLAP_PX, 'gap');
+                }
+                addSplitRooms(top, bottom, 'section');
+                coveredUntil = Math.max(coveredUntil, bottom - ROOM_OVERLAP_PX);
+            }
+
+            if (pageBottom - coveredUntil > 180) {
+                addSplitRooms(coveredUntil, pageBottom, 'tail');
+            }
+        }
+
+        if (rooms.length === 0) {
+            for (let start = 0; start < pageBottom - 80;) {
+                const bottom = Math.min(pageBottom, start + maxRoomHeight);
+                rooms.push({
+                    top: start,
+                    bottom,
+                    source: 'fallback',
+                });
+                if (bottom >= pageBottom) {
+                    break;
+                }
+                start = Math.max(start + 120, bottom - ROOM_OVERLAP_PX);
+            }
+        }
+
+        return normalizeRooms(rooms, pageBottom).map((room, index) => ({
+            ...room,
+            index,
+        }));
+    }
+
+    findRoomIndexForDocY(docY) {
+        const rooms = this.rooms?.length ? this.rooms : [{ top: 0, bottom: pageEndGroundDocY(), index: 0 }];
+        const y = Number.isFinite(docY) ? docY : window.scrollY;
+        const direct = rooms.find((room) => y >= room.top - 4 && y <= room.bottom + 4);
+        if (direct) {
+            return direct.index || 0;
+        }
+
+        let bestIndex = 0;
+        let bestDistance = Infinity;
+        for (const room of rooms) {
+            const distance = y < room.top ? room.top - y : y - room.bottom;
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                bestIndex = room.index || 0;
+            }
+        }
+
+        return bestIndex;
+    }
+
+    currentRoom() {
+        if (!this.rooms?.length) {
+            return { top: 0, bottom: pageEndGroundDocY(), index: 0 };
+        }
+
+        return this.rooms[clamp(this.roomIndex, 0, this.rooms.length - 1)] || this.rooms[0];
+    }
+
+    rebuildRoomCollisionCache() {
+        const room = this.currentRoom();
+        this.roomCollisionCache = this.collisionCacheForRoom(room);
+
+        if (this.runnerState) {
+            this.runnerState.cachedPlatforms = this.roomCollisionCache;
+        }
+    }
+
+    collisionCacheForRoom(room = this.currentRoom()) {
+        const textRects = this.textBreaker?.charPlatformRectsForRoom?.(room) || [];
+        const imageRects = this.imageBreaker?.platformRectsForRoom?.(room) || [];
+        const placedRects = this.placedLetters
+            .map((placed) => {
+                const rect = this.placedLetterDocRect(placed);
+                return rect ? { rect, surfaceY: rect.top, placed, type: 'placed' } : null;
+            })
+            .filter(Boolean)
+            .filter((item) => item.rect.bottom >= room.top - 64 && item.rect.top <= room.bottom + 64);
+
+        return {
+            roomIndex: room.index || 0,
+            room,
+            textRects,
+            imageRects,
+            placedRects,
+        };
+    }
+
+    ensureRoomCollisionCache() {
+        const room = this.currentRoom();
+        if (!this.roomCollisionCache || this.roomCollisionCache.roomIndex !== (room.index || 0)) {
+            this.rebuildRoomCollisionCache();
+        }
+
+        return this.roomCollisionCache;
+    }
+
+    previewLandingDocYForRoom(room) {
+        if (!this.runnerState || !room) {
+            return null;
+        }
+
+        const cache = this.collisionCacheForRoom(room);
+        const rect = this.runnerDocPhysicsRect();
+        const accepts = (surfaceY) => surfaceY >= room.top - ROOM_OVERLAP_PX && surfaceY <= room.bottom + ROOM_DROP_LANDING_SEARCH_PX;
+        const textLandingY = cachedTextSurfaceY(cache.textRects || [], rect, accepts);
+        const imageLandingY = cachedRectSurfaceY(cache.imageRects || [], rect, accepts);
+        const placedLandingY = cachedRectSurfaceY(cache.placedRects || [], rect, accepts);
+        return firstLandingY(textLandingY, imageLandingY, placedLandingY);
+    }
+
     mountBrickRails() {
         this.brickLayer?.remove();
         this.brickLayer = document.createElement('div');
@@ -889,20 +1244,6 @@ export class StageOverlay {
         `;
         this.effectLayer?.prepend(this.brickLayer);
         this.updateBrickRails();
-    }
-
-    mountSnowClimbLayer() {
-        this.snowLayer?.remove();
-        this.snowLayer = document.createElement('div');
-        this.snowLayer.className = 'gw-snow-climb-layer';
-        const flakes = Array.from({ length: this.reducedMotion ? 8 : 18 }, (_, index) => (
-            `<span class="gw-snow-flake" style="--gw-x:${(index * 17) % 100}vw; --gw-d:${index * 180}ms; --gw-s:${0.72 + (index % 5) * 0.12};"></span>`
-        )).join('');
-        this.snowLayer.innerHTML = `
-            <span class="gw-ice-ledges" aria-hidden="true"></span>
-            ${flakes}
-        `;
-        this.effectLayer?.prepend(this.snowLayer);
     }
 
     updateBrickRails() {
@@ -954,12 +1295,17 @@ export class StageOverlay {
             const gateElement = document.createElement('span');
             gateElement.className = 'gw-link-gate';
             gateElement.setAttribute('aria-hidden', 'true');
-            gateElement.textContent = (target.text || '\u30b2\u30fc\u30c8').slice(0, 18);
+            const gateText = (target.text || '\u30b2\u30fc\u30c8').slice(0, 18);
+            gateElement.innerHTML = `
+                <span class="gw-link-gate__label">${escapeHtml(gateText)}</span>
+                <span class="gw-link-gate__meter" aria-hidden="true"></span>
+            `;
             this.gateLayer.appendChild(gateElement);
 
             this.linkGates.push({
                 target,
                 element: gateElement,
+                meter: gateElement.querySelector('.gw-link-gate__meter'),
                 href: target.element.href,
                 destroyed: false,
             });
@@ -985,6 +1331,9 @@ export class StageOverlay {
 
             gate.element.hidden = !visible;
             if (!visible) {
+                if (this.linkGateCharge?.gate === gate) {
+                    this.resetLinkGateCharge();
+                }
                 continue;
             }
 
@@ -1078,11 +1427,17 @@ export class StageOverlay {
         this.returnRouteCooldownUntil = currentTime() + 1600;
         this.returnRoute.classList.add('gw-return-route--active');
         const targetY = Math.max(0, window.scrollY - window.innerHeight * 0.86);
+        const targetScreenY = Math.max(92, Math.min(this.runnerState.y, window.innerHeight * 0.52));
         this.runnerScrollFollowUntil = currentTime() + 420;
         window.scrollTo({ top: targetY, behavior: this.reducedMotion ? 'auto' : 'smooth' });
-        this.runnerState.y = Math.max(92, Math.min(this.runnerState.y, window.innerHeight * 0.52));
+        this.ensureRunnerDocumentState();
+        this.runnerState.docY = targetY + targetScreenY;
+        this.roomIndex = this.findRoomIndexForDocY(this.runnerState.docY + RUNNER_HEIGHT);
+        this.runnerState.roomIndex = this.roomIndex;
+        this.rebuildRoomCollisionCache();
         this.runnerState.vy = -120;
         this.runnerState.grounded = false;
+        this.syncRunnerScreenPosition();
         this.onRunnerSound('warp', { volume: 0.12, rate: 1.08 });
         this.showMessage(UI_TEXT.returnRouteHint, 1400);
     }
@@ -1324,6 +1679,7 @@ export class StageOverlay {
             return true;
         }
 
+        this.rebuildRoomCollisionCache();
         this.holdLetter(picked);
         const timer = window.setTimeout(() => {
             this.timers.delete(timer);
@@ -1373,6 +1729,7 @@ export class StageOverlay {
             return true;
         }
 
+        this.rebuildRoomCollisionCache();
         this.holdLetter(picked, {
             message: UI_TEXT.treasureHold,
             messageDuration: 620,
@@ -1383,6 +1740,8 @@ export class StageOverlay {
     }
 
     pickPlacedLetterAtRect(rect) {
+        this.syncPlacedLettersToScroll();
+
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const candidates = [];
@@ -1420,6 +1779,7 @@ export class StageOverlay {
 
         this.placedLetters = remaining.concat(candidates.slice(1).map((candidate) => candidate.placed));
         picked.placed.element.remove();
+        this.rebuildRoomCollisionCache();
 
         return {
             char: picked.placed.char,
@@ -1430,6 +1790,8 @@ export class StageOverlay {
     }
 
     destroyPlacedLettersAtRect(rect, options = {}) {
+        this.syncPlacedLettersToScroll();
+
         const limit = options.limit || 1;
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -1473,6 +1835,8 @@ export class StageOverlay {
         if (destroyed.length === 0) {
             return null;
         }
+
+        this.rebuildRoomCollisionCache();
 
         return {
             count: destroyed.length,
@@ -1532,8 +1896,9 @@ export class StageOverlay {
         this.clearTreasureStoreTimer();
         const held = this.heldLetter;
         const element = held.element;
-        const x = this.runnerState.x + RUNNER_WIDTH / 2;
-        const y = this.runnerState.y + RUNNER_HEIGHT - Math.max(6, held.height / 2);
+        this.ensureRunnerDocumentState();
+        const docX = this.runnerState.docX + RUNNER_WIDTH / 2;
+        const docY = this.runnerState.docY + RUNNER_HEIGHT - Math.max(6, held.height / 2);
 
         this.heldLetter = null;
         this.runner?.classList.remove('gw-pixel-runner--holding');
@@ -1544,16 +1909,18 @@ export class StageOverlay {
 
         element.classList.remove('gw-held-letter--drop', 'gw-held-letter--treasure-store');
         element.classList.add('gw-held-letter--placed');
-        element.style.left = `${x}px`;
-        element.style.top = `${y}px`;
-        element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-        this.placedLetters.push({
+        const placed = {
             char: held.char,
             element,
             style: held.style || {},
             width: held.width,
             height: held.height,
-        });
+            docX,
+            docY,
+        };
+        this.placedLetters.push(placed);
+        this.positionPlacedLetter(placed);
+        this.rebuildRoomCollisionCache();
 
         while (this.placedLetters.length > 12) {
             const old = this.placedLetters.shift();
@@ -1564,6 +1931,97 @@ export class StageOverlay {
         this.onRunnerSound('uiMove', { volume: 0.08, rate: 0.96 });
         this.showMessage(UI_TEXT.treasurePlaced, 900);
         return true;
+    }
+
+    positionPlacedLetter(placed) {
+        if (!placed?.element) {
+            return;
+        }
+
+        const docX = typeof placed.docX === 'number'
+            ? placed.docX
+            : (placed.element.getBoundingClientRect().left + placed.element.getBoundingClientRect().width / 2 + window.scrollX);
+        const docY = typeof placed.docY === 'number'
+            ? placed.docY
+            : (placed.element.getBoundingClientRect().top + placed.element.getBoundingClientRect().height / 2 + window.scrollY);
+
+        placed.docX = docX;
+        placed.docY = docY;
+        placed.element.style.left = `${docX - window.scrollX}px`;
+        placed.element.style.top = `${docY - window.scrollY}px`;
+        placed.element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+    }
+
+    syncPlacedLettersToScroll() {
+        if (!this.placedLetters.length) {
+            return;
+        }
+
+        const alive = [];
+        for (const placed of this.placedLetters) {
+            if (!placed.element?.isConnected) {
+                continue;
+            }
+
+            this.positionPlacedLetter(placed);
+            alive.push(placed);
+        }
+
+        this.placedLetters = alive;
+    }
+
+    findPlacedLetterSupportDocY(runnerRect) {
+        let supportY = null;
+        const feet = runnerRect.bottom;
+
+        for (const placed of this.placedLetters) {
+            const rect = this.placedLetterDocRect(placed);
+            if (!rect || horizontalOverlap(runnerRect, rect) < Math.min(20, RUNNER_FOOT_WIDTH * 0.46)) {
+                continue;
+            }
+
+            if (rect.top >= feet - 7 && rect.top <= feet + 9) {
+                supportY = supportY === null ? rect.top : Math.min(supportY, rect.top);
+            }
+        }
+
+        return supportY;
+    }
+
+    findPlacedLetterLandingDocY(runnerRect, previousBottom, nextBottom) {
+        let landingY = null;
+
+        for (const placed of this.placedLetters) {
+            const rect = this.placedLetterDocRect(placed);
+            if (!rect || horizontalOverlap(runnerRect, rect) < Math.min(20, RUNNER_FOOT_WIDTH * 0.46)) {
+                continue;
+            }
+
+            if (rect.top >= previousBottom - 5 && rect.top <= nextBottom + 12) {
+                landingY = landingY === null ? rect.top : Math.min(landingY, rect.top);
+            }
+        }
+
+        return landingY;
+    }
+
+    placedLetterDocRect(placed) {
+        if (!placed?.element?.isConnected) {
+            return null;
+        }
+
+        const width = Math.max(placed.width || placed.element.getBoundingClientRect().width || 8, 8);
+        const height = Math.max(placed.height || placed.element.getBoundingClientRect().height || 12, 12);
+        const left = placed.docX - width / 2;
+        const top = placed.docY - height / 2;
+        return {
+            left,
+            top,
+            right: left + width,
+            bottom: top + height,
+            width,
+            height,
+        };
     }
 
     storeHeldLetterToTreasure() {
@@ -1594,19 +2052,23 @@ export class StageOverlay {
     }
 
     storeTreasureLetter(char, impactRect = this.runnerHandRect()) {
-        if (!char || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
+        const treasureChar = firstTreasureChar(char);
+        this.treasureLetters = this.normalizedTreasureLetters();
+
+        if (!treasureChar || this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
             return false;
         }
 
-        this.treasureLetters.push(char);
-        this.stageStats.lettersCollected = this.treasureLetters.length;
+        this.treasureLetters.push(treasureChar);
+        this.treasureLetters = this.normalizedTreasureLetters();
+        this.stageStats.lettersCollected = this.collectedLetterCount();
         this.updateGoalGate(true);
         this.updateMissionHud(true);
         this.impactBurstAt(impactRect, this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'char');
         this.shakeScreen(this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'soft');
         this.onRunnerSound('collect', { volume: 0.13, rate: 1.08 });
         this.onTreasureCollect({
-            word: char,
+            word: treasureChar,
             treasure_letters: this.treasureWord(),
             letters_collected: this.collectedLetterCount(),
             letters_required: GOAL_REQUIRED_LETTERS,
@@ -1614,7 +2076,7 @@ export class StageOverlay {
         this.showMessage(
             this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS
                 ? UI_TEXT.goalReadyWithLetters
-                : UI_TEXT.treasureStored.replace('{char}', char),
+                : UI_TEXT.treasureStored.replace('{char}', treasureChar),
             1300
         );
         return true;
@@ -1958,6 +2420,7 @@ export class StageOverlay {
             if (!missile.parried && Math.hypot(missile.x - missile.targetX, missile.y - missile.targetY) < 22) {
                 const textHit = this.textBreaker?.destroyAtRect(missileRect, { limit: 1, source: 'enemy_missile' });
                 if (textHit?.count > 0) {
+                    this.rebuildRoomCollisionCache();
                     this.bumpStageStat('enemyBroken', textHit.count);
                     this.impactBurstAt(textHit.rect, textHit.chars?.some(Boolean) ? 'medium' : 'soft');
                     if (this.criticalDestroyed(textHit)) {
@@ -2102,6 +2565,7 @@ export class StageOverlay {
 
         const textHit = this.textBreaker?.destroyAtRect(attackRect, { limit: enemy.type === 'boss' ? 2 : 1, source: 'enemy' });
         if (textHit?.count > 0) {
+            this.rebuildRoomCollisionCache();
             this.bumpStageStat('enemyBroken', textHit.count);
             this.impactBurstAt(textHit.rect, enemy.type === 'boss' ? 'hard' : 'medium');
             this.shakeScreen(enemy.type === 'boss' ? 'medium' : 'soft');
@@ -2115,6 +2579,7 @@ export class StageOverlay {
 
         const imageHit = this.imageBreaker?.hitAtRect(attackRect, { direction: enemy.vx >= 0 ? 1 : -1 });
         if (imageHit?.count > 0) {
+            this.rebuildRoomCollisionCache();
             this.bumpStageStat('imagesDamaged', 1);
             this.impactBurstAt(imageHit.rect, enemy.type === 'boss' ? 'hard' : 'medium');
             this.spawnImageChips(imageHit.rect, enemy.vx >= 0 ? 1 : -1, Boolean(imageHit.destroyed));
@@ -2277,6 +2742,9 @@ export class StageOverlay {
         }
 
         bestGate.destroyed = true;
+        if (this.linkGateCharge?.gate === bestGate) {
+            this.resetLinkGateCharge();
+        }
         bestGate.element.classList.add('gw-link-gate--broken');
         this.removeLater(bestGate.element, 620);
 
@@ -2286,6 +2754,48 @@ export class StageOverlay {
             selector: bestGate.target.selector,
             text: bestGate.target.text,
             rect: gateRect,
+        };
+    }
+
+    hitAccordionAtRect(rect, options = {}) {
+        let bestTarget = null;
+        let bestRect = null;
+        let bestScore = 0;
+
+        for (const target of this.visibleRunnerTargets()) {
+            if (target.type !== 'accordion') {
+                continue;
+            }
+
+            const targetRect = liveRectForTarget(target);
+            const overlap = rectOverlapArea(rect, targetRect);
+            if (overlap <= 0) {
+                continue;
+            }
+
+            const centerDistance = Math.abs(
+                (targetRect.left + targetRect.width / 2) - (rect.left + rect.width / 2)
+            );
+            const score = overlap - centerDistance * 0.2;
+            if (score > bestScore) {
+                bestTarget = target;
+                bestRect = targetRect;
+                bestScore = score;
+            }
+        }
+
+        if (!bestTarget || bestScore < 12) {
+            return null;
+        }
+
+        const toggled = this.toggleAccordionTarget(bestTarget, options);
+        return {
+            count: 1,
+            target: bestTarget,
+            selector: bestTarget.selector,
+            text: bestTarget.text,
+            rect: bestRect || liveRectForTarget(bestTarget),
+            opened: toggled.opened,
         };
     }
 
@@ -2307,10 +2817,7 @@ export class StageOverlay {
 
     checkGateEntry() {
         if (!this.runnerState || currentTime() < this.gateCooldownUntil) {
-            return;
-        }
-
-        if (Math.abs(this.runnerState.vx) < 18) {
+            this.resetLinkGateCharge();
             return;
         }
 
@@ -2323,6 +2830,8 @@ export class StageOverlay {
             height: RUNNER_HEIGHT - 11,
         };
 
+        let activeGate = null;
+        let activeGateRect = null;
         for (const gate of this.linkGates) {
             if (gate.destroyed || gate.element.hidden) {
                 continue;
@@ -2334,15 +2843,53 @@ export class StageOverlay {
                 continue;
             }
 
-            this.enterLinkGate(gate);
+            activeGate = gate;
+            activeGateRect = gateRect;
+            break;
+        }
+
+        if (!activeGate) {
+            this.resetLinkGateCharge();
             return;
+        }
+
+        const horizontalSpeed = Math.abs(this.runnerState.vx);
+        const verticalSpeed = Math.abs(this.runnerState.vy);
+        if (horizontalSpeed > LINK_GATE_STILL_SPEED || verticalSpeed > LINK_GATE_MAX_VERTICAL_SPEED) {
+            this.resetLinkGateCharge(activeGate);
+            return;
+        }
+
+        const now = currentTime();
+        if (!this.linkGateCharge || this.linkGateCharge.gate !== activeGate) {
+            this.resetLinkGateCharge();
+            this.linkGateCharge = {
+                gate: activeGate,
+                startedAt: now,
+                messageShown: false,
+            };
+            activeGate.element.classList.add('gw-link-gate--charging');
+        }
+
+        const progress = clamp((now - this.linkGateCharge.startedAt) / LINK_GATE_DWELL_MS, 0, 1);
+        this.updateLinkGateCharge(activeGate, activeGateRect, progress);
+        if (!this.linkGateCharge.messageShown && progress > 0.22) {
+            this.linkGateCharge.messageShown = true;
+            this.showMessage(UI_TEXT.gateCharge, 900);
+            this.onRunnerSound('uiMove', { volume: 0.06, rate: 1.12 });
+        }
+
+        if (progress >= 1) {
+            this.enterLinkGate(activeGate);
         }
     }
 
     enterLinkGate(gate) {
         this.gateCooldownUntil = currentTime() + 1800;
+        this.resetLinkGateCharge(gate);
         gate.element.classList.add('gw-link-gate--enter');
         this.showMessage(UI_TEXT.gateReady, 1100);
+        this.onRunnerSound('warp', { volume: 0.11, rate: 1.02 });
 
         const timer = window.setTimeout(() => {
             this.onNavigate(gate.href);
@@ -2350,6 +2897,67 @@ export class StageOverlay {
         }, 260);
 
         this.timers.add(timer);
+    }
+
+    updateLinkGateCharge(gate, gateRect, progress) {
+        gate.element.style.setProperty('--gw-gate-charge', `${Math.round(progress * 100)}%`);
+        gate.meter?.style.setProperty('--gw-gate-charge', `${Math.round(progress * 100)}%`);
+
+        const gauge = this.ensureLinkGateGauge();
+        if (!gauge || !this.runnerState) {
+            return;
+        }
+
+        const centerX = this.runnerState.x + RUNNER_WIDTH / 2;
+        const centerY = this.runnerState.y + RUNNER_HEIGHT / 2;
+        gauge.hidden = false;
+        gauge.style.left = `${centerX}px`;
+        gauge.style.top = `${centerY}px`;
+        gauge.style.setProperty('--gw-gate-charge', `${Math.round(progress * 100)}%`);
+        gauge.style.setProperty('--gw-gate-width', `${Math.max(58, Math.min(96, gateRect.width * 0.72))}px`);
+    }
+
+    ensureLinkGateGauge() {
+        if (this.linkGateGauge?.isConnected) {
+            return this.linkGateGauge;
+        }
+
+        if (!this.effectLayer) {
+            return null;
+        }
+
+        this.linkGateGauge = document.createElement('span');
+        this.linkGateGauge.className = 'gw-link-gate-charge';
+        this.linkGateGauge.setAttribute('aria-hidden', 'true');
+        this.linkGateGauge.hidden = true;
+        this.effectLayer.appendChild(this.linkGateGauge);
+        return this.linkGateGauge;
+    }
+
+    resetLinkGateCharge(nextGate = null) {
+        if (this.linkGateCharge?.gate && this.linkGateCharge.gate !== nextGate) {
+            this.linkGateCharge.gate.element.classList.remove('gw-link-gate--charging');
+            this.linkGateCharge.gate.element.style.removeProperty('--gw-gate-charge');
+            this.linkGateCharge.gate.meter?.style.removeProperty('--gw-gate-charge');
+        }
+
+        if (!nextGate) {
+            this.linkGateCharge = null;
+            if (this.linkGateGauge) {
+                this.linkGateGauge.hidden = true;
+                this.linkGateGauge.style.removeProperty('--gw-gate-charge');
+            }
+            return;
+        }
+
+        this.linkGateCharge = null;
+        nextGate.element.classList.remove('gw-link-gate--charging');
+        nextGate.element.style.removeProperty('--gw-gate-charge');
+        nextGate.meter?.style.removeProperty('--gw-gate-charge');
+        if (this.linkGateGauge) {
+            this.linkGateGauge.hidden = true;
+            this.linkGateGauge.style.removeProperty('--gw-gate-charge');
+        }
     }
 
     mountGoalGate() {
@@ -2787,14 +3395,12 @@ export class StageOverlay {
     }
 
     updateRunnerPhysics(delta) {
+        this.ensureRunnerDocumentState();
+        this.syncRunnerScreenPosition();
+        this.setRunnerPhysicsState('falling');
+
         if (this.runnerState.scrollPinned) {
-            const bounds = this.currentPlayBounds();
-            this.runnerState.x = clamp(this.runnerState.x, bounds.left, bounds.right - RUNNER_WIDTH);
-            this.runnerState.y = clamp(this.runnerState.y, 28, runnerGroundY());
-            this.runnerState.vx = 0;
-            this.runnerState.vy = 0;
-            this.runnerState.grounded = true;
-            return;
+            this.runnerState.scrollPinned = false;
         }
 
         const left = this.controlHeld('left');
@@ -2803,13 +3409,13 @@ export class StageOverlay {
         const shielding = this.controlHeld('shield');
         const runSpeed = shielding ? 145 : 250;
         const friction = this.runnerState.grounded ? 0.74 : 0.9;
-        const gravity = 920;
-        const maxFallSpeed = 470;
-        const worldGroundY = runnerGroundY();
-        const previousY = this.runnerState.y;
+        const gravity = 860;
+        const maxFallSpeed = 540;
+        const previousDocY = this.runnerState.docY;
         const wasGrounded = this.runnerState.grounded;
-        const oldBottom = this.runnerState.y + RUNNER_HEIGHT;
         const bounds = this.currentPlayBounds();
+        const docBounds = this.runnerDocumentBounds(bounds);
+        const oldBottom = this.runnerState.docY + RUNNER_HEIGHT;
 
         if (left && !right) {
             this.runnerState.vx = -runSpeed;
@@ -2824,133 +3430,413 @@ export class StageOverlay {
             }
         }
 
+        this.runnerState.docX = clamp(
+            this.runnerState.docX + this.runnerState.vx * delta,
+            docBounds.left,
+            docBounds.right - RUNNER_WIDTH
+        );
+        this.syncRunnerScreenPosition();
+
         if (jump && this.runnerState.grounded) {
             this.runnerState.vy = -560;
             this.runnerState.grounded = false;
-            this.runnerState.fallStartY = this.runnerState.y;
+            this.runnerState.fallStartY = this.runnerState.docY;
             this.runnerState.fallSoundPlayed = false;
             this.onRunnerSound('jump', { volume: 0.14, rate: 1.04 });
         }
 
+        if (this.runnerState.grounded && !jump) {
+            const supportY = this.currentRunnerSupportDocY(this.runnerDocPhysicsRect());
+            if (supportY !== null) {
+                this.setRunnerPhysicsState('support-steady');
+                this.runnerState.docY = supportY - RUNNER_HEIGHT;
+                this.runnerState.vy = 0;
+                this.syncRunnerScreenPosition();
+                this.updateRunnerCamera(delta);
+                return;
+            }
+
+            const worldGroundY = pageEndGroundDocY();
+            if (this.runnerState.docY + RUNNER_HEIGHT >= worldGroundY - 2) {
+                this.setRunnerPhysicsState('world-ground');
+                this.runnerState.docY = worldGroundY - RUNNER_HEIGHT;
+                this.runnerState.vy = 0;
+                this.syncRunnerScreenPosition();
+                this.updateRunnerCamera(delta);
+                return;
+            }
+
+            this.setRunnerPhysicsState('lost-support');
+            this.runnerState.grounded = false;
+            this.runnerState.fallStartY = this.runnerState.docY;
+            this.runnerState.fallSoundPlayed = false;
+        }
+
         this.runnerState.vy = Math.min(this.runnerState.vy + gravity * delta, maxFallSpeed);
-        this.runnerState.x = clamp(this.runnerState.x + this.runnerState.vx * delta, bounds.left, bounds.right - RUNNER_WIDTH);
-        this.runnerState.y += this.runnerState.vy * delta;
+        this.runnerState.docY += this.runnerState.vy * delta;
+        this.syncRunnerScreenPosition();
         const runnerRect = this.runnerPhysicsRect();
 
         if (wasGrounded && !jump && this.runnerAtSideWall(runnerRect)) {
-            this.runnerState.y = previousY;
+            this.setRunnerPhysicsState('side-wall-stop');
+            this.runnerState.docY = previousDocY;
             this.runnerState.vy = 0;
             this.runnerState.grounded = true;
+            this.syncRunnerScreenPosition();
             return;
         }
 
         if (this.runnerState.vy >= 0) {
-            const landingY = firstLandingY(
-                this.textBreaker?.findLandingY(runnerRect, oldBottom, runnerRect.bottom),
-                this.imageBreaker?.findLandingY(runnerRect, oldBottom, runnerRect.bottom)
-            );
-            if (landingY !== null && landingY <= worldGroundY) {
+            const landingY = this.findRunnerLandingDocY(this.runnerDocPhysicsRect(), oldBottom, this.runnerState.docY + RUNNER_HEIGHT);
+            if (landingY !== null) {
+                this.setRunnerPhysicsState('land-surface');
                 this.landRunnerAt(landingY, this.runnerState.vy);
+                this.updateRunnerCamera(delta);
                 return;
             }
         }
 
-        if (this.followRunnerFall(delta)) {
-            this.maybePlayFallSound();
+        const worldGroundY = pageEndGroundDocY();
+        if (this.runnerState.docY + RUNNER_HEIGHT >= worldGroundY) {
+            this.setRunnerPhysicsState('world-ground');
+            this.landRunnerAt(worldGroundY, this.runnerState.vy);
+            this.updateRunnerCamera(delta);
             return;
         }
 
-        if (this.runnerState.y >= worldGroundY) {
-            this.landRunnerAt(worldGroundY + RUNNER_HEIGHT, this.runnerState.vy);
-            return;
-        }
-
-        if (this.runnerState.grounded && !jump) {
-            const supportRect = this.runnerPhysicsRect();
-            if (this.runnerAtSideWall(supportRect)) {
-                this.runnerState.vy = 0;
-                return;
-            }
-
-            const textSupportY = this.textBreaker?.findSupportY(supportRect);
-            const imageSupportY = this.imageBreaker?.findSupportY(supportRect);
-            const supportY = firstLandingY(textSupportY, imageSupportY);
-            const supportTolerance = imageSupportY !== null && (textSupportY === null || imageSupportY <= textSupportY) ? 20 : 10;
-            if (supportY !== null && Math.abs(this.runnerState.y - (supportY - RUNNER_HEIGHT)) < supportTolerance) {
-                this.runnerState.y = supportY - RUNNER_HEIGHT;
-                this.runnerState.vy = 0;
-                return;
-            }
-
-            if (this.runnerState.y < worldGroundY - 2) {
-                this.runnerState.grounded = false;
-                this.runnerState.fallStartY = this.runnerState.y;
-                this.runnerState.fallSoundPlayed = false;
-            }
-        }
-
+        this.updateRunnerCamera(delta);
         this.maybePlayFallSound();
     }
 
-    followRunnerFall(delta) {
-        if (!this.runnerState || this.runnerState.grounded || this.runnerState.vy <= 40) {
+    currentRunnerSupportY(rect) {
+        const textSupportY = this.textBreaker?.findSupportY(rect);
+        const imageSupportY = this.imageBreaker?.findSupportY(rect);
+        return firstLandingY(textSupportY, imageSupportY);
+    }
+
+    currentRunnerSupportDocY(rect) {
+        const cache = this.ensureRoomCollisionCache();
+        const feet = rect.bottom;
+        const accepts = (surfaceY) => surfaceY >= feet - 7 && surfaceY <= feet + 9;
+        const textSupportY = cachedTextSurfaceY(cache?.textRects || [], rect, accepts);
+        const imageSupportY = cachedRectSurfaceY(cache?.imageRects || [], rect, accepts);
+        const placedSupportY = cachedRectSurfaceY(cache?.placedRects || [], rect, accepts);
+        const cachedSupportY = firstLandingY(textSupportY, imageSupportY, placedSupportY);
+        if (cachedSupportY !== null) {
+            return cachedSupportY;
+        }
+
+        const liveTextSupportY = this.textBreaker?.findSupportDocY?.(rect);
+        const liveImageSupportY = this.imageBreaker?.findSupportDocY?.(rect);
+        return firstLandingY(liveTextSupportY, liveImageSupportY);
+    }
+
+    findRunnerLandingDocY(runnerRect, previousBottom, nextBottom) {
+        const cache = this.ensureRoomCollisionCache();
+        const accepts = (surfaceY) => surfaceY >= previousBottom - 5 && surfaceY <= nextBottom + 12;
+        const textLandingY = cachedTextSurfaceY(cache?.textRects || [], runnerRect, accepts);
+        const imageLandingY = cachedRectSurfaceY(cache?.imageRects || [], runnerRect, accepts);
+        const placedLandingY = cachedRectSurfaceY(cache?.placedRects || [], runnerRect, accepts);
+        const cachedLandingY = firstLandingY(textLandingY, imageLandingY, placedLandingY);
+        if (cachedLandingY !== null) {
+            return cachedLandingY;
+        }
+
+        const liveTextLandingY = this.textBreaker?.findLandingDocY?.(runnerRect, previousBottom, nextBottom);
+        const liveImageLandingY = this.imageBreaker?.findLandingDocY?.(runnerRect, previousBottom, nextBottom);
+        return firstLandingY(liveTextLandingY, liveImageLandingY);
+    }
+
+    shouldDropBeforeLanding(landingY) {
+        if (!this.runnerState || this.runnerState.grounded || this.runnerState.vy < 0 || this.roomIndex >= this.rooms.length - 1) {
             return false;
         }
 
-        if (this.runnerAtSideWall(this.runnerPhysicsRect())) {
+        const room = this.currentRoom();
+        const landingScreenY = landingY - window.scrollY;
+        return landingScreenY >= window.innerHeight - ROOM_SCREEN_DROP_GATE_GAP
+            || landingY >= room.bottom - ROOM_DROP_MARGIN;
+    }
+
+    setRunnerPhysicsState(label) {
+        if (this.runnerState) {
+            this.runnerState.lastPhysics = label;
+        }
+    }
+
+    shouldFollowToLowerText() {
+        if (!this.runnerState || maxPageScrollY() - window.scrollY <= 1) {
             return false;
         }
 
+        return this.shouldFallTowardLowerText();
+    }
+
+    shouldFallTowardLowerText() {
+        return this.lowerTextSurfaceY() !== null;
+    }
+
+    lowerTextSurfaceY() {
+        if (!this.runnerState) {
+            return null;
+        }
+
+        return this.textBreaker?.findSupportBelowDocY?.(this.runnerDocPhysicsRect()) ?? null;
+    }
+
+    followRunnerFall(delta, options = {}) {
+        if (!this.runnerState || this.runnerState.grounded) {
+            return false;
+        }
+
+        return this.updateRunnerCamera(delta, { force: Boolean(options.force) });
+    }
+
+    landOnSurfaceAfterCameraScroll(actualScroll, delta) {
+        if (!this.runnerState || actualScroll <= 0 || this.runnerState.vy < 0) {
+            return false;
+        }
+
+        const runnerRect = this.runnerDocPhysicsRect();
+        const previousBottom = runnerRect.bottom - Math.max(28, actualScroll + Math.max(this.runnerState.vy, 260) * delta);
+        const landingY = this.findRunnerLandingDocY(runnerRect, previousBottom, runnerRect.bottom + 18);
+        if (landingY === null) {
+            return false;
+        }
+
+        this.setRunnerPhysicsState('camera-scroll-land-surface');
+        this.landRunnerAt(landingY, this.runnerState.vy);
+        return true;
+    }
+
+    updateRunnerCamera(delta, options = {}) {
+        if (!this.runnerState) {
+            return false;
+        }
+
+        this.ensureRunnerDocumentState();
+        this.syncRunnerScreenPosition();
+        if (this.runnerState.grounded) {
+            this.cameraScrollVelocity *= 0.72;
+            this.syncRoomToRunner();
+            return false;
+        }
+
+        const runnerBottom = this.runnerState.docY + RUNNER_HEIGHT;
+        const runnerScreenBottom = runnerBottom - window.scrollY;
+        const followStartY = window.innerHeight * CAMERA_FOLLOW_START_RATIO;
+        const followTargetY = window.innerHeight * CAMERA_FOLLOW_TARGET_RATIO;
+        const desiredScrollY = runnerScreenBottom > followStartY
+            ? runnerBottom - followTargetY
+            : window.scrollY;
         const maxScroll = maxPageScrollY();
-        const remaining = maxScroll - window.scrollY;
-        if (remaining <= 1) {
+        const targetScrollY = clamp(desiredScrollY, 0, maxScroll);
+        const distance = targetScrollY - window.scrollY;
+
+        this.syncRoomToRunner();
+
+        if (Math.abs(distance) < 0.5) {
+            this.cameraScrollVelocity *= 0.82;
             return false;
         }
 
-        const runnerBottom = this.runnerState.y + RUNNER_HEIGHT;
-        const followStart = Math.min(runnerGroundY() - 6, window.innerHeight * FALL_CAMERA_START_RATIO);
-        if (runnerBottom < followStart) {
+        const maxSpeed = CAMERA_FOLLOW_MAX_SPEED + Math.max(0, this.runnerState.vy || 0) * 0.45;
+        const desiredVelocity = clamp(distance * CAMERA_FOLLOW_SPRING, -maxSpeed, maxSpeed);
+        const ease = clamp(delta * CAMERA_FOLLOW_EASE, 0, 1);
+        this.cameraScrollVelocity = lerp(this.cameraScrollVelocity, desiredVelocity, ease);
+        const step = clamp(this.cameraScrollVelocity * delta, -Math.abs(distance), Math.abs(distance));
+        const previousScrollY = window.scrollY;
+        window.scrollTo(0, clamp(previousScrollY + step, 0, maxScroll));
+        const actualScroll = window.scrollY - previousScrollY;
+        if (Math.abs(actualScroll) < 0.5) {
             return false;
         }
 
-        const targetTop = clamp(
-            window.innerHeight * FALL_CAMERA_TARGET_RATIO,
-            118,
-            Math.max(118, runnerGroundY() - RUNNER_HEIGHT - 92)
-        );
-        const fallingStep = Math.max(FALL_CAMERA_MIN_SCROLL_STEP, this.runnerState.vy * delta * 0.92);
-        const pressureStep = Math.max(0, runnerBottom - followStart) * 0.18;
-        const maxStep = Math.max(FALL_CAMERA_MIN_SCROLL_STEP, FALL_CAMERA_MAX_SPEED * delta);
-        const scrollAmount = Math.min(
-            remaining,
-            this.runnerState.y - targetTop > 0 ? Math.max(fallingStep, pressureStep) : fallingStep,
-            maxStep
-        );
-
-        if (scrollAmount <= 0) {
-            return false;
-        }
-
-        this.runnerScrollFollowUntil = currentTime() + FALL_CAMERA_FOLLOW_MS;
-        window.scrollBy(0, scrollAmount);
-        this.runnerState.y = Math.max(28, this.runnerState.y - scrollAmount);
         this.playBounds = this.calculatePlayBounds();
+        this.syncRunnerScreenPosition();
+        this.syncRoomToRunner();
         this.updateBrickRails();
         this.updateLinkGates();
         this.updateGoalGate(true);
+        this.updateReturnRoute(true);
+        this.syncPlacedLettersToScroll();
         return true;
+    }
+
+    syncRoomToRunner() {
+        if (!this.runnerState || !this.rooms?.length) {
+            return;
+        }
+
+        const nextRoomIndex = this.findRoomIndexForDocY(this.runnerState.docY + RUNNER_HEIGHT);
+        if (nextRoomIndex === this.roomIndex && this.roomCollisionCache) {
+            return;
+        }
+
+        this.roomIndex = nextRoomIndex;
+        this.runnerState.roomIndex = nextRoomIndex;
+        this.rebuildRoomCollisionCache();
+    }
+
+    hasVisibleLandingBeforeDropGate() {
+        if (!this.runnerState || this.runnerState.vy < 0) {
+            return false;
+        }
+
+        const rect = this.runnerDocPhysicsRect();
+        const runnerBottom = this.runnerState.docY + RUNNER_HEIGHT;
+        const landingY = this.findRunnerLandingDocY(rect, runnerBottom - 8, runnerBottom + 190);
+        if (landingY === null) {
+            return false;
+        }
+
+        const landingScreenY = landingY - window.scrollY;
+        return landingScreenY < window.innerHeight - ROOM_SCREEN_DROP_GATE_GAP;
+    }
+
+    nextRoomIndexForDrop() {
+        if (!this.runnerState || !this.rooms?.length) {
+            return this.roomIndex + 1;
+        }
+
+        const minUsefulBottom = this.runnerState.docY + RUNNER_HEIGHT + Math.max(ROOM_MIN_HEIGHT, ROOM_DROP_NEXT_MIN_AHEAD_PX);
+        for (let index = this.roomIndex + 1; index < this.rooms.length; index += 1) {
+            if (this.rooms[index].bottom > minUsefulBottom) {
+                return index;
+            }
+        }
+
+        return Math.min(this.rooms.length - 1, this.roomIndex + 1);
+    }
+
+    startRoomDropTransition(nextIndex = this.roomIndex + 1) {
+        if (!this.runnerState || this.roomTransition || nextIndex >= this.rooms.length) {
+            return false;
+        }
+
+        const nextRoom = this.rooms[nextIndex];
+        const fromScrollY = window.scrollY;
+        const previewLandingY = this.previewLandingDocYForRoom(nextRoom);
+        const targetLandingScreenY = clamp(window.innerHeight - 190, 330, Math.max(340, window.innerHeight - 96));
+        const desiredScrollY = Number.isFinite(previewLandingY)
+            ? previewLandingY - targetLandingScreenY
+            : nextRoom.top;
+        const toScrollY = clamp(Math.max(fromScrollY + 80, desiredScrollY), 0, maxPageScrollY());
+        const distance = Math.abs(toScrollY - fromScrollY);
+
+        if (distance < 2) {
+            this.roomIndex = nextIndex;
+            this.runnerState.roomIndex = nextIndex;
+            this.rebuildRoomCollisionCache();
+            return false;
+        }
+
+        this.clearAttackCharge();
+        this.clearThrowHold();
+        this.runnerState.transitioning = true;
+        this.runnerState.cameraMode = 'room-transition';
+        this.runnerState.grounded = false;
+        this.runnerState.vy = Math.max(this.runnerState.vy, 380);
+        this.runnerState.fallStartY = this.runnerState.docY;
+        this.runnerState.fallSoundPlayed = false;
+        this.setRunnerPhysicsState('room-drop');
+
+        this.roomTransition = {
+            fromScrollY,
+            toScrollY,
+            nextIndex,
+            startedAt: currentTime(),
+            duration: clamp(distance * 0.82, ROOM_TRANSITION_MIN_MS, ROOM_TRANSITION_MAX_MS),
+            screenX: this.runnerState.x,
+            fromScreenY: this.runnerState.y,
+            toScreenY: clamp(ROOM_DROP_TARGET_MIN_Y, 180, Math.max(180, window.innerHeight - ROOM_DROP_TARGET_MAX_BOTTOM_GAP)),
+        };
+
+        this.runnerScrollFollowUntil = currentTime() + this.roomTransition.duration + 120;
+        this.showMessage('DROP!', 720);
+        this.onRunnerSound('fall', { volume: 0.08, rate: 1.02 });
+        this.shakeScreen('soft');
+        return true;
+    }
+
+    updateRoomDropTransition(time = currentTime()) {
+        if (!this.runnerState || !this.roomTransition) {
+            return false;
+        }
+
+        const transition = this.roomTransition;
+        const progress = clamp((time - transition.startedAt) / transition.duration, 0, 1);
+        const eased = easeInOut(progress);
+        const nextScrollY = lerp(transition.fromScrollY, transition.toScrollY, eased);
+        window.scrollTo(0, nextScrollY);
+        this.playBounds = this.calculatePlayBounds();
+
+        const screenY = lerp(transition.fromScreenY, transition.toScreenY, eased)
+            + Math.sin(progress * Math.PI) * 34;
+        const bounds = this.currentPlayBounds();
+        const screenX = clamp(transition.screenX, bounds.left, bounds.right - RUNNER_WIDTH);
+        this.runnerState.docX = window.scrollX + screenX;
+        this.runnerState.docY = window.scrollY + screenY;
+        this.runnerState.vy = Math.max(this.runnerState.vy, 360);
+        this.syncRunnerScreenPosition();
+        this.updateBrickRails();
+        this.updateLinkGates();
+        this.updateGoalGate(true);
+        this.updateReturnRoute(true);
+        this.syncPlacedLettersToScroll();
+
+        if (progress >= 1) {
+            this.finishRoomDropTransition();
+        }
+
+        return true;
+    }
+
+    finishRoomDropTransition() {
+        if (!this.runnerState || !this.roomTransition) {
+            return;
+        }
+
+        const nextIndex = this.roomTransition.nextIndex;
+        this.roomTransition = null;
+        this.roomIndex = nextIndex;
+        this.runnerState.roomIndex = nextIndex;
+        this.runnerState.transitioning = false;
+        this.runnerState.cameraMode = 'room';
+        this.runnerState.vy = 300;
+        this.runnerState.grounded = false;
+        this.playBounds = this.calculatePlayBounds();
+        this.rebuildRoomCollisionCache();
+
+        const rect = this.runnerDocPhysicsRect();
+        const landingY = this.findRunnerLandingDocY(rect, rect.bottom - 18, rect.bottom + ROOM_DROP_LANDING_SEARCH_PX);
+        const hudBottom = this.missionHud?.getBoundingClientRect?.().bottom || 0;
+        const minLandingScreenY = Math.max(190, hudBottom + RUNNER_HEIGHT + 14);
+        const landingScreenY = landingY === null ? Infinity : landingY - window.scrollY;
+        if (landingY !== null && landingScreenY >= minLandingScreenY && landingScreenY < window.innerHeight - 86) {
+            this.landRunnerAt(landingY, 430);
+        } else {
+            this.syncRunnerScreenPosition();
+        }
+
+        this.updateBrickRails();
+        this.updateLinkGates();
+        this.updateGoalGate(true);
+        this.updateReturnRoute(true);
+        this.syncPlacedLettersToScroll();
     }
 
     landRunnerAt(surfaceY, velocity) {
         const now = currentTime();
         const wasAirborne = !this.runnerState.grounded;
-        const fallDistance = Math.max(0, (this.runnerState.y || 0) - (this.runnerState.fallStartY || this.runnerState.y || 0));
+        const fallDistance = Math.max(0, (this.runnerState.docY || 0) - (this.runnerState.fallStartY || this.runnerState.docY || 0));
 
-        this.runnerState.y = surfaceY - RUNNER_HEIGHT;
+        this.runnerState.docY = surfaceY - RUNNER_HEIGHT;
         this.runnerState.vy = 0;
         this.runnerState.grounded = true;
         this.runnerState.fallSoundPlayed = false;
-        this.runnerState.fallStartY = this.runnerState.y;
+        this.runnerState.fallStartY = this.runnerState.docY;
+        this.syncRunnerScreenPosition();
 
         if (wasAirborne && now - this.runnerState.lastLandAt > 140) {
             const heavy = velocity > 390 || fallDistance > 150;
@@ -2959,10 +3845,13 @@ export class StageOverlay {
                 volume: heavy ? 0.09 : 0.055,
                 rate: heavy ? 0.94 : 1.04,
             });
-            this.spawnSnowPuff(this.runnerPhysicsRect(), heavy ? 'medium' : 'soft');
 
             if (heavy) {
                 this.shakeScreen('soft');
+            }
+
+            if (!this.reducedMotion) {
+                this.spawnLandingDust(heavy);
             }
         }
     }
@@ -2972,7 +3861,7 @@ export class StageOverlay {
             return;
         }
 
-        const fallDistance = this.runnerState.y - (this.runnerState.fallStartY || this.runnerState.y);
+        const fallDistance = this.runnerState.docY - (this.runnerState.fallStartY || this.runnerState.docY);
         if (fallDistance < 34) {
             return;
         }
@@ -3078,6 +3967,7 @@ export class StageOverlay {
     }
 
     runnerPhysicsRect() {
+        this.syncRunnerScreenPosition();
         const footLeft = this.runnerState.x + (RUNNER_WIDTH - RUNNER_FOOT_WIDTH) / 2;
 
         return {
@@ -3090,6 +3980,51 @@ export class StageOverlay {
         };
     }
 
+    runnerDocPhysicsRect() {
+        this.ensureRunnerDocumentState();
+        const footLeft = this.runnerState.docX + (RUNNER_WIDTH - RUNNER_FOOT_WIDTH) / 2;
+
+        return {
+            left: footLeft,
+            top: this.runnerState.docY,
+            right: footLeft + RUNNER_FOOT_WIDTH,
+            bottom: this.runnerState.docY + RUNNER_HEIGHT,
+            width: RUNNER_FOOT_WIDTH,
+            height: RUNNER_HEIGHT,
+        };
+    }
+
+    ensureRunnerDocumentState() {
+        if (!this.runnerState) {
+            return;
+        }
+
+        if (typeof this.runnerState.docX !== 'number') {
+            this.runnerState.docX = (this.runnerState.x || 0) + window.scrollX;
+        }
+
+        if (typeof this.runnerState.docY !== 'number') {
+            this.runnerState.docY = (this.runnerState.y || 0) + window.scrollY;
+        }
+    }
+
+    syncRunnerScreenPosition() {
+        if (!this.runnerState) {
+            return;
+        }
+
+        this.ensureRunnerDocumentState();
+        this.runnerState.x = this.runnerState.docX - window.scrollX;
+        this.runnerState.y = this.runnerState.docY - window.scrollY;
+    }
+
+    runnerDocumentBounds(bounds = this.currentPlayBounds()) {
+        return {
+            left: bounds.left + window.scrollX,
+            right: bounds.right + window.scrollX,
+        };
+    }
+
     runnerAtSideWall(rect = this.runnerPhysicsRect()) {
         const bounds = this.currentPlayBounds();
         const margin = Math.max(18, RUNNER_FOOT_WIDTH * 0.5);
@@ -3097,16 +4032,26 @@ export class StageOverlay {
     }
 
     renderRunner(time = currentTime()) {
+        this.syncRunnerScreenPosition();
         this.runner.style.left = `${this.runnerState.x}px`;
         this.runner.style.top = `${this.runnerState.y}px`;
+        this.runner.dataset.gwPhysics = this.runnerState.lastPhysics || '';
         this.runner.classList.toggle('gw-pixel-runner--left', this.runnerState.direction < 0);
         const running = Math.abs(this.runnerState.vx) > 16;
+        const falling = !this.runnerState.grounded && this.runnerState.vy > 150;
+        const fastFalling = !this.runnerState.grounded && this.runnerState.vy > 355;
         this.runner.classList.toggle('gw-pixel-runner--running', running);
         this.runner.classList.toggle('gw-pixel-runner--jumping', !this.runnerState.grounded);
+        this.runner.classList.toggle('gw-pixel-runner--falling', falling);
+        this.runner.classList.toggle('gw-pixel-runner--fastfall', fastFalling);
         this.runner.classList.toggle('gw-pixel-runner--shielding', this.controlHeld('shield'));
 
         if (running && this.runnerState.grounded && !this.reducedMotion) {
             this.spawnRunnerDust(time);
+        }
+
+        if (falling && !this.reducedMotion) {
+            this.spawnFallTrail(time, fastFalling);
         }
 
         this.renderHeldLetter();
@@ -3127,6 +4072,42 @@ export class StageOverlay {
         dust.style.top = `${this.runnerState.y + RUNNER_HEIGHT - 6}px`;
         dust.style.setProperty('--gw-dust-x', `${this.runnerState.direction > 0 ? -24 : 24}px`);
         this.addTemporaryEffect(dust, 360);
+    }
+
+    spawnFallTrail(time, fastFalling = false) {
+        const interval = fastFalling ? 72 : 118;
+        if (time - this.runnerState.lastFallTrailAt < interval) {
+            return;
+        }
+
+        this.runnerState.lastFallTrailAt = time;
+        const streak = document.createElement('span');
+        streak.className = `gw-fall-streak${fastFalling ? ' gw-fall-streak--fast' : ''}`;
+        const drift = (Math.random() - 0.5) * 18;
+        const x = this.runnerState.x + RUNNER_WIDTH / 2 + drift;
+        const y = this.runnerState.y + 12 + Math.random() * 24;
+        streak.style.left = `${x}px`;
+        streak.style.top = `${y}px`;
+        streak.style.setProperty('--gw-fall-drift', `${-drift * 0.6}px`);
+        this.addTemporaryEffect(streak, fastFalling ? 380 : 460);
+    }
+
+    spawnLandingDust(heavy = false) {
+        if (!this.runnerState) {
+            return;
+        }
+
+        const count = heavy ? 5 : 3;
+        for (let i = 0; i < count; i += 1) {
+            const dust = document.createElement('span');
+            dust.className = `gw-run-dust gw-run-dust--landing${heavy ? ' gw-run-dust--heavy' : ''}`;
+            const side = i % 2 === 0 ? -1 : 1;
+            const offset = (8 + i * 5) * side;
+            dust.style.left = `${this.runnerState.x + RUNNER_WIDTH / 2 + offset * 0.18}px`;
+            dust.style.top = `${this.runnerState.y + RUNNER_HEIGHT - 5}px`;
+            dust.style.setProperty('--gw-dust-x', `${offset}px`);
+            this.addTemporaryEffect(dust, heavy ? 460 : 340);
+        }
     }
 
     playRunnerStrike(options = {}) {
@@ -3349,8 +4330,15 @@ export class StageOverlay {
             return;
         }
 
+        const accordionHit = this.hitAccordionAtRect(attackRect, { trigger: 'player_control' });
+        if (accordionHit?.count > 0) {
+            this.runnerOnHit?.(accordionHit.target, 'accordion_attack');
+            return;
+        }
+
         const charBreak = this.textBreaker?.destroyAtRect(attackRect, { limit: 1, source: 'player' });
         if (charBreak?.count > 0) {
+            this.rebuildRoomCollisionCache();
             this.bumpStageStat('playerBroken', charBreak.count);
             this.impactBurstAt(charBreak.rect, 'char');
             this.shakeScreen('medium');
@@ -3382,11 +4370,12 @@ export class StageOverlay {
 
         const imageHit = this.imageBreaker?.hitAtRect(attackRect, { direction: this.runnerState.direction });
         if (imageHit?.count > 0) {
+            this.rebuildRoomCollisionCache();
             this.bumpStageStat('imagesDamaged', 1);
             this.impactBurstAt(imageHit.rect, imageHit.destroyed ? 'hard' : 'medium');
             this.spawnImageChips(imageHit.rect, this.runnerState.direction, imageHit.destroyed);
             this.shakeScreen(imageHit.destroyed ? 'hard' : 'medium');
-            this.showMessage(imageHit.destroyed ? UI_TEXT.imageBreak : UI_TEXT.imageSpin, 1800);
+            this.showMessage(this.imageHitMessage(imageHit, false), 1800);
             this.runnerOnImageHit?.(imageHit);
             return;
         }
@@ -3437,6 +4426,7 @@ export class StageOverlay {
 
         const charBreak = this.textBreaker?.destroyAtRect(chargedRect, { limit: full ? 4 : 2, source: 'player' });
         if (charBreak?.count > 0) {
+            this.rebuildRoomCollisionCache();
             this.bumpStageStat('playerBroken', charBreak.count);
             this.impactBurstAt(charBreak.rect, intensity);
             this.shakeScreen(full ? 'hard' : 'medium');
@@ -3466,13 +4456,20 @@ export class StageOverlay {
             return;
         }
 
+        const accordionHit = this.hitAccordionAtRect(chargedRect, { trigger: full ? 'charged_attack_full' : 'charged_attack' });
+        if (accordionHit?.count > 0) {
+            this.runnerOnHit?.(accordionHit.target, 'accordion_attack');
+            return;
+        }
+
         const imageHit = this.imageBreaker?.hitAtRect(chargedRect, { direction: this.runnerState.direction });
         if (imageHit?.count > 0) {
+            this.rebuildRoomCollisionCache();
             this.bumpStageStat('imagesDamaged', 1);
             this.impactBurstAt(imageHit.rect, imageHit.destroyed || full ? 'hard' : 'medium');
             this.spawnImageChips(imageHit.rect, this.runnerState.direction, imageHit.destroyed || full);
             this.shakeScreen(full ? 'hard' : 'medium');
-            this.showMessage(imageHit.destroyed ? UI_TEXT.imageBreak : UI_TEXT.imageSpin, 1800);
+            this.showMessage(this.imageHitMessage(imageHit, false), 1800);
             this.runnerOnImageHit?.(imageHit);
             return;
         }
@@ -3632,9 +4629,19 @@ export class StageOverlay {
 
     mountRunnerControls() {
         this.runnerControls = document.createElement('div');
-        this.runnerControls.className = 'gw-player-controls';
+        this.runnerControls.className = 'gw-player-controls gw-player-controls--hidden';
         this.runnerControls.setAttribute('role', 'group');
         this.runnerControls.setAttribute('aria-label', 'Player controls');
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'gw-player-controls__close';
+        closeButton.textContent = UI_TEXT.controlsClose;
+        closeButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.setRunnerControlsVisible(false);
+        });
+        this.runnerControls.appendChild(closeButton);
 
         for (const { control, label, keys } of RUNNER_CONTROL_DEFS) {
             const button = document.createElement('button');
@@ -3654,9 +4661,49 @@ export class StageOverlay {
         this.root?.appendChild(this.runnerControls);
     }
 
+    setRunnerControlsVisible(visible) {
+        this.controlsVisible = Boolean(visible);
+        this.runnerControls?.classList.toggle('gw-player-controls--hidden', !this.controlsVisible);
+        this.runnerControlsToggle?.setAttribute('aria-pressed', this.controlsVisible ? 'true' : 'false');
+        this.runnerControlsToggle?.classList.toggle('gw-controls-toggle--active', this.controlsVisible);
+    }
+
+    toggleRunnerControls() {
+        this.setRunnerControlsVisible(!this.controlsVisible);
+    }
+
+    showControlGuide() {
+        this.controlGuide?.remove();
+        this.controlGuide = document.createElement('div');
+        this.controlGuide.className = 'gw-control-guide';
+        this.controlGuide.innerHTML = `
+            <strong>${UI_TEXT.controlGuideTitle}</strong>
+            <span>${UI_TEXT.controlGuideKeys}</span>
+            <small>${UI_TEXT.controlGuidePad}</small>
+        `;
+        this.root?.appendChild(this.controlGuide);
+
+        const timer = window.setTimeout(() => {
+            this.controlGuide?.classList.add('gw-control-guide--leaving');
+            const removeTimer = window.setTimeout(() => {
+                this.controlGuide?.remove();
+                this.controlGuide = null;
+                this.timers.delete(removeTimer);
+            }, 360);
+            this.timers.add(removeTimer);
+            this.timers.delete(timer);
+        }, 5600);
+        this.timers.add(timer);
+    }
+
     unmountRunnerControls() {
         this.runnerControls?.remove();
         this.runnerControls = null;
+        this.controlGuide?.remove();
+        this.controlGuide = null;
+        this.controlsVisible = false;
+        this.runnerControlsToggle?.setAttribute('aria-pressed', 'false');
+        this.runnerControlsToggle?.classList.remove('gw-controls-toggle--active');
     }
 
     bindRunnerControlButton(button, control) {
@@ -3885,29 +4932,6 @@ export class StageOverlay {
             flash.className = 'gw-impact-flash';
             this.addTemporaryEffect(flash, 180);
         }
-
-        this.spawnSnowPuff(rect, intensity);
-    }
-
-    spawnSnowPuff(rect, intensity = 'soft') {
-        if (this.reducedMotion || !this.effectLayer) {
-            return;
-        }
-
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.bottom || (rect.top + rect.height);
-        const count = intensity === 'hard' ? 12 : (intensity === 'medium' ? 8 : 5);
-        for (let index = 0; index < count; index += 1) {
-            const puff = document.createElement('span');
-            puff.className = 'gw-snow-puff';
-            puff.style.left = `${centerX + randomBetween(-18, 18)}px`;
-            puff.style.top = `${centerY + randomBetween(-8, 8)}px`;
-            puff.style.setProperty('--gw-x', `${randomBetween(-58, 58)}px`);
-            puff.style.setProperty('--gw-y', `${randomBetween(-36, -8)}px`);
-            puff.style.setProperty('--gw-s', `${randomBetween(0.6, intensity === 'hard' ? 1.35 : 1.05)}`);
-            puff.style.setProperty('--gw-d', `${randomBetween(0, 70)}ms`);
-            this.addTemporaryEffect(puff, 620);
-        }
     }
 
     shakeScreen(strength = 'medium') {
@@ -3958,7 +4982,19 @@ export class StageOverlay {
         this.impactBurstAt(rect, imageHit?.destroyed ? 'hard' : 'medium');
         this.spawnImageChips(rect, imageHit?.target ? (imageHit.stage % 2 === 0 ? -1 : 1) : 1, Boolean(imageHit?.destroyed));
         this.shakeScreen(imageHit?.destroyed ? 'hard' : 'medium');
-        this.showMessage(imageHit?.destroyed ? UI_TEXT.imageBreak : UI_TEXT.imageCrack);
+        this.showMessage(this.imageHitMessage(imageHit, true));
+    }
+
+    imageHitMessage(imageHit, crack = false) {
+        if (imageHit?.type === 'icon') {
+            return imageHit?.destroyed ? UI_TEXT.iconBreak : UI_TEXT.iconSpin;
+        }
+
+        if (crack) {
+            return imageHit?.destroyed ? UI_TEXT.imageBreak : UI_TEXT.imageCrack;
+        }
+
+        return imageHit?.destroyed ? UI_TEXT.imageBreak : UI_TEXT.imageSpin;
     }
 
     spawnImageChips(rect, direction = 1, destroyed = false) {
@@ -4024,6 +5060,59 @@ export class StageOverlay {
         this.showMessage(UI_TEXT.actionHop);
     }
 
+    toggleAccordionTarget(target, options = {}) {
+        const rect = liveRectForTarget(target);
+        const wasOpen = accordionIsOpen(target.element);
+        const opened = !wasOpen;
+        const label = document.createElement('div');
+        label.className = 'gw-action-echo gw-accordion-echo';
+        label.textContent = opened ? 'OPEN' : 'CLOSE';
+        label.style.left = `${rect.left + rect.width / 2}px`;
+        label.style.top = `${rect.top + rect.height / 2}px`;
+        this.addTemporaryEffect(label, 680);
+
+        target.element.classList.add('gw-accordion-hit');
+        const clearTimer = window.setTimeout(() => {
+            target.element.classList.remove('gw-accordion-hit');
+            this.timers.delete(clearTimer);
+        }, 520);
+        this.timers.add(clearTimer);
+
+        this.passThroughNativeAccordionClick(target.element, opened, wasOpen);
+        this.rebuildRoomCollisionCache();
+        this.impactBurstAt(rect, options.charged ? 'medium' : 'soft');
+        this.shakeScreen('soft');
+        this.showMessage(opened ? UI_TEXT.accordionOpen : UI_TEXT.accordionClose, 1200);
+
+        return {
+            opened,
+            rect,
+        };
+    }
+
+    passThroughNativeAccordionClick(element, desiredOpen, previousOpen) {
+        window.__GamingWebAllowNativeClickUntil = performance.now() + 260;
+
+        if (typeof element.click === 'function') {
+            element.click();
+        }
+
+        const timer = window.setTimeout(() => {
+            if (accordionIsOpen(element) === previousOpen) {
+                setAccordionOpen(element, desiredOpen);
+            }
+
+            this.rebuildRoomCollisionCache();
+
+            if (performance.now() >= window.__GamingWebAllowNativeClickUntil) {
+                window.__GamingWebAllowNativeClickUntil = 0;
+            }
+
+            this.timers.delete(timer);
+        }, 80);
+        this.timers.add(timer);
+    }
+
     brighten(target) {
         const rect = liveRectForTarget(target);
         const glow = document.createElement('div');
@@ -4067,6 +5156,17 @@ function rectFromDom(rect) {
     };
 }
 
+function rectToDocumentObject(rect) {
+    return {
+        left: rect.left + window.scrollX,
+        top: rect.top + window.scrollY,
+        right: rect.right + window.scrollX,
+        bottom: rect.bottom + window.scrollY,
+        width: rect.width,
+        height: rect.height,
+    };
+}
+
 function unionRects(rects = []) {
     const usable = rects.filter(Boolean);
     if (usable.length === 0) {
@@ -4088,6 +5188,180 @@ function unionRects(rects = []) {
     };
 }
 
+function normalizeRooms(rooms = [], pageBottom = pageEndGroundDocY()) {
+    const sorted = rooms
+        .map((room) => ({
+            top: clamp(Math.floor(room.top), 0, pageBottom),
+            bottom: clamp(Math.ceil(room.bottom), 0, pageBottom),
+            source: room.source || 'room',
+        }))
+        .filter((room) => room.bottom - room.top >= 120)
+        .sort((a, b) => a.top - b.top || a.bottom - b.bottom);
+
+    if (sorted.length === 0) {
+        return [{ top: 0, bottom: pageBottom, source: 'fallback' }];
+    }
+
+    const normalized = [];
+    for (const room of sorted) {
+        const previous = normalized[normalized.length - 1];
+        if (previous && Math.abs(previous.top - room.top) < 12 && Math.abs(previous.bottom - room.bottom) < 24) {
+            continue;
+        }
+
+        if (previous && room.bottom <= previous.bottom + 80) {
+            continue;
+        }
+
+        normalized.push(room);
+    }
+
+    if (normalized[0].top > 0) {
+        normalized.unshift({
+            top: 0,
+            bottom: Math.max(normalized[0].top + ROOM_OVERLAP_PX, Math.min(pageBottom, window.innerHeight * ROOM_HEIGHT_RATIO)),
+            source: 'head',
+        });
+    }
+
+    const last = normalized[normalized.length - 1];
+    if (last.bottom < pageBottom - 40) {
+        normalized.push({
+            top: Math.max(0, last.bottom - ROOM_OVERLAP_PX),
+            bottom: pageBottom,
+            source: 'tail',
+        });
+    }
+
+    return normalized;
+}
+
+function cachedTextSurfaceY(entries = [], runnerRect, acceptsSurface) {
+    const rects = [];
+
+    for (const entry of entries) {
+        if (!entry?.span?.isConnected || entry.span.dataset.gwBroken === '1') {
+            continue;
+        }
+
+        const rect = entry.rect;
+        if (!rect || rect.width < 1 || rect.height < 1 || !acceptsSurface(rect.top)) {
+            continue;
+        }
+
+        rects.push(rect);
+    }
+
+    let surfaceY = null;
+    for (const line of groupCachedRectsByLine(rects)) {
+        if (!cachedLineSupportsRunner(line, runnerRect)) {
+            continue;
+        }
+
+        const top = Math.min(...line.map((rect) => rect.top));
+        surfaceY = surfaceY === null ? top : Math.min(surfaceY, top);
+    }
+
+    return surfaceY;
+}
+
+function cachedRectSurfaceY(entries = [], runnerRect, acceptsSurface) {
+    let surfaceY = null;
+    const minOverlap = Math.min(22, runnerRect.width * 0.48);
+
+    for (const entry of entries) {
+        if (entry?.record && (!entry.record.element?.isConnected || (entry.record.stage >= 5 && entry.record.supportUntil <= performance.now()))) {
+            continue;
+        }
+
+        if (entry?.placed && !entry.placed.element?.isConnected) {
+            continue;
+        }
+
+        const rect = entry?.rect;
+        const y = entry?.surfaceY ?? rect?.top;
+        if (!rect || !Number.isFinite(y) || !acceptsSurface(y)) {
+            continue;
+        }
+
+        if (horizontalOverlap(runnerRect, rect) < minOverlap) {
+            continue;
+        }
+
+        surfaceY = surfaceY === null ? y : Math.min(surfaceY, y);
+    }
+
+    return surfaceY;
+}
+
+function groupCachedRectsByLine(rects = []) {
+    const sorted = [...rects].sort((a, b) => a.top - b.top || a.left - b.left);
+    const lines = [];
+
+    for (const rect of sorted) {
+        const line = lines.find((candidate) => Math.abs(candidate.top - rect.top) <= ROOM_TEXT_LINE_TOLERANCE);
+        if (line) {
+            line.rects.push(rect);
+            line.top = Math.min(line.top, rect.top);
+            continue;
+        }
+
+        lines.push({
+            top: rect.top,
+            rects: [rect],
+        });
+    }
+
+    return lines.map((line) => line.rects);
+}
+
+function cachedLineSupportsRunner(line, runnerRect) {
+    if (!line.length) {
+        return false;
+    }
+
+    const sorted = [...line].sort((a, b) => a.left - b.left);
+    const charWidth = median(sorted.map((rect) => rect.width).filter((width) => width > 1)) || 10;
+    const bridgeGap = Math.max(18, charWidth * ROOM_TEXT_BRIDGE_GAP_CHARS);
+    const merged = [];
+
+    for (const rect of sorted) {
+        const last = merged[merged.length - 1];
+        if (!last || rect.left - last.right > bridgeGap) {
+            merged.push({ ...rect });
+            continue;
+        }
+
+        last.right = Math.max(last.right, rect.right);
+        last.left = Math.min(last.left, rect.left);
+        last.width = last.right - last.left;
+        last.top = Math.min(last.top, rect.top);
+        last.bottom = Math.max(last.bottom, rect.bottom);
+        last.height = last.bottom - last.top;
+    }
+
+    const centerX = runnerRect.left + runnerRect.width / 2;
+    return merged.some((rect) => {
+        if (centerX >= rect.left - 2 && centerX <= rect.right + 2) {
+            return true;
+        }
+
+        return horizontalOverlap(runnerRect, rect) >= Math.min(22, runnerRect.width * 0.48);
+    });
+}
+
+function median(values = []) {
+    if (values.length === 0) {
+        return null;
+    }
+
+    const sorted = [...values].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 === 0
+        ? (sorted[mid - 1] + sorted[mid]) / 2
+        : sorted[mid];
+}
+
 function normalizeText(text) {
     return String(text || '').replace(/\s+/g, ' ').trim();
 }
@@ -4098,7 +5372,7 @@ function splitSummarySentences(text) {
         return [];
     }
 
-    const matches = normalized.match(/[^。！？!?]+[。！？!?]?/g) || [normalized];
+    const matches = normalized.match(/[^\u3002\uff01!?]+[\u3002\uff01!?]?/g) || [normalized];
     return matches
         .map((sentence) => normalizeText(sentence).slice(0, 120))
         .filter(Boolean);
@@ -4126,8 +5400,16 @@ function runnerGroundY() {
     return Math.max(72, window.innerHeight - 118);
 }
 
+function pageEndGroundDocY() {
+    return maxPageScrollY() + runnerGroundY();
+}
+
 function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
+}
+
+function horizontalOverlap(first, second) {
+    return Math.max(0, Math.min(first.right, second.right) - Math.max(first.left, second.left));
 }
 
 function lerp(start, end, progress) {
@@ -4292,7 +5574,7 @@ function keyToRunnerControl(key) {
         return 'right';
     }
 
-    if (normalized === 'arrowup' || normalized === 'w') {
+    if (normalized === 'arrowup' || normalized === 'w' || normalized === ' ' || normalized === 'spacebar') {
         return 'jump';
     }
 
@@ -4300,19 +5582,29 @@ function keyToRunnerControl(key) {
         return 'lock';
     }
 
-    if (normalized === 'shift' || normalized === 'e') {
+    if (normalized === 'shift' || normalized === 'e' || normalized === 'l') {
         return 'shield';
     }
 
-    if (normalized === 'x') {
+    if (normalized === 'x' || normalized === 'k') {
         return 'throw';
     }
 
-    if (normalized === ' ' || normalized === 'spacebar' || normalized === 'z' || normalized === 'enter') {
+    if (normalized === 'z' || normalized === 'j' || normalized === 'enter') {
         return 'attack';
     }
 
     return '';
+}
+
+function treasureCharsFrom(value) {
+    return Array.from(String(value || ''))
+        .map((char) => char.trim())
+        .filter(Boolean);
+}
+
+function firstTreasureChar(value) {
+    return treasureCharsFrom(value)[0] || '';
 }
 
 function isBlockedDownKey(key) {
@@ -4402,7 +5694,127 @@ function runnerTargetPriority(target) {
         return 32000;
     }
 
+    if (target.type === 'accordion') {
+        return 36000;
+    }
+
     return 0;
+}
+
+function accordionIsOpen(element) {
+    if (!(element instanceof Element)) {
+        return false;
+    }
+
+    const details = element.closest('details');
+    if (details instanceof HTMLDetailsElement) {
+        return details.open;
+    }
+
+    const ariaExpanded = element.getAttribute('aria-expanded');
+    if (ariaExpanded === 'true') {
+        return true;
+    }
+
+    if (ariaExpanded === 'false') {
+        return false;
+    }
+
+    if (element.classList.contains('elementor-active')
+        || element.classList.contains('active')
+        || element.classList.contains('show')) {
+        return true;
+    }
+
+    return accordionControlledPanels(element).some((panel) => {
+        const style = window.getComputedStyle(panel);
+        return !panel.hidden
+            && style.display !== 'none'
+            && style.visibility !== 'hidden'
+            && panel.getBoundingClientRect().height > 1;
+    });
+}
+
+function setAccordionOpen(element, open) {
+    if (!(element instanceof Element)) {
+        return;
+    }
+
+    const details = element.closest('details');
+    if (details instanceof HTMLDetailsElement) {
+        details.open = open;
+        return;
+    }
+
+    element.setAttribute('aria-expanded', open ? 'true' : 'false');
+    element.classList.toggle('elementor-active', open);
+    element.classList.toggle('active', open);
+    element.classList.toggle('collapsed', !open);
+
+    for (const panel of accordionControlledPanels(element)) {
+        panel.hidden = !open;
+        panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+        panel.classList.toggle('elementor-active', open);
+        panel.classList.toggle('active', open);
+        panel.classList.toggle('show', open);
+        panel.style.display = open ? 'block' : 'none';
+    }
+}
+
+function accordionControlledPanels(element) {
+    const panels = [];
+    const addPanel = (panel) => {
+        if (panel instanceof Element && !panels.includes(panel)) {
+            panels.push(panel);
+        }
+    };
+
+    const controls = (element.getAttribute('aria-controls') || '').split(/\s+/).filter(Boolean);
+    controls.forEach((id) => addPanel(document.getElementById(id)));
+
+    const titleId = element.id || '';
+    if (titleId.includes('elementor-tab-title')) {
+        addPanel(document.getElementById(titleId.replace('elementor-tab-title', 'elementor-tab-content')));
+    }
+
+    const dataTab = element.getAttribute('data-tab');
+    if (dataTab) {
+        const container = element.closest('.elementor-accordion,.elementor-toggle,.elementor-widget-container') || document;
+        addPanel(container.querySelector(`.elementor-tab-content[data-tab="${cssEscape(dataTab)}"]`));
+    }
+
+    addPanel(element.closest('.accordion-item,.elementor-accordion-item,.elementor-toggle-item')?.querySelector('.accordion-collapse,.elementor-tab-content'));
+    return panels;
+}
+
+function cssEscape(value) {
+    if (window.CSS && typeof window.CSS.escape === 'function') {
+        return window.CSS.escape(String(value));
+    }
+
+    return String(value).replace(/["\\]/g, '\\$&');
+}
+
+function initialRunnerTargetPriority(target) {
+    const tag = target.element?.tagName?.toLowerCase() || '';
+
+    if (tag === 'h1') {
+        return 120000;
+    }
+
+    if (/^h[2-6]$/.test(tag)) {
+        return 112000 - Number(tag.slice(1)) * 1000;
+    }
+
+    if (target.type === 'heading') {
+        return 102000;
+    }
+
+    if (target.type === 'paragraph') {
+        return 70000;
+    }
+
+    return runnerTargetPriority(target);
 }
 
 function isInternalLinkGate(element) {
@@ -4431,7 +5843,7 @@ function isPlayableContentElement(element) {
         return false;
     }
 
-    return Boolean(element.closest('.gw-demo-content,.entry-content,main,article'));
+    return Boolean(element.closest('.gw-demo-content,.entry-content,main,article,.elementor,.elementor-element,.elementor-widget-container,.e-con'));
 }
 
 

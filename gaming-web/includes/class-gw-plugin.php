@@ -9,6 +9,7 @@ class GW_Plugin
     private static ?GW_Plugin $instance = null;
     private GW_Settings $settings;
     private GW_REST $rest;
+    private array $frontend_config_for_footer = array();
 
     public static function instance(): GW_Plugin
     {
@@ -56,6 +57,8 @@ class GW_Plugin
             GAMING_WEB_VERSION
         );
 
+        wp_enqueue_script('jquery');
+
         wp_enqueue_script(
             'gaming-web-adapter',
             GAMING_WEB_URL . 'assets/js/wordpress-adapter.js',
@@ -64,7 +67,22 @@ class GW_Plugin
             true
         );
 
-        wp_localize_script('gaming-web-adapter', 'GamingWebConfig', $this->frontend_config());
+        $this->frontend_config_for_footer = $this->frontend_config();
+        add_action('wp_footer', array($this, 'print_frontend_config'), 19);
+    }
+
+    public function print_frontend_config(): void
+    {
+        if (empty($this->frontend_config_for_footer)) {
+            return;
+        }
+
+        $frontend_config = wp_json_encode(
+            $this->frontend_config_for_footer,
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+        );
+
+        echo '<script id="gaming-web-config" type="application/json">' . ($frontend_config ?: '{}') . '</script>' . "\n";
     }
 
     public function mark_adapter_as_module(string $tag, string $handle, string $src): string

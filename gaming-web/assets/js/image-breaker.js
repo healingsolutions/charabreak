@@ -1,4 +1,4 @@
-const IMAGE_TYPES = new Set(['image']);
+const IMAGE_TYPES = new Set(['image', 'icon', 'platform', 'action']);
 const IMAGE_BREAK_STAGE = 5;
 const IMAGE_MAX_VISUAL_STAGE = 4;
 const IMAGE_DESTROY_SUPPORT_MS = 12000;
@@ -18,11 +18,27 @@ export class ImageBreaker {
         }
 
         for (const target of targets) {
-            if (!IMAGE_TYPES.has(target.type) || !(target.element instanceof HTMLImageElement)) {
+            if (!IMAGE_TYPES.has(target.type) || !(target.element instanceof Element)) {
                 continue;
             }
 
-            if (!isPlayableImage(target.element)) {
+            if (target.type === 'image' && !isPlayableImage(target.element)) {
+                continue;
+            }
+
+            if (target.type === 'icon' && !isPlayableIcon(target.element)) {
+                continue;
+            }
+
+            if (target.type === 'platform' && !isPlayablePlatform(target.element)) {
+                continue;
+            }
+
+            if (target.type === 'action' && !isPlayableActionSupport(target.element)) {
+                continue;
+            }
+
+            if (target.type === 'icon' && target.element.parentElement?.closest('.gw-icon-breakable')) {
                 continue;
             }
 
@@ -40,7 +56,7 @@ export class ImageBreaker {
         this.timers.clear();
 
         for (const record of this.records.values()) {
-            record.element.className = record.className;
+            restoreAttribute(record.element, 'class', record.classAttribute);
 
             if (record.styleAttribute === null) {
                 record.element.removeAttribute('style');
@@ -54,7 +70,7 @@ export class ImageBreaker {
     }
 
     hitTarget(target, options = {}) {
-        if (!target || !(target.element instanceof HTMLImageElement)) {
+        if (!target || !IMAGE_TYPES.has(target.type) || !(target.element instanceof Element)) {
             return emptyHit();
         }
 
@@ -68,7 +84,7 @@ export class ImageBreaker {
         let best = null;
 
         for (const record of this.records.values()) {
-            if ((!canSupport(record)) || !record.element.isConnected) {
+            if (!canHit(record) || !record.element.isConnected) {
                 continue;
             }
 
@@ -120,6 +136,27 @@ export class ImageBreaker {
         return landingY;
     }
 
+    findLandingDocY(runnerRect, previousBottom, nextBottom) {
+        let landingY = null;
+
+        for (const record of this.records.values()) {
+            if ((!canSupport(record)) || !record.element.isConnected) {
+                continue;
+            }
+
+            const surface = supportSurfaceDocForRunner(record, runnerRect);
+            if (!surface) {
+                continue;
+            }
+
+            if (surface.y >= previousBottom - 5 && surface.y <= nextBottom + 12) {
+                landingY = landingY === null ? surface.y : Math.min(landingY, surface.y);
+            }
+        }
+
+        return landingY;
+    }
+
     findSupportY(runnerRect) {
         const feet = runnerRect.bottom;
         let supportY = null;
@@ -142,6 +179,66 @@ export class ImageBreaker {
         return supportY;
     }
 
+    findSupportDocY(runnerRect) {
+        const feet = runnerRect.bottom;
+        let supportY = null;
+
+        for (const record of this.records.values()) {
+            if ((!canSupport(record)) || !record.element.isConnected) {
+                continue;
+            }
+
+            const surface = supportSurfaceDocForRunner(record, runnerRect);
+            if (!surface) {
+                continue;
+            }
+
+            if (Math.abs(surface.y - feet) <= IMAGE_SUPPORT_TOLERANCE) {
+                supportY = supportY === null ? surface.y : Math.min(supportY, surface.y);
+            }
+        }
+
+        return supportY;
+    }
+
+    platformRectsForRoom(room) {
+        if (!room) {
+            return [];
+        }
+
+        const top = Number.isFinite(room.top) ? room.top : 0;
+        const bottom = Number.isFinite(room.bottom) ? room.bottom : Number.MAX_SAFE_INTEGER;
+        const platforms = [];
+
+        for (const record of this.records.values()) {
+            if ((!canSupport(record)) || !record.element.isConnected) {
+                continue;
+            }
+
+            const surface = supportSurfaceDocForRunner(record, {
+                left: record.baseDocRect.left,
+                right: record.baseDocRect.right,
+                top: record.baseDocRect.top - 4,
+                bottom: record.baseDocRect.bottom + 4,
+                width: record.baseDocRect.width,
+                height: record.baseDocRect.height + 8,
+            });
+            const rect = surface?.rect || supportDocRectForRecord(record);
+            if (!rect || rect.width < 8 || rect.height < 2 || rect.bottom < top - 64 || rect.top > bottom + 64) {
+                continue;
+            }
+
+            platforms.push({
+                rect,
+                surfaceY: surface?.y ?? rect.top,
+                record,
+                type: record.type,
+            });
+        }
+
+        return platforms;
+    }
+
     ensureRecord(target) {
         const existing = this.records.get(target.element);
         if (existing) {
@@ -150,8 +247,9 @@ export class ImageBreaker {
 
         const record = {
             element: target.element,
-            selector: target.selector || 'img',
-            className: target.element.className,
+            selector: target.selector || defaultSelectorForType(target.type),
+            type: target.type,
+            classAttribute: target.element.getAttribute('class'),
             styleAttribute: target.element.getAttribute('style'),
             baseDocRect: rectToDocumentObject(target.element.getBoundingClientRect()),
             stage: 0,
@@ -159,9 +257,20 @@ export class ImageBreaker {
             offsetX: 0,
             offsetY: 0,
             supportUntil: 0,
+            backdrop: target.type === 'image' ? isBackdropImage(target.element) : false,
         };
 
-        target.element.classList.add('gw-image-breakable');
+        if (target.type === 'platform' || target.type === 'action') {
+            target.element.classList.add('gw-platform-support');
+        } else {
+            target.element.classList.add('gw-image-breakable');
+        }
+        if (target.type === 'icon') {
+            target.element.classList.add('gw-icon-breakable');
+        }
+        if (target.type === 'platform') {
+            target.element.classList.add('gw-platform-support');
+        }
         this.records.set(target.element, record);
         return record;
     }
@@ -228,6 +337,7 @@ export class ImageBreaker {
             count: 1,
             rect,
             selector: record.selector,
+            type: record.type,
             stage: record.stage,
             target: element,
             destroyed: record.stage >= IMAGE_BREAK_STAGE,
@@ -255,7 +365,85 @@ function isPlayableImage(element) {
         return false;
     }
 
-    return Boolean(element.closest('.gw-demo-content,.entry-content,main,article'));
+    return Boolean(element.closest('.gw-demo-content,.entry-content,main,article,.elementor,.elementor-element,.elementor-widget-container,.e-con'));
+}
+
+function isPlayableIcon(element) {
+    if (!(element instanceof Element)) {
+        return false;
+    }
+
+    if (element.closest('header,footer,nav,.gw-stage')) {
+        return false;
+    }
+
+    const rect = element.getBoundingClientRect();
+    if (rect.width < 12 || rect.height < 12 || rect.width > 240 || rect.height > 240) {
+        return false;
+    }
+
+    if (!element.closest('.gw-demo-content,.entry-content,main,article,.elementor,.elementor-element,.elementor-widget-container,.e-con')) {
+        return false;
+    }
+
+    const tag = element.tagName.toLowerCase();
+    return tag === 'svg'
+        || tag === 'i'
+        || element.classList.contains('elementor-icon')
+        || element.classList.contains('elementor-icon-box-icon')
+        || element.classList.contains('elementskit-info-box-icon')
+        || element.classList.contains('ekit_icon_button')
+        || element.classList.contains('icon');
+}
+
+function isPlayablePlatform(element) {
+    if (!(element instanceof Element)) {
+        return false;
+    }
+
+    if (element.closest('header,footer,nav,.gw-stage')) {
+        return false;
+    }
+
+    if (!element.closest('.gw-demo-content,.entry-content,main,article,.elementor,.elementor-element,.elementor-widget-container,.e-con')) {
+        return false;
+    }
+
+    const rect = element.getBoundingClientRect();
+    return rect.width >= 24 && rect.height >= 2;
+}
+
+function isPlayableActionSupport(element) {
+    if (!(element instanceof Element)) {
+        return false;
+    }
+
+    if (element.closest('header,footer,nav,.gw-stage')) {
+        return false;
+    }
+
+    if (!element.closest('.gw-demo-content,.entry-content,main,article,.elementor,.elementor-element,.elementor-widget-container,.e-con')) {
+        return false;
+    }
+
+    const rect = element.getBoundingClientRect();
+    return rect.width >= 36 && rect.height >= 18;
+}
+
+function defaultSelectorForType(type) {
+    if (type === 'icon') {
+        return '.elementor-icon';
+    }
+
+    if (type === 'platform') {
+        return '.gw-platform-support';
+    }
+
+    if (type === 'action') {
+        return 'a,button';
+    }
+
+    return 'img';
 }
 
 function rectOverlapArea(first, second) {
@@ -306,11 +494,63 @@ function supportRectForRecord(record) {
     };
 }
 
+function supportDocRectForRecord(record) {
+    return {
+        left: record.baseDocRect.left + record.offsetX,
+        top: record.baseDocRect.top + record.offsetY,
+        width: record.baseDocRect.width,
+        height: record.baseDocRect.height,
+        right: record.baseDocRect.left + record.offsetX + record.baseDocRect.width,
+        bottom: record.baseDocRect.top + record.offsetY + record.baseDocRect.height,
+    };
+}
+
 function supportSurfaceForRunner(record, runnerRect) {
     const rect = supportRectForRecord(record);
 
     if (rect.width < 12 || rect.height < 12 || horizontalOverlap(runnerRect, rect) < IMAGE_SUPPORT_MIN_OVERLAP) {
         return null;
+    }
+
+    if (record.backdrop) {
+        return {
+            y: clamp(rect.bottom, rect.top + 18, rect.bottom),
+            rect,
+        };
+    }
+
+    if (record.type === 'platform') {
+        return {
+            y: rect.top,
+            rect,
+        };
+    }
+
+    const centerX = runnerRect.left + runnerRect.width / 2;
+    const clampedX = clamp(centerX, rect.left, rect.right);
+    const rotation = clamp(record.rotation, -24, 24);
+    const slope = Math.tan(rotation * Math.PI / 180) * (clampedX - (rect.left + rect.width / 2)) * 0.42;
+    const y = clamp(rect.top + slope, rect.top - 18, rect.top + 42);
+
+    return { y, rect };
+}
+
+function supportSurfaceDocForRunner(record, runnerRect) {
+    const rect = supportDocRectForRecord(record);
+
+    if (rect.width < 12 || rect.height < 12 || horizontalOverlap(runnerRect, rect) < IMAGE_SUPPORT_MIN_OVERLAP) {
+        return null;
+    }
+
+    if (record.backdrop) {
+        return null;
+    }
+
+    if (record.type === 'platform') {
+        return {
+            y: rect.top,
+            rect,
+        };
     }
 
     const centerX = runnerRect.left + runnerRect.width / 2;
@@ -335,7 +575,19 @@ function imageRotationStep(stage) {
 }
 
 function canSupport(record) {
+    if (record.backdrop) {
+        return false;
+    }
+
+    if (record.type === 'platform') {
+        return true;
+    }
+
     return record.stage < IMAGE_BREAK_STAGE || hasTemporarySupport(record);
+}
+
+function canHit(record) {
+    return record.type !== 'platform' && record.type !== 'action' && !record.backdrop && record.stage < IMAGE_BREAK_STAGE;
 }
 
 function clamp(value, min, max) {
@@ -348,4 +600,28 @@ function randomBetween(min, max) {
 
 function hasTemporarySupport(record) {
     return record.supportUntil > performance.now();
+}
+
+function restoreAttribute(element, name, value) {
+    if (value === null) {
+        element.removeAttribute(name);
+        return;
+    }
+
+    element.setAttribute(name, value);
+}
+
+function isBackdropImage(element) {
+    const rect = element.getBoundingClientRect();
+    const viewportArea = Math.max(1, window.innerWidth * window.innerHeight);
+    const imageArea = Math.max(0, rect.width * rect.height);
+    const classText = `${element.className || ''} ${element.parentElement?.className || ''}`.toLowerCase();
+
+    if (classText.includes('background') || classText.includes('hero')) {
+        return imageArea > viewportArea * 0.22;
+    }
+
+    return rect.width > window.innerWidth * 0.52
+        && rect.height > window.innerHeight * 0.42
+        && imageArea > viewportArea * 0.24;
 }

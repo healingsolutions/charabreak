@@ -3,6 +3,7 @@ const SKIP_SELECTOR = 'script,style,noscript,svg,canvas,input,textarea,select,.g
 const TEXT_DIRECT_SUPPORT_OVERLAP = 5;
 const TEXT_BRIDGE_GAP_CHARS = 2.8;
 const TEXT_LINE_TOLERANCE = 6;
+const TEXT_LANDING_OVERSHOOT = 64;
 
 export class TextBreaker {
     constructor() {
@@ -130,12 +131,41 @@ export class TextBreaker {
     }
 
     findLandingY(runnerRect, previousBottom, nextBottom) {
-        return this.findTextSurfaceY(runnerRect, (rect) => rect.top >= previousBottom - 3 && rect.top <= nextBottom + 9);
+        const overshoot = Math.min(TEXT_LANDING_OVERSHOOT, Math.max(24, runnerRect.height * 0.86));
+        return this.findTextSurfaceY(runnerRect, (rect) => rect.top >= previousBottom - overshoot && rect.top <= nextBottom + 12);
+    }
+
+    findLandingDocY(runnerRect, previousBottom, nextBottom) {
+        const overshoot = Math.min(TEXT_LANDING_OVERSHOOT, Math.max(24, runnerRect.height * 0.86));
+        return this.findTextSurfaceDocY(runnerRect, (rect) => rect.top >= previousBottom - overshoot && rect.top <= nextBottom + 12);
     }
 
     findSupportY(runnerRect) {
         const feet = runnerRect.bottom;
         return this.findTextSurfaceY(runnerRect, (rect) => rect.top >= feet - 6 && rect.top <= feet + 8);
+    }
+
+    findSupportDocY(runnerRect) {
+        const feet = runnerRect.bottom;
+        return this.findTextSurfaceDocY(runnerRect, (rect) => rect.top >= feet - 7 && rect.top <= feet + 9);
+    }
+
+    findSupportBelowY(runnerRect, maxTop = window.innerHeight + 460) {
+        return this.findTextSurfaceY(
+            runnerRect,
+            (rect) => rect.top > runnerRect.bottom + 10 && rect.top <= maxTop
+        );
+    }
+
+    findSupportBelowDocY(runnerRect, maxTop = runnerRect.bottom + 900) {
+        return this.findTextSurfaceDocY(
+            runnerRect,
+            (rect) => rect.top > runnerRect.bottom + 10 && rect.top <= maxTop
+        );
+    }
+
+    hasSupportBelow(runnerRect, maxTop = window.innerHeight + 460) {
+        return this.findSupportBelowY(runnerRect, maxTop) !== null;
     }
 
     findTextSurfaceY(runnerRect, acceptsRect) {
@@ -167,6 +197,66 @@ export class TextBreaker {
         }
 
         return surfaceY;
+    }
+
+    findTextSurfaceDocY(runnerRect, acceptsRect) {
+        const rects = [];
+
+        for (const span of this.charSpans) {
+            if (span.dataset.gwBroken === '1' || !span.isConnected) {
+                continue;
+            }
+
+            const rect = rectToDocumentObject(span.getBoundingClientRect());
+            if (rect.width < 1 || rect.height < 1 || !acceptsRect(rect)) {
+                continue;
+            }
+
+            rects.push(rect);
+        }
+
+        const lines = groupRectsByLine(rects);
+        let surfaceY = null;
+
+        for (const line of lines) {
+            if (!lineSupportsRunner(line, runnerRect)) {
+                continue;
+            }
+
+            const top = Math.min(...line.map((rect) => rect.top));
+            surfaceY = surfaceY === null ? top : Math.min(surfaceY, top);
+        }
+
+        return surfaceY;
+    }
+
+    charPlatformRectsForRoom(room) {
+        if (!room) {
+            return [];
+        }
+
+        const top = Number.isFinite(room.top) ? room.top : 0;
+        const bottom = Number.isFinite(room.bottom) ? room.bottom : Number.MAX_SAFE_INTEGER;
+        const rects = [];
+
+        for (const span of this.charSpans) {
+            if (span.dataset.gwBroken === '1' || !span.isConnected) {
+                continue;
+            }
+
+            const rect = rectToDocumentObject(span.getBoundingClientRect());
+            if (rect.width < 1 || rect.height < 1 || rect.bottom < top - 36 || rect.top > bottom + 36) {
+                continue;
+            }
+
+            rects.push({
+                rect,
+                span,
+                type: 'text',
+            });
+        }
+
+        return rects;
     }
 
     hasUnbrokenText(element) {
@@ -390,7 +480,7 @@ function isContentElement(element) {
         return false;
     }
 
-    return Boolean(element.closest('.gw-demo-content,.entry-content,main,article'));
+    return Boolean(element.closest('.gw-demo-content,.entry-content,main,article,.elementor,.elementor-element,.elementor-widget-container,.e-con'));
 }
 
 function rectOverlapArea(first, second) {
@@ -541,6 +631,17 @@ function plainRect(rect) {
         top: rect.top,
         right: rect.right,
         bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+    };
+}
+
+function rectToDocumentObject(rect) {
+    return {
+        left: rect.left + window.scrollX,
+        top: rect.top + window.scrollY,
+        right: rect.right + window.scrollX,
+        bottom: rect.bottom + window.scrollY,
         width: rect.width,
         height: rect.height,
     };

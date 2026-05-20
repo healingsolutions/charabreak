@@ -1,12 +1,13 @@
-import { GamingWebCore } from './gaming-web-core.js?v=0.1.46';
-import { GamingWebLogger } from './logger.js?v=0.1.46';
-import { AudioManager } from './audio-manager.js?v=0.1.46';
+import { GamingWebCore } from './gaming-web-core.js?v=0.2.2';
+import { GamingWebLogger } from './logger.js?v=0.2.2';
+import { AudioManager } from './audio-manager.js?v=0.2.2';
 
-const config = window.GamingWebConfig || {};
 const RESUME_KEY = 'gaming_web_resume_mode';
 
 ready(() => {
-    if (!config.enabled) {
+    const config = resolveConfig();
+
+    if (!isEnabled(config.enabled)) {
         return;
     }
 
@@ -115,6 +116,39 @@ function shouldShowFloatingButton(config) {
     return config.showFloatingButton !== false
         && config.showFloatingButton !== '0'
         && config.showFloatingButton !== 0;
+}
+
+function resolveConfig() {
+    const globalConfig = globalThis.GamingWebConfig || window.GamingWebConfig;
+    if (globalConfig && typeof globalConfig === 'object') {
+        return globalConfig;
+    }
+
+    const configScript = document.getElementById('gaming-web-config');
+    if (!configScript) {
+        return {};
+    }
+
+    try {
+        const parsed = JSON.parse(configScript.textContent || '{}');
+        if (parsed && typeof parsed === 'object') {
+            globalThis.GamingWebConfig = parsed;
+            return parsed;
+        }
+    } catch (error) {
+        if (window.console && typeof window.console.warn === 'function') {
+            window.console.warn('[Gaming Web] Invalid frontend config.', error);
+        }
+    }
+
+    return {};
+}
+
+function isEnabled(value) {
+    return value === true
+        || value === 1
+        || value === '1'
+        || value === 'true';
 }
 
 function ready(callback) {

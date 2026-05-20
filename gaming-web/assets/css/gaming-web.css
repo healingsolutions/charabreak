@@ -342,62 +342,17 @@
 .gw-brick-wall {
     position: fixed;
     display: block;
-    opacity: 0.74;
+    opacity: 0.58;
     background:
-        linear-gradient(90deg, rgba(31, 41, 55, 0.16) 1px, transparent 1px) 0 0 / 34px 20px,
-        linear-gradient(90deg, rgba(31, 41, 55, 0.16) 1px, transparent 1px) 17px 10px / 34px 20px,
-        linear-gradient(rgba(31, 41, 55, 0.18) 1px, transparent 1px) 0 0 / 34px 20px,
-        linear-gradient(135deg, rgba(181, 98, 75, 0.72), rgba(110, 124, 132, 0.72));
-    box-shadow: inset 0 0 18px rgba(31, 41, 55, 0.18);
-}
-
-.gw-snow-climb-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.gw-ice-ledges {
-    position: fixed;
-    inset: 0;
-    opacity: 0.28;
-    background:
-        repeating-linear-gradient(
-            180deg,
-            transparent 0 126px,
-            rgba(190, 231, 242, 0.7) 126px 132px,
-            rgba(255, 255, 255, 0.9) 132px 136px,
-            transparent 136px 242px
-        );
-}
-
-.gw-snow-flake {
-    position: fixed;
-    left: var(--gw-x);
-    top: -12px;
-    width: 6px;
-    height: 6px;
-    border-radius: 2px;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 0 10px rgba(190, 231, 242, 0.86);
-    opacity: 0.78;
-    transform: scale(var(--gw-s));
-    animation: gw-snow-fall 5.8s linear infinite;
-    animation-delay: var(--gw-d);
-}
-
-.gw-stage--reduced .gw-snow-flake {
-    animation: none;
-    opacity: 0.34;
+        linear-gradient(90deg, rgba(22, 33, 43, 0.16), rgba(22, 33, 43, 0.04)),
+        linear-gradient(180deg, rgba(154, 188, 197, 0.55), rgba(211, 231, 235, 0.38));
+    box-shadow: inset 0 0 16px rgba(31, 41, 55, 0.12);
 }
 
 .gw-stage .gw-brick-wall {
     background:
-        linear-gradient(90deg, rgba(31, 41, 55, 0.13) 1px, transparent 1px) 0 0 / 34px 20px,
-        linear-gradient(90deg, rgba(31, 41, 55, 0.12) 1px, transparent 1px) 17px 10px / 34px 20px,
-        linear-gradient(rgba(31, 41, 55, 0.14) 1px, transparent 1px) 0 0 / 34px 20px,
-        linear-gradient(135deg, rgba(154, 188, 197, 0.68), rgba(211, 231, 235, 0.7));
+        linear-gradient(90deg, rgba(22, 33, 43, 0.15), rgba(22, 33, 43, 0.03)),
+        linear-gradient(180deg, rgba(154, 188, 197, 0.5), rgba(211, 231, 235, 0.34));
 }
 
 .gw-brick-wall--left {
@@ -410,65 +365,63 @@
 
 .gw-mission-hud {
     position: fixed;
-    top: 16px;
-    left: 16px;
+    top: 8px;
+    left: 50%;
     z-index: 5;
-    width: min(306px, calc(100vw - 32px));
-    padding: 9px 10px 10px;
-    border: 3px solid #16212b;
-    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 72px minmax(130px, 1.2fr) minmax(92px, 0.7fr) auto;
+    align-items: center;
+    gap: 9px;
+    width: min(760px, calc(100vw - 188px));
+    min-height: 34px;
+    padding: 5px 8px;
+    border: 1px solid rgba(78, 220, 207, 0.46);
+    border-radius: 0;
     background:
-        linear-gradient(180deg, rgba(255, 253, 247, 0.98), rgba(239, 247, 244, 0.96));
-    color: #16212b;
-    font-size: 12px;
+        linear-gradient(90deg, rgba(78, 220, 207, 0.16), transparent 38%, rgba(245, 213, 101, 0.1)),
+        rgba(7, 18, 27, 0.56);
+    color: rgba(237, 252, 250, 0.94);
+    font-size: 10px;
     font-weight: 800;
-    line-height: 1.25;
+    line-height: 1;
     box-shadow:
-        0 0 0 3px rgba(240, 207, 93, 0.64),
-        7px 7px 0 rgba(22, 33, 43, 0.14),
-        0 16px 28px rgba(31, 41, 55, 0.16);
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+        0 0 18px rgba(78, 220, 207, 0.18);
     pointer-events: none;
+    transform: translateX(-50%);
+    backdrop-filter: blur(9px);
 }
 
 .gw-mission-hud--danger {
-    border-color: rgba(191, 107, 87, 0.58);
-    background: rgba(255, 246, 242, 0.96);
+    border-color: rgba(245, 92, 112, 0.68);
+    background:
+        linear-gradient(90deg, rgba(245, 92, 112, 0.2), transparent 44%, rgba(245, 213, 101, 0.1)),
+        rgba(24, 8, 14, 0.62);
 }
 
 .gw-mission-hud__title {
-    margin: -2px -2px 7px;
-    padding: 5px 8px 4px;
-    border-radius: 5px;
-    background: #16212b;
-    color: #f0cf5d;
-    font-size: 10px;
-    font-weight: 900;
-    line-height: 1;
-    text-align: center;
-    text-transform: uppercase;
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
+    display: none;
 }
 
 .gw-mission-hud__goal {
-    padding: 0 2px;
-    margin-bottom: 7px;
-    color: #25312f;
-    font-size: 12px;
+    min-width: 0;
+    color: rgba(237, 252, 250, 0.76);
+    font-size: 10px;
     font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .gw-mission-hud__treasure {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 7px;
-    padding: 7px 8px;
-    border: 2px solid rgba(22, 33, 43, 0.72);
-    border-radius: 6px;
-    background:
-        linear-gradient(90deg, rgba(240, 207, 93, 0.22), rgba(47, 154, 138, 0.14));
-    box-shadow: inset 0 -3px 0 rgba(22, 33, 43, 0.08);
+    justify-content: flex-start;
+    gap: 5px;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .gw-mission-hud__treasure strong,
@@ -477,51 +430,53 @@
 }
 
 .gw-mission-hud__treasure strong {
-    color: #5d2f37;
-    font-size: 10px;
+    color: rgba(78, 220, 207, 0.72);
+    font-size: 9px;
     white-space: nowrap;
 }
 
 .gw-mission-hud__treasure span {
-    color: #16212b;
-    font-size: 14px;
+    color: #f5d565;
+    font-size: 13px;
     font-weight: 900;
     overflow: hidden;
-    text-align: right;
+    text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-shadow: 0 0 10px rgba(245, 213, 101, 0.28);
 }
 
 .gw-mission-hud__bar {
-    height: 7px;
-    margin-bottom: 8px;
+    width: 72px;
+    height: 4px;
     overflow: hidden;
-    border-radius: 8px;
-    border: 1px solid rgba(22, 33, 43, 0.48);
-    background: rgba(31, 41, 55, 0.16);
+    border-radius: 0;
+    border: 1px solid rgba(78, 220, 207, 0.36);
+    background: rgba(237, 252, 250, 0.08);
 }
 
 .gw-mission-hud__bar span {
     display: block;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, #2f9a8a, #f0cf5d);
+    background: linear-gradient(90deg, #4edccf, #f0cf5d);
     transition: width 180ms steps(3, end);
+    box-shadow: 0 0 10px rgba(78, 220, 207, 0.34);
 }
 
 .gw-mission-hud__stats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 5px;
+    grid-template-columns: repeat(5, minmax(36px, auto));
+    gap: 7px;
     margin: 0;
 }
 
 .gw-mission-hud__stats div {
     min-width: 0;
-    padding: 4px 3px;
-    border-radius: 6px;
-    border: 1px solid rgba(22, 33, 43, 0.12);
-    background: rgba(255, 255, 255, 0.62);
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
     text-align: center;
 }
 
@@ -531,21 +486,33 @@
 }
 
 .gw-mission-hud__stats dt {
-    color: #5c6874;
-    font-size: 10px;
+    color: rgba(237, 252, 250, 0.5);
+    font-size: 8px;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
 .gw-mission-hud__stats dd {
-    color: #16212b;
-    font-size: 13px;
+    color: #edfdfa;
+    font-family: "Consolas", "SFMono-Regular", monospace;
+    font-size: 15px;
     font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(78, 220, 207, 0.24);
+}
+
+.gw-mission-hud__stats div:nth-child(2) dd::after {
+    color: rgba(237, 252, 250, 0.46);
+    font-size: 9px;
+    content: "%";
 }
 
 .gw-mission-hud__stats .gw-life-hearts {
-    color: #bf4f57;
-    font-size: 15px;
+    color: #ff6f8a;
+    font-size: 13px;
     letter-spacing: 0;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+    text-shadow: 0 0 10px rgba(255, 111, 138, 0.32);
 }
 
 .gw-link-gates {
@@ -578,6 +545,30 @@
     overflow: hidden;
 }
 
+.gw-link-gate__label {
+    position: relative;
+    z-index: 1;
+    display: block;
+    max-width: 100%;
+    padding: 0 8px;
+}
+
+.gw-link-gate__meter {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    z-index: 1;
+    height: 4px;
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, rgba(245, 213, 101, 0.96), rgba(47, 154, 138, 0.96))
+        0 0 / var(--gw-gate-charge, 0%) 100% no-repeat,
+        rgba(255, 255, 255, 0.42);
+    opacity: 0;
+    transition: opacity 120ms steps(2, end);
+}
+
 .gw-link-gate::before,
 .gw-link-gate::after {
     position: absolute;
@@ -604,8 +595,48 @@
     animation: gw-link-gate-break 560ms steps(5, end) forwards;
 }
 
+.gw-link-gate--charging {
+    border-color: rgba(245, 213, 101, 0.95);
+    background:
+        linear-gradient(0deg, rgba(245, 213, 101, 0.18), rgba(245, 213, 101, 0.18)),
+        rgba(47, 154, 138, 0.14);
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.48),
+        0 0 22px rgba(245, 213, 101, 0.48);
+}
+
+.gw-link-gate--charging .gw-link-gate__meter {
+    opacity: 1;
+}
+
 .gw-link-gate--enter {
     animation: gw-link-gate-enter 240ms steps(3, end) forwards;
+}
+
+.gw-link-gate-charge {
+    position: fixed;
+    z-index: 4;
+    width: var(--gw-gate-width, 70px);
+    height: var(--gw-gate-width, 70px);
+    border-radius: 999px;
+    background: conic-gradient(
+        rgba(245, 213, 101, 0.98) var(--gw-gate-charge, 0%),
+        rgba(255, 255, 255, 0.22) 0
+    );
+    box-shadow:
+        0 0 0 2px rgba(22, 33, 43, 0.34),
+        0 0 18px rgba(245, 213, 101, 0.36);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+.gw-link-gate-charge::after {
+    position: absolute;
+    inset: 7px;
+    border-radius: inherit;
+    border: 2px solid rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.08);
+    content: "";
 }
 
 .gw-goal-gate {
@@ -918,18 +949,40 @@
 .gw-game-over__actions button {
     min-height: 40px;
     padding: 8px 14px;
-    border: 0;
+    border: 2px solid transparent;
     border-radius: 8px;
     background: #2f9a8a;
     color: #ffffff;
     font-size: 14px;
     font-weight: 900;
+    line-height: 1.1;
+    text-shadow: none;
+    box-sizing: border-box;
     cursor: pointer;
 }
 
+.gw-game-over__actions .gw-game-over__retry {
+    border-color: #8a4f44;
+    background: #f5d565;
+    color: #16212b;
+    -webkit-text-fill-color: #16212b;
+    box-shadow:
+        inset 0 -4px 0 rgba(138, 79, 68, 0.28),
+        0 4px 0 rgba(22, 33, 43, 0.14);
+}
+
+.gw-game-over__actions .gw-game-over__retry:hover,
+.gw-game-over__actions .gw-game-over__retry:focus-visible {
+    background: #ffe58a;
+    outline: 3px solid rgba(245, 213, 101, 0.38);
+    outline-offset: 2px;
+}
+
 .gw-game-over__actions .gw-game-over__exit {
+    border-color: rgba(22, 33, 43, 0.12);
     background: #e8ede9;
     color: #16212b;
+    -webkit-text-fill-color: #16212b;
 }
 
 .gw-enemy-layer {
@@ -1338,6 +1391,17 @@
     will-change: transform, clip-path, opacity, filter;
 }
 
+.gw-icon-breakable {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+}
+
+.gw-platform-support {
+    transform-origin: center center;
+}
+
 .gw-image-breakable--hit {
     outline: 2px solid rgba(245, 213, 101, 0.84);
     outline-offset: 2px;
@@ -1345,24 +1409,91 @@
 
 .gw-controls {
     position: fixed;
-    top: 18px;
-    right: 18px;
+    top: 8px;
+    right: 10px;
+    z-index: 7;
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: center;
+    gap: 4px;
+    padding: 3px;
+    border: 1px solid rgba(78, 220, 207, 0.34);
+    background: rgba(7, 18, 27, 0.58);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 0 18px rgba(78, 220, 207, 0.12);
     pointer-events: auto;
+    backdrop-filter: blur(9px);
 }
 
 .gw-player-controls {
     position: fixed;
     left: 18px;
-    bottom: 18px;
-    z-index: 4;
+    bottom: 20px;
+    z-index: 6;
     display: grid;
-    grid-template-columns: 48px 48px 48px 54px 64px 74px 74px;
-    gap: 8px;
+    grid-template-columns: 52px 92px 52px 68px 78px 104px 70px;
+    grid-template-areas: "left jump right shield lock throw attack";
+    gap: 7px;
+    max-width: calc(100vw - 36px);
+    padding: 24px 10px 10px;
+    border: 2px solid rgba(245, 213, 101, 0.92);
+    border-radius: 8px;
+    background:
+        linear-gradient(90deg, rgba(245, 213, 101, 0.12), transparent 18%, rgba(47, 154, 138, 0.14)),
+        rgba(10, 24, 34, 0.92);
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.08),
+        0 10px 0 rgba(22, 33, 43, 0.18),
+        0 18px 38px rgba(0, 0, 0, 0.32);
     pointer-events: auto;
     touch-action: none;
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+}
+
+.gw-player-controls--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(14px) scale(0.98);
+    visibility: hidden;
+}
+
+.gw-player-controls__close {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    min-height: 18px;
+    padding: 1px 6px;
+    border: 1px solid rgba(245, 213, 101, 0.32);
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(245, 213, 101, 0.92);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.gw-player-controls::before {
+    position: absolute;
+    left: 10px;
+    top: 6px;
+    color: #f5d565;
+    font-size: 9px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.28);
+    content: "CONTROL DECK";
+}
+
+.gw-player-controls::after {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    width: 42px;
+    height: 7px;
+    background:
+        linear-gradient(90deg, #2f9a8a 0 8px, transparent 8px 12px, #f5d565 12px 24px, transparent 24px 28px, #bf4f57 28px 42px);
+    opacity: 0.9;
+    content: "";
 }
 
 .gw-player-control {
@@ -1370,65 +1501,109 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    height: 48px;
-    padding: 5px 8px;
-    border: 2px solid rgba(21, 94, 83, 0.42);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.94);
-    color: #155e53;
+    min-width: 0;
+    height: 56px;
+    padding: 5px 6px;
+    border: 2px solid rgba(245, 213, 101, 0.34);
+    border-radius: 6px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02)),
+        #12323f;
+    color: #f5f8ef;
     font-size: 16px;
     font-weight: 900;
     line-height: 1;
-    box-shadow: 0 10px 20px rgba(31, 41, 55, 0.18);
+    box-shadow:
+        inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.16);
     cursor: pointer;
     user-select: none;
+}
+
+.gw-player-control--left {
+    grid-area: left;
+}
+
+.gw-player-control--jump {
+    grid-area: jump;
+}
+
+.gw-player-control--right {
+    grid-area: right;
+}
+
+.gw-player-control--shield {
+    grid-area: shield;
+}
+
+.gw-player-control--lock {
+    grid-area: lock;
+}
+
+.gw-player-control--throw {
+    grid-area: throw;
+}
+
+.gw-player-control--attack {
+    grid-area: attack;
 }
 
 .gw-player-control__label {
     display: block;
     white-space: nowrap;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.28);
 }
 
 .gw-player-control__keys {
     display: block;
-    max-width: 100%;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
     margin-top: 3px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: #5c6874;
+    padding: 2px 4px;
+    border: 1px solid rgba(245, 213, 101, 0.28);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.32);
+    color: #f5d565;
     font-family: inherit;
     font-size: 9px;
     font-weight: 900;
-    line-height: 1;
+    line-height: 1.1;
     letter-spacing: 0;
+    text-align: center;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    text-shadow: none;
 }
 
 .gw-player-control--attack {
-    min-width: 74px;
-    background: #f5d565;
-    color: #25312f;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(0, 0, 0, 0.04)),
+        #f5d565;
+    color: #16212b;
 }
 
 .gw-player-control--lock {
-    min-width: 64px;
-    background: #16212b;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.08)),
+        #16212b;
     color: #f0cf5d;
     font-size: 13px;
 }
 
 .gw-player-control--throw {
-    min-width: 74px;
-    background: #2f9a8a;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.06)),
+        #2f9a8a;
     color: #ffffff;
     font-size: 13px;
 }
 
 .gw-player-control--shield {
-    min-width: 54px;
-    background: #16212b;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.08)),
+        #16212b;
     color: #ffffff;
     font-size: 14px;
 }
@@ -1436,7 +1611,9 @@
 .gw-player-control--lock .gw-player-control__keys,
 .gw-player-control--throw .gw-player-control__keys,
 .gw-player-control--shield .gw-player-control__keys {
-    color: rgba(255, 255, 255, 0.78);
+    border-color: rgba(245, 213, 101, 0.34);
+    background: rgba(0, 0, 0, 0.34);
+    color: #f5d565;
 }
 
 .gw-player-control--active,
@@ -1457,42 +1634,122 @@
     color: #f5d565;
 }
 
-.gw-exit-button,
-.gw-bgm-toggle,
-.gw-inventory-toggle {
-    min-height: 38px;
-    padding: 8px 12px;
-    border: 1px solid rgba(31, 41, 55, 0.18);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.94);
-    color: #1f2937;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.2;
-    box-shadow: 0 8px 20px rgba(31, 41, 55, 0.14);
-    cursor: pointer;
+.gw-control-guide {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 7;
+    display: grid;
+    gap: 5px;
+    width: min(620px, calc(100vw - 36px));
+    padding: 10px 13px;
+    border: 1px solid rgba(78, 220, 207, 0.4);
+    background:
+        linear-gradient(90deg, rgba(78, 220, 207, 0.12), transparent 42%, rgba(245, 213, 101, 0.1)),
+        rgba(7, 18, 27, 0.72);
+    color: rgba(237, 252, 250, 0.9);
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1.35;
+    box-shadow: 0 0 24px rgba(78, 220, 207, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+    text-align: center;
+    transform: translateX(-50%);
+    backdrop-filter: blur(10px);
+    animation: gw-control-guide-enter 220ms ease-out;
 }
 
-.gw-exit-button:hover,
-.gw-bgm-toggle:hover,
-.gw-inventory-toggle:hover,
-.gw-exit-button:focus-visible,
-.gw-bgm-toggle:focus-visible,
-.gw-inventory-toggle:focus-visible {
-    border-color: #2f9a8a;
-    outline: 3px solid rgba(47, 154, 138, 0.18);
+.gw-control-guide strong {
+    color: #f5d565;
+    font-size: 10px;
+    letter-spacing: 0;
+}
+
+.gw-control-guide span,
+.gw-control-guide small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gw-control-guide small {
+    color: rgba(78, 220, 207, 0.78);
+    font-size: 10px;
+}
+
+.gw-control-guide--leaving {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.gw-stage .gw-exit-button,
+.gw-stage .gw-bgm-toggle,
+.gw-stage .gw-inventory-toggle,
+.gw-stage .gw-controls-toggle {
+    flex: 0 0 auto;
+    width: 48px;
+    min-width: 0;
+    max-width: 48px;
+    height: 28px;
+    min-height: 0;
+    padding: 0 5px;
+    border: 1px solid rgba(78, 220, 207, 0.28);
+    border-radius: 0;
+    background: rgba(12, 39, 52, 0.72);
+    color: rgba(237, 252, 250, 0.86);
+    font-size: 9px;
+    font-weight: 900;
+    line-height: 1.2;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.gw-stage .gw-inventory-toggle {
+    width: 42px;
+    max-width: 42px;
+}
+
+.gw-stage .gw-bgm-toggle {
+    width: 44px;
+    max-width: 44px;
+}
+
+.gw-stage .gw-controls-toggle {
+    width: 48px;
+    max-width: 48px;
+}
+
+.gw-stage .gw-exit-button:hover,
+.gw-stage .gw-bgm-toggle:hover,
+.gw-stage .gw-inventory-toggle:hover,
+.gw-stage .gw-controls-toggle:hover,
+.gw-stage .gw-exit-button:focus-visible,
+.gw-stage .gw-bgm-toggle:focus-visible,
+.gw-stage .gw-inventory-toggle:focus-visible,
+.gw-stage .gw-controls-toggle:focus-visible {
+    border-color: #4edccf;
+    outline: 2px solid rgba(78, 220, 207, 0.28);
     outline-offset: 2px;
+}
+
+.gw-controls-toggle--active {
+    border-color: rgba(245, 213, 101, 0.78);
+    background: rgba(245, 213, 101, 0.2);
+    color: #f5d565;
 }
 
 .gw-bgm-toggle--on {
     border-color: rgba(245, 213, 101, 0.9);
-    background: #25312f;
+    background: rgba(245, 213, 101, 0.2);
     color: #f5d565;
 }
 
 .gw-inventory-panel {
     position: absolute;
-    top: 48px;
+    top: 36px;
     right: 0;
     width: min(260px, calc(100vw - 36px));
     padding: 12px;
@@ -1615,6 +1872,18 @@
 
 .gw-pixel-runner--jumping .gw-pixel-runner__sprite {
     animation-duration: 260ms;
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__sprite {
+    animation: gw-runner-fall 300ms steps(2, end) infinite;
+    filter: drop-shadow(0 10px 0 rgba(31, 41, 55, 0.1));
+}
+
+.gw-pixel-runner--fastfall .gw-pixel-runner__sprite {
+    animation-duration: 220ms;
+    filter:
+        drop-shadow(0 12px 0 rgba(31, 41, 55, 0.12))
+        drop-shadow(0 0 10px rgba(245, 213, 101, 0.18));
 }
 
 .gw-pixel-runner--charging .gw-pixel-runner__sprite {
@@ -1894,6 +2163,48 @@
     content: "";
 }
 
+.gw-pixel-runner--falling .gw-pixel-runner__scarf {
+    transform: translateY(-3px);
+    box-shadow:
+        20px 1px 0 #8a4f44,
+        24px 2px 0 #8a4f44;
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__arm,
+.gw-pixel-runner--falling .gw-pixel-runner__leg,
+.gw-pixel-runner--falling .gw-pixel-runner__boot {
+    animation: none;
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__arm--front {
+    transform: rotate(16deg) translateY(-1px);
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__arm--back {
+    transform: rotate(-14deg) translateY(-1px);
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__leg--front {
+    transform: rotate(8deg) translateY(1px);
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__leg--back {
+    transform: rotate(-8deg) translateY(1px);
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__boot--front {
+    transform: translate(1px, 1px);
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__boot--back {
+    transform: translate(-1px, 1px);
+}
+
+.gw-pixel-runner--falling .gw-pixel-runner__hammer {
+    opacity: 0.82;
+    transform: rotate(-4deg) translateY(-2px);
+}
+
 .gw-pixel-runner--strike .gw-pixel-runner__hammer {
     left: 40px;
     top: 14px;
@@ -2048,20 +2359,50 @@
     animation: gw-run-dust 340ms steps(3, end) forwards;
 }
 
-.gw-snow-puff {
+.gw-run-dust--landing {
+    width: 14px;
+    height: 7px;
+    background: rgba(91, 80, 67, 0.24);
+    animation-duration: 380ms;
+}
+
+.gw-run-dust--heavy {
+    width: 18px;
+    height: 8px;
+    background: rgba(91, 80, 67, 0.32);
+    animation-duration: 460ms;
+}
+
+.gw-fall-streak {
     position: fixed;
     z-index: 2;
-    width: 13px;
-    height: 9px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow:
-        8px -2px 0 rgba(190, 231, 242, 0.7),
-        -7px 2px 0 rgba(255, 255, 255, 0.66);
+    width: 5px;
+    height: 20px;
+    border-radius: 0;
+    background:
+        linear-gradient(
+            180deg,
+            transparent 0,
+            rgba(255, 255, 255, 0.78) 28%,
+            rgba(245, 213, 101, 0.48) 76%,
+            transparent 100%
+        );
     pointer-events: none;
-    transform: translate(-50%, -50%) scale(var(--gw-s));
-    animation: gw-snow-puff 560ms cubic-bezier(.16, .72, .22, 1) forwards;
-    animation-delay: var(--gw-d);
+    transform: translate(-50%, -50%);
+    animation: gw-fall-streak 430ms steps(4, end) forwards;
+}
+
+.gw-fall-streak--fast {
+    height: 28px;
+    background:
+        linear-gradient(
+            180deg,
+            transparent 0,
+            rgba(255, 255, 255, 0.84) 20%,
+            rgba(47, 154, 138, 0.34) 80%,
+            transparent 100%
+        );
+    animation-duration: 340ms;
 }
 
 .gw-impact-flash {
@@ -2249,6 +2590,20 @@
     overflow-wrap: anywhere;
 }
 
+.gw-accordion-hit {
+    outline: 2px solid rgba(245, 213, 101, 0.82);
+    outline-offset: 3px;
+    filter: drop-shadow(0 0 10px rgba(245, 213, 101, 0.28));
+}
+
+.gw-accordion-echo {
+    background: rgba(245, 213, 101, 0.94);
+    color: #16212b;
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.78),
+        0 8px 20px rgba(22, 33, 43, 0.22);
+}
+
 .gw-soft-glow {
     border-radius: 12px;
     background: rgba(245, 213, 101, 0.16);
@@ -2277,6 +2632,15 @@
     }
     100% {
         transform: scaleX(var(--gw-runner-face)) translateY(-4px);
+    }
+}
+
+@keyframes gw-runner-fall {
+    0% {
+        transform: scaleX(var(--gw-runner-face)) translateY(-1px) scaleY(1.04);
+    }
+    100% {
+        transform: scaleX(var(--gw-runner-face)) translateY(2px) scaleY(0.98);
     }
 }
 
@@ -2815,6 +3179,18 @@
     }
 }
 
+@keyframes gw-control-guide-enter {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
 @keyframes gw-soft-glow {
     0% {
         opacity: 0;
@@ -2882,28 +3258,17 @@
     }
 }
 
-@keyframes gw-snow-fall {
+@keyframes gw-fall-streak {
     0% {
         opacity: 0;
-        transform: translate3d(0, -12px, 0) scale(var(--gw-s));
+        transform: translate(-50%, -70%) scaleY(0.55);
     }
-    12% {
-        opacity: 0.78;
+    18% {
+        opacity: 0.82;
     }
     100% {
         opacity: 0;
-        transform: translate3d(22px, calc(100vh + 18px), 0) scale(var(--gw-s));
-    }
-}
-
-@keyframes gw-snow-puff {
-    0% {
-        opacity: 0.84;
-        transform: translate(-50%, -50%) scale(0.62);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--gw-x)), calc(-50% + var(--gw-y))) scale(var(--gw-s));
+        transform: translate(calc(-50% + var(--gw-fall-drift)), 34px) scaleY(1.15);
     }
 }
 
@@ -3035,25 +3400,39 @@
     }
 
     .gw-controls {
-        top: 12px;
-        right: 12px;
-        left: 12px;
+        top: 8px;
+        right: 8px;
+        left: auto;
         justify-content: flex-end;
     }
 
     .gw-mission-hud {
-        top: 62px;
-        left: 12px;
-        width: min(300px, calc(100vw - 24px));
-        padding: 8px 9px;
+        top: 8px;
+        left: 8px;
+        right: 152px;
+        grid-template-columns: 46px minmax(0, 1fr) auto;
+        width: auto;
+        min-height: 30px;
+        padding: 4px 6px;
+        transform: none;
+    }
+
+    .gw-mission-hud__goal {
+        display: none;
+    }
+
+    .gw-mission-hud__treasure strong {
+        display: none;
     }
 
     .gw-mission-hud__stats {
-        gap: 4px;
+        grid-template-columns: repeat(3, minmax(26px, auto));
+        gap: 5px;
     }
 
-    .gw-mission-hud__stats dt {
-        font-size: 9px;
+    .gw-mission-hud__stats div:nth-child(3),
+    .gw-mission-hud__stats div:nth-child(5) {
+        display: none;
     }
 
     .gw-mission-hud__stats dd {
@@ -3064,27 +3443,42 @@
         left: 12px;
         right: 12px;
         bottom: 12px;
-        grid-template-columns: 40px 40px 40px 44px 52px 52px minmax(58px, 1fr);
+        grid-template-columns: 1fr 1.2fr 1fr 1fr;
+        grid-template-areas:
+            "left jump right shield"
+            "attack throw throw lock";
         gap: 6px;
-        max-width: 374px;
+        max-width: min(420px, calc(100vw - 24px));
+        padding: 23px 8px 8px;
+    }
+
+    .gw-control-guide {
+        bottom: 74px;
+        width: min(360px, calc(100vw - 24px));
+        padding: 9px 10px;
+    }
+
+    .gw-control-guide span,
+    .gw-control-guide small {
+        white-space: normal;
     }
 
     .gw-player-control {
-        min-width: 40px;
-        height: 44px;
+        min-width: 0;
+        height: 50px;
         padding: 4px 5px;
         font-size: 14px;
     }
 
     .gw-player-control__keys {
         margin-top: 2px;
+        padding: 1px 3px;
         font-size: 8px;
     }
 
     .gw-player-control--lock,
     .gw-player-control--shield,
     .gw-player-control--throw {
-        min-width: 44px;
         font-size: 12px;
     }
 
@@ -3132,6 +3526,7 @@
     .gw-impact-ring,
     .gw-pixel-debris,
     .gw-run-dust,
+    .gw-fall-streak,
     .gw-image-chip,
     .gw-impact-flash,
     .gw-screen-shake .wp-site-blocks,

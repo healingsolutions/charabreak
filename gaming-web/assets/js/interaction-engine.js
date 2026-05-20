@@ -1,4 +1,4 @@
-import { findScannedTarget } from './dom-scanner.js?v=0.1.46';
+import { findScannedTarget } from './dom-scanner.js?v=0.2.2';
 
 const MESSAGE_WORD_COLLECT = '\u8a00\u8449\u306e\u304b\u3051\u3089\u3092\u898b\u3064\u3051\u305f\uff01';
 const MESSAGE_SOFT_CLEAR = '\u5c11\u3057\u30da\u30fc\u30b8\u304c\u660e\u308b\u304f\u306a\u3063\u305f\uff01';
@@ -40,6 +40,10 @@ export class InteractionEngine {
             return;
         }
 
+        if (window.__GamingWebAllowNativeClickUntil && performance.now() < window.__GamingWebAllowNativeClickUntil) {
+            return;
+        }
+
         const target = findScannedTarget(event.target, this.targets);
         if (!target) {
             return;
@@ -64,7 +68,7 @@ export class InteractionEngine {
             return;
         }
 
-        if (target.type === 'image') {
+        if (target.type === 'image' || target.type === 'icon') {
             this.audio?.play('hitHeavy', { volume: 0.34 });
             this.overlay.crackImage(target);
             return;
@@ -85,6 +89,12 @@ export class InteractionEngine {
             return;
         }
 
+        if (target.type === 'accordion') {
+            this.audio?.play('uiOpen', { volume: 0.18, rate: 1.04 });
+            this.overlay.toggleAccordionTarget(target, { trigger });
+            return;
+        }
+
         this.audio?.play('uiMove', { volume: 0.16 });
         this.overlay.brighten(target);
     }
@@ -102,7 +112,12 @@ export class InteractionEngine {
             return;
         }
 
-        if (target.type === 'image') {
+        if (target.type === 'accordion') {
+            this.audio?.play('uiOpen', { volume: 0.18, rate: 1.04 });
+            return;
+        }
+
+        if (target.type === 'image' || target.type === 'icon') {
             this.audio?.play('hitHeavy', { volume: 0.34 });
             this.overlay.crackImage(target);
             return;
@@ -129,7 +144,7 @@ export class InteractionEngine {
         this.audio?.play(detail.destroyed ? 'imageBreak' : 'imageCrack', { volume: detail.destroyed ? 0.34 : 0.24 });
         this.logger?.log('element_hit', {
             element_selector: detail.selector || 'img',
-            element_type: 'image',
+            element_type: detail.type === 'icon' ? 'icon' : 'image',
             stage_name: this.stageName,
             inventory_count: this.inventory.length,
             trigger: 'player_control',

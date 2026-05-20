@@ -1,4 +1,36 @@
-const TARGET_SELECTOR = 'h1,h2,h3,p,img,a,button,section,article,main';
+const TARGET_SELECTOR = [
+    'h1,h2,h3,h4,h5,h6',
+    'p',
+    'img',
+    'a,button',
+    'section,article,main',
+    '.elementor-heading-title',
+    '.elementor-widget-text-editor',
+    '.elementor-button',
+    '.e-heading-base',
+    '.e-paragraph-base',
+    'details > summary',
+    '.elementor-accordion .elementor-tab-title',
+    '.elementor-toggle .elementor-tab-title',
+    '.elementor-widget-accordion .elementor-tab-title',
+    '.elementor-widget-toggle .elementor-tab-title',
+    '.e-n-accordion-item-title',
+    '.accordion-button',
+    '.elementor-divider-separator',
+    '.elementor-progress-bar',
+    '.elementor-widget-divider',
+    '.elementor-widget-progress',
+    '.elementor-spacer-inner',
+    '.ekit-progressbar-bar',
+    '.progress-bar',
+    'hr',
+    '.elementor-icon',
+    '.elementor-icon-box-icon',
+    '.elementskit-info-box-icon',
+    '.ekit-wid-con .icon',
+    '.ekit-wid-con svg',
+    '.ekit-wid-con i',
+].join(',');
 const IGNORE_SELECTOR = '.gw-mode-button, .gw-stage, .gw-stage *';
 
 export function scanGameTargets(root = document, options = {}) {
@@ -61,16 +93,32 @@ export function liveRectForTarget(target) {
 function classifyElement(element) {
     const tag = element.tagName.toLowerCase();
 
-    if (/^h[1-3]$/.test(tag)) {
+    if (/^h[1-6]$/.test(tag)
+        || element.classList.contains('elementor-heading-title')
+        || element.classList.contains('e-heading-base')) {
         return 'heading';
     }
 
-    if (tag === 'p') {
+    if (tag === 'p'
+        || element.classList.contains('elementor-widget-text-editor')
+        || element.classList.contains('e-paragraph-base')) {
         return 'paragraph';
     }
 
     if (tag === 'img') {
         return 'image';
+    }
+
+    if (isAccordionElement(element)) {
+        return 'accordion';
+    }
+
+    if (isPlatformElement(element)) {
+        return 'platform';
+    }
+
+    if (isIconElement(element)) {
+        return 'icon';
     }
 
     if (tag === 'a' || tag === 'button') {
@@ -85,7 +133,66 @@ function extractElementText(element) {
         return element.alt || element.currentSrc || element.src || 'image';
     }
 
+    if (isIconElement(element)) {
+        return element.getAttribute('aria-label')
+            || element.getAttribute('title')
+            || element.closest('.elementor-widget-icon-box,.elementskit-infobox')?.textContent?.trim()
+            || 'icon';
+    }
+
+    if (isAccordionElement(element)) {
+        return element.getAttribute('aria-label')
+            || element.getAttribute('title')
+            || element.textContent?.replace(/\s+/g, ' ').trim()
+            || 'accordion';
+    }
+
+    if (isPlatformElement(element)) {
+        return element.getAttribute('aria-label')
+            || element.getAttribute('title')
+            || element.textContent?.replace(/\s+/g, ' ').trim()
+            || 'platform';
+    }
+
     return (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 240);
+}
+
+function isAccordionElement(element) {
+    const tag = element.tagName.toLowerCase();
+    if (tag === 'summary' && element.parentElement?.tagName?.toLowerCase() === 'details') {
+        return true;
+    }
+
+    if (element.classList.contains('elementor-tab-title')
+        && element.closest('.elementor-accordion,.elementor-toggle,.elementor-widget-accordion,.elementor-widget-toggle')) {
+        return true;
+    }
+
+    return element.classList.contains('e-n-accordion-item-title')
+        || element.classList.contains('accordion-button');
+}
+
+function isPlatformElement(element) {
+    const tag = element.tagName.toLowerCase();
+    return tag === 'hr'
+        || element.classList.contains('elementor-divider-separator')
+        || element.classList.contains('elementor-progress-bar')
+        || element.classList.contains('elementor-widget-divider')
+        || element.classList.contains('elementor-widget-progress')
+        || element.classList.contains('elementor-spacer-inner')
+        || element.classList.contains('ekit-progressbar-bar')
+        || element.classList.contains('progress-bar');
+}
+
+function isIconElement(element) {
+    const tag = element.tagName.toLowerCase();
+    return tag === 'svg'
+        || tag === 'i'
+        || element.classList.contains('elementor-icon')
+        || element.classList.contains('elementor-icon-box-icon')
+        || element.classList.contains('elementskit-info-box-icon')
+        || element.classList.contains('ekit_icon_button')
+        || element.classList.contains('icon');
 }
 
 function isVisibleElement(element) {
