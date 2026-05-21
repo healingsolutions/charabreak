@@ -91,10 +91,14 @@ class GW_REST
             'enemy_defeated_count' => absint($params['enemy_defeated_count'] ?? 0),
             'gates_broken' => absint($params['gates_broken'] ?? 0),
             'images_damaged' => absint($params['images_damaged'] ?? 0),
+            'goal_condition' => sanitize_key((string) ($params['goal_condition'] ?? '')),
             'letters_collected' => absint($params['letters_collected'] ?? 0),
             'letters_required' => absint($params['letters_required'] ?? 0),
             'treasure_letters' => $treasure_letters,
             'treasure_word' => sanitize_text_field($treasure_word),
+            'chests_opened' => absint($params['chests_opened'] ?? 0),
+            'chests_required' => absint($params['chests_required'] ?? 0),
+            'score_jewels' => absint($params['score_jewels'] ?? 0),
             'clear_reason' => sanitize_key((string) ($params['reason'] ?? '')),
             'next_href' => esc_url_raw((string) ($params['next_href'] ?? '')),
             'stage_name' => sanitize_text_field((string) ($params['stage_name'] ?? '')),
@@ -121,7 +125,7 @@ class GW_REST
             return array();
         }
 
-        if (absint($event_data['letters_collected'] ?? 0) < 3) {
+        if (absint($event_data['chests_opened'] ?? 0) < 3) {
             return array();
         }
 

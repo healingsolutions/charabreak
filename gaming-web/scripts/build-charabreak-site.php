@@ -175,7 +175,7 @@ if (!function_exists('gw_cb_image')) {
                 'url' => $url,
                 'id' => $id,
                 'size' => '',
-                'alt' => '',
+                'alt' => wp_strip_all_tags(str_replace('image:: ', '', $label)),
                 'source' => $id > 0 ? 'library' : 'url',
             ),
             'image_size' => 'full',
@@ -189,6 +189,53 @@ if (!function_exists('gw_cb_image')) {
             'isInner' => false,
             'widgetType' => 'image',
             'elType' => 'widget',
+        );
+    }
+}
+
+if (!function_exists('gw_cb_find_brand_attachment')) {
+    function gw_cb_find_brand_attachment(string $file, string $title): int
+    {
+        $attachments = get_posts(array(
+            'post_type' => 'attachment',
+            'post_status' => 'inherit',
+            'posts_per_page' => 1,
+            'fields' => 'ids',
+            'meta_key' => '_charabreak_brand_asset',
+            'meta_value' => $file,
+        ));
+
+        if (!empty($attachments)) {
+            return (int) $attachments[0];
+        }
+
+        $attachments = get_posts(array(
+            'post_type' => 'attachment',
+            'post_status' => 'inherit',
+            'posts_per_page' => 1,
+            'fields' => 'ids',
+            'title' => $title,
+            'orderby' => 'ID',
+            'order' => 'DESC',
+        ));
+
+        return !empty($attachments) ? (int) $attachments[0] : 0;
+    }
+}
+
+if (!function_exists('gw_cb_brand_image')) {
+    function gw_cb_brand_image(string $file, string $title): array
+    {
+        $id = gw_cb_find_brand_attachment($file, $title);
+        $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : false;
+
+        if (!$url) {
+            $url = plugins_url('assets/brand/' . $file, dirname(__DIR__) . '/gaming-web.php');
+        }
+
+        return array(
+            'url' => $url,
+            'id' => $id,
         );
     }
 }
@@ -338,6 +385,7 @@ if (!function_exists('gw_cb_card_grid')) {
 if (!function_exists('gw_cb_nav')) {
     function gw_cb_nav(array $links): array
     {
+        $logo = gw_cb_character_image();
         $buttons = array(
             gw_cb_button('nav-home', 'button:: Home', 'Home', $links['home'], 'secondary'),
             gw_cb_button('nav-features', 'button:: Features', 'Features', $links['features'], 'secondary'),
@@ -360,10 +408,23 @@ if (!function_exists('gw_cb_nav')) {
             'background_color' => '#08141f',
             '_css_classes' => 'cb-nav',
         ), array(
-            gw_cb_heading('nav-brand', 'title:: CharaBreakロゴ', 'CharaBreak', 'h3', array(
-                'title_color' => '#fbfaf4',
-                'typography_font_size' => gw_cb_size(24),
-            )),
+            gw_cb_container('nav-brand-wrap', 'container:: CharaBreak brand mark', array(
+                'content_width' => 'full',
+                'width' => gw_cb_size(30, '%'),
+                'width_tablet' => gw_cb_size(100, '%'),
+                'flex_direction' => 'row',
+                'flex_align_items' => 'center',
+                'flex_gap' => array('column' => '12', 'row' => '12', 'isLinked' => true, 'unit' => 'px', 'size' => 12),
+            ), array(
+                gw_cb_image('nav-logo', 'image:: CharaBreak logo mark', $logo['url'], $logo['id'], array(
+                    'width' => gw_cb_size(42),
+                    'width_mobile' => gw_cb_size(36),
+                )),
+                gw_cb_heading('nav-brand', 'title:: CharaBreakロゴ', 'CharaBreak', 'h3', array(
+                    'title_color' => '#fbfaf4',
+                    'typography_font_size' => gw_cb_size(24),
+                )),
+            ), true),
             gw_cb_container('nav-links', 'container:: ナビゲーションリンク', array(
                 'html_tag' => 'nav',
                 'content_width' => 'full',
@@ -414,20 +475,14 @@ if (!function_exists('gw_cb_footer_cta')) {
 if (!function_exists('gw_cb_business_image')) {
     function gw_cb_business_image(): array
     {
-        $url = home_url('/wp-content/uploads/2026/05/multicultural-business-team-headed-by-boss-posing-FFEKMDQ.jpg');
-        $id = attachment_url_to_postid($url);
-
-        return array('url' => $url, 'id' => $id);
+        return gw_cb_brand_image('charabreak-hero-smash.png', 'CharaBreak Hero Smash');
     }
 }
 
 if (!function_exists('gw_cb_character_image')) {
     function gw_cb_character_image(): array
     {
-        return array(
-            'url' => plugins_url('assets/sprites/character-placeholder.svg', dirname(__FILE__)),
-            'id' => 0,
-        );
+        return gw_cb_brand_image('charabreak-logo-transparent-hd.png', 'CharaBreak Brand Logo Transparent HD');
     }
 }
 
@@ -450,7 +505,7 @@ if (!function_exists('gw_cb_home_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#08141f',
                 'background_overlay_background' => 'classic',
-                'background_overlay_color' => 'rgba(8,20,31,0.72)',
+                'background_overlay_color' => 'rgba(8,20,31,0.42)',
                 'background_overlay_image' => array(
                     'url' => $business['url'],
                     'id' => $business['id'],
@@ -502,23 +557,24 @@ if (!function_exists('gw_cb_home_data')) {
                     'width_mobile' => gw_cb_size(100, '%'),
                     'padding' => gw_cb_space(30, 30, 30, 30),
                     'background_background' => 'classic',
-                    'background_color' => 'rgba(251,250,244,0.92)',
+                    'background_color' => 'rgba(8,20,31,0.78)',
                     'border_border' => 'solid',
                     'border_color' => 'rgba(78,220,207,0.48)',
                     'border_width' => gw_cb_space(1, 1, 1, 1),
                     'border_radius' => gw_cb_space(8, 8, 8, 8),
                 ), array(
                     gw_cb_image('home-character', 'image:: CharaBreakキャラクター', $character['url'], $character['id'], array(
-                        'width' => gw_cb_size(46, '%'),
+                        'width' => gw_cb_size(82, '%'),
                         'align' => 'center',
                     )),
                     gw_cb_heading('home-visual-title', 'title:: 壊せるサイト訴求', 'Serious page. Playable content.', 'h3', array(
-                        'title_color' => '#08141f',
+                        'title_color' => '#fbfaf4',
                         'align' => 'center',
                         'typography_font_size' => gw_cb_size(28),
                     )),
                     gw_cb_text('home-visual-body', 'text:: ビジュアル説明', 'きちんと作り込まれたWebサイトほど、ゲームとして触れた時のギャップが強くなります。おしゃれなページなのに壊せる。その違和感が、思わず誰かに見せたくなる体験になります。', array(
                         'align' => 'center',
+                        'text_color' => 'rgba(251,250,244,0.78)',
                     )),
                 ), true),
             )),
@@ -589,6 +645,8 @@ if (!function_exists('gw_cb_home_data')) {
 if (!function_exists('gw_cb_features_data')) {
     function gw_cb_features_data(array $links): array
     {
+        $dashboard = gw_cb_brand_image('charabreak-feature-dashboard.png', 'CharaBreak Feature Dashboard');
+
         return array(
             gw_cb_nav($links),
             gw_cb_container('features-hero', 'section:: 01・機能ページヒーロー', array(
@@ -599,6 +657,19 @@ if (!function_exists('gw_cb_features_data')) {
                 'background_color' => '#fbfaf4',
             ), array(
                 gw_cb_section_title('features-title', 'Features', 'ページそのものを、インタラクティブWebにする。', 'CharaBreakはWordPressの本文、画像、ボタン、リンクを読み取り、遊べる足場とリアクションに変換します。訪問者はコンテンツを読む前に、コンテンツの中へ入り込みます。'),
+                gw_cb_image('features-dashboard-image', 'image:: 機能ダッシュボードビジュアル', $dashboard['url'], $dashboard['id'], array(
+                    'width' => gw_cb_size(88, '%'),
+                    'align' => 'center',
+                    'border_radius' => gw_cb_space(8, 8, 8, 8),
+                    'box_shadow_box_shadow_type' => 'yes',
+                    'box_shadow_box_shadow' => array(
+                        'horizontal' => 0,
+                        'vertical' => 24,
+                        'blur' => 68,
+                        'spread' => 0,
+                        'color' => 'rgba(8,20,31,0.24)',
+                    ),
+                )),
                 gw_cb_card_grid('features-grid', array(
                     array('icon' => 'fas fa-font', 'title' => '文字がステージになる', 'body' => '1文字ずつ攻撃でき、壊れた場所は穴として残ります。本文そのものが、進行と発見のきっかけになります。', 'accent' => '#4edccf'),
                     array('icon' => 'fas fa-image', 'title' => '画像やアイコンも遊べる', 'body' => '通常画像、アイコン、バー、ボタン枠も足場や攻撃対象になります。ビジュアル要素まで、触れるコンテンツになります。', 'accent' => '#f5d565'),
@@ -630,6 +701,8 @@ if (!function_exists('gw_cb_features_data')) {
 if (!function_exists('gw_cb_pricing_data')) {
     function gw_cb_pricing_data(array $links): array
     {
+        $pricing = gw_cb_brand_image('charabreak-pricing-worlds.png', 'CharaBreak Pricing Worlds');
+
         return array(
             gw_cb_nav($links),
             gw_cb_container('pricing-hero', 'section:: 01・料金ページヒーロー', array(
@@ -640,6 +713,19 @@ if (!function_exists('gw_cb_pricing_data')) {
                 'background_color' => '#08141f',
             ), array(
                 gw_cb_section_title('pricing-title', 'Pricing', '無料で試して、Proでサイト全体を冒険に。', '無料版は誰でもダウンロードでき、1ページだけゲーム化できます。Proは1サイトごとの単発販売としてFreemiusで提供し、複数ページの回遊、特典導線、より深いステージ設定を開放する想定です。', true),
+                gw_cb_image('pricing-worlds-image', 'image:: FreeとProの世界観', $pricing['url'], $pricing['id'], array(
+                    'width' => gw_cb_size(84, '%'),
+                    'align' => 'center',
+                    'border_radius' => gw_cb_space(8, 8, 8, 8),
+                    'box_shadow_box_shadow_type' => 'yes',
+                    'box_shadow_box_shadow' => array(
+                        'horizontal' => 0,
+                        'vertical' => 24,
+                        'blur' => 72,
+                        'spread' => 0,
+                        'color' => 'rgba(78,220,207,0.20)',
+                    ),
+                )),
                 gw_cb_card_grid('pricing-plans', array(
                     array('icon' => 'fas fa-leaf', 'title' => 'Free / 1 Page', 'body' => '1ページのゲーム化、基本操作、クリア演出、軽量ログ。まずは「自分のサイトで本当に面白いか」を低いハードルで試せます。', 'accent' => '#4edccf'),
                     array('icon' => 'fas fa-gem', 'title' => 'Pro / 1 Site', 'body' => 'ページ数無制限、リンクゲートで複数ページ冒険、特典/クーポン、ステージ設定拡張。サイト全体をインタラクティブ施策にできます。', 'accent' => '#f5d565'),
@@ -679,7 +765,7 @@ if (!function_exists('gw_cb_pricing_data')) {
 if (!function_exists('gw_cb_demo_data')) {
     function gw_cb_demo_data(array $links): array
     {
-        $business = gw_cb_business_image();
+        $business = gw_cb_brand_image('charabreak-demo-world.png', 'CharaBreak Demo World');
 
         return array(
             gw_cb_nav($links),
@@ -706,7 +792,7 @@ if (!function_exists('gw_cb_demo_data')) {
                     gw_cb_text('demo-lead', 'text:: デモ説明', 'このページの文章、画像、ボタン、アイコン、ゲートは、ゲームモードで足場にも攻撃対象にもなります。普通なら読み飛ばされる要素が、遊びの対象になる。STARTを押して、Webサイトがインタラクティブなステージに変わる瞬間を試してください。'),
                     gw_cb_button('demo-start', 'button:: デモ開始', 'Start Demo', '#gaming-web-start', 'primary', 'gw-inline-start'),
                 ), true),
-                gw_cb_image('demo-image', 'image:: ビジネスサイト画像', $business['url'], $business['id'], array(
+                gw_cb_image('demo-image', 'image:: CharaBreakデモワールド', $business['url'], $business['id'], array(
                     'width' => gw_cb_size(42, '%'),
                     'width_tablet' => gw_cb_size(100, '%'),
                     'border_radius' => gw_cb_space(8, 8, 8, 8),
@@ -737,6 +823,8 @@ if (!function_exists('gw_cb_demo_data')) {
 if (!function_exists('gw_cb_faq_data')) {
     function gw_cb_faq_data(array $links): array
     {
+        $boss = gw_cb_brand_image('charabreak-boss-gate.png', 'CharaBreak Boss Gate');
+
         return array(
             gw_cb_nav($links),
             gw_cb_container('faq-hero', 'section:: 01・FAQヒーロー', array(
@@ -747,6 +835,19 @@ if (!function_exists('gw_cb_faq_data')) {
                 'background_color' => '#fbfaf4',
             ), array(
                 gw_cb_section_title('faq-title', 'FAQ', '配布、販売、ビジネス活用のよくある質問。', '無料配布からFreemius販売、インタラクティブWeb施策としての使い方まで、CharaBreakを世界に出すために必要な情報をまとめます。'),
+                gw_cb_image('faq-boss-gate-image', 'image:: 中ボスとゲートの世界観', $boss['url'], $boss['id'], array(
+                    'width' => gw_cb_size(82, '%'),
+                    'align' => 'center',
+                    'border_radius' => gw_cb_space(8, 8, 8, 8),
+                    'box_shadow_box_shadow_type' => 'yes',
+                    'box_shadow_box_shadow' => array(
+                        'horizontal' => 0,
+                        'vertical' => 24,
+                        'blur' => 72,
+                        'spread' => 0,
+                        'color' => 'rgba(8,20,31,0.22)',
+                    ),
+                )),
                 gw_cb_accordion('faq-accordion', 'accordion:: CharaBreak FAQ', array(
                     array('title' => 'どんなWordPressページでもゲーム化できますか？', 'body' => '固定ページや投稿を中心に対応します。Elementorなど主要ビルダーは順次互換性を高めますが、複雑なスライダーや特殊な埋め込みは個別調整が必要です。'),
                     array('title' => 'ビジネス上の狙いは何ですか？', 'body' => '文章を最初から読ませるのではなく、壊す・進む・守るという行為を通じてページとの接触時間を増やすことです。結果的に見出しや本文、CTAへの接触回数が増え、ブランド記憶や回遊につながります。'),
@@ -853,6 +954,11 @@ update_option('blogname', 'CharaBreak');
 update_option('blogdescription', 'Make stylish WordPress pages playable.');
 update_option('show_on_front', 'page');
 update_option('page_on_front', $ids['home']);
+$brand_logo = gw_cb_character_image();
+if ($brand_logo['id'] > 0) {
+    update_option('site_icon', $brand_logo['id']);
+    set_theme_mod('custom_logo', $brand_logo['id']);
+}
 update_option('gaming_web_enabled', '1');
 update_option('gaming_web_post_types', array('page', 'post'));
 update_option('gaming_web_show_floating_button', '1');

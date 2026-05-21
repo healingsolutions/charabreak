@@ -1,6 +1,6 @@
 [
     {
-        "id": "1848a8fb",
+        "id": "a48eaa1a",
         "settings": {
             "html_tag": "header",
             "content_width": "full",
@@ -30,33 +30,91 @@
         },
         "elements": [
             {
-                "id": "c6c82b4e",
+                "id": "211880fb",
                 "settings": {
-                    "title": "CharaBreak",
-                    "header_size": "h3",
-                    "title_color": "#fbfaf4",
-                    "typography_font_family": "Inter",
-                    "typography_typography": "custom",
-                    "typography_font_weight": "900",
-                    "typography_line_height": {
-                        "unit": "em",
-                        "size": 1.08,
+                    "content_width": "full",
+                    "width": {
+                        "unit": "%",
+                        "size": 30,
                         "sizes": []
                     },
-                    "_title": "title:: CharaBreakロゴ",
-                    "typography_font_size": {
-                        "unit": "px",
-                        "size": 24,
+                    "width_tablet": {
+                        "unit": "%",
+                        "size": 100,
                         "sizes": []
-                    }
+                    },
+                    "flex_direction": "row",
+                    "flex_align_items": "center",
+                    "flex_gap": {
+                        "column": "12",
+                        "row": "12",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 12
+                    },
+                    "_title": "container:: CharaBreak brand mark"
                 },
-                "elements": [],
-                "isInner": false,
-                "widgetType": "heading",
-                "elType": "widget"
+                "elements": [
+                    {
+                        "id": "bd75b340",
+                        "settings": {
+                            "image": {
+                                "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-logo-transparent-hd.png",
+                                "id": 334,
+                                "size": "",
+                                "alt": "CharaBreak logo mark",
+                                "source": "library"
+                            },
+                            "image_size": "full",
+                            "_title": "image:: CharaBreak logo mark",
+                            "width": {
+                                "unit": "px",
+                                "size": 42,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "px",
+                                "size": 36,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "image",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "9c984cc1",
+                        "settings": {
+                            "title": "CharaBreak",
+                            "header_size": "h3",
+                            "title_color": "#fbfaf4",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: CharaBreakロゴ",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 24,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
             },
             {
-                "id": "e0165368",
+                "id": "4ace2fce",
                 "settings": {
                     "html_tag": "nav",
                     "content_width": "full",
@@ -419,7 +477,7 @@
         "elType": "container"
     },
     {
-        "id": "251ec1d3",
+        "id": "8200fd1b",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "row",
@@ -448,10 +506,10 @@
             "background_background": "classic",
             "background_color": "#08141f",
             "background_overlay_background": "classic",
-            "background_overlay_color": "rgba(8,20,31,0.72)",
+            "background_overlay_color": "rgba(8,20,31,0.42)",
             "background_overlay_image": {
-                "url": "http://localhost:8089/wp-content/uploads/2026/05/multicultural-business-team-headed-by-boss-posing-FFEKMDQ.jpg",
-                "id": 235,
+                "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-hero-smash.png",
+                "id": 326,
                 "size": "",
                 "alt": "",
                 "source": "library"
@@ -464,7 +522,7 @@
         },
         "elements": [
             {
-                "id": "84c9dbc5",
+                "id": "5e790266",
                 "settings": {
                     "content_width": "full",
                     "width": {
@@ -494,7 +552,7 @@
                 },
                 "elements": [
                     {
-                        "id": "5575e55f",
+                        "id": "81a0b85e",
                         "settings": {
                             "title": "PLAYABLE WORDPRESS PLUGIN",
                             "header_size": "h6",
@@ -525,7 +583,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "d518f2e6",
+                        "id": "76ea7b43",
                         "settings": {
                             "title": "読む前に、壊せ。",
                             "header_size": "h1",
@@ -551,7 +609,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "9b1c0a9c",
+                        "id": "5bb1d612",
                         "settings": {
                             "editor": "<p>ユーザーは、最初から長い文章を読んでくれません。だからCharaBreakは、読む前の数秒をゲームに変えます。文字を攻撃し、画像を揺らし、ページの上を走り回るうちに、訪問者はいつの間にか本文・見出し・ボタンに触れています。壊すことをコンテンツ化し、サイト滞在時間と記憶に残る体験をつくる、WordPress向けインタラクティブWebプラグインです。</p>",
                             "text_color": "rgba(251,250,244,0.84)",
@@ -575,7 +633,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "9edb9bf8",
+                        "id": "e842a39f",
                         "settings": {
                             "content_width": "full",
                             "flex_direction": "row",
@@ -591,7 +649,7 @@
                         },
                         "elements": [
                             {
-                                "id": "2b753094",
+                                "id": "8af9521c",
                                 "settings": {
                                     "text": "Free Download",
                                     "link": {
@@ -647,7 +705,7 @@
                                 "elType": "widget"
                             },
                             {
-                                "id": "bdbd1d16",
+                                "id": "b552242f",
                                 "settings": {
                                     "text": "Break This Page",
                                     "link": {
@@ -712,7 +770,7 @@
                 "elType": "container"
             },
             {
-                "id": "f57c37ab",
+                "id": "b888d25a",
                 "settings": {
                     "content_width": "full",
                     "width": {
@@ -739,7 +797,7 @@
                         "isLinked": false
                     },
                     "background_background": "classic",
-                    "background_color": "rgba(251,250,244,0.92)",
+                    "background_color": "rgba(8,20,31,0.78)",
                     "border_border": "solid",
                     "border_color": "rgba(78,220,207,0.48)",
                     "border_width": {
@@ -762,20 +820,20 @@
                 },
                 "elements": [
                     {
-                        "id": "8e409495",
+                        "id": "d097ffc5",
                         "settings": {
                             "image": {
-                                "url": "http://localhost:8089/wp-content/plugins/gaming-web/assets/sprites/character-placeholder.svg",
-                                "id": 0,
+                                "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-logo-transparent-hd.png",
+                                "id": 334,
                                 "size": "",
-                                "alt": "",
-                                "source": "url"
+                                "alt": "CharaBreakキャラクター",
+                                "source": "library"
                             },
                             "image_size": "full",
                             "_title": "image:: CharaBreakキャラクター",
                             "width": {
                                 "unit": "%",
-                                "size": 46,
+                                "size": 82,
                                 "sizes": []
                             },
                             "align": "center"
@@ -786,11 +844,11 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "683d4da5",
+                        "id": "44095ec4",
                         "settings": {
                             "title": "Serious page. Playable content.",
                             "header_size": "h3",
-                            "title_color": "#08141f",
+                            "title_color": "#fbfaf4",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
                             "typography_font_weight": "900",
@@ -813,10 +871,10 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "55895036",
+                        "id": "d333a916",
                         "settings": {
                             "editor": "<p>きちんと作り込まれたWebサイトほど、ゲームとして触れた時のギャップが強くなります。おしゃれなページなのに壊せる。その違和感が、思わず誰かに見せたくなる体験になります。</p>",
-                            "text_color": "#18222d",
+                            "text_color": "rgba(251,250,244,0.78)",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
                             "typography_font_size": {
@@ -846,7 +904,7 @@
         "elType": "container"
     },
     {
-        "id": "e34596cb",
+        "id": "fe330f31",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -864,7 +922,7 @@
         },
         "elements": [
             {
-                "id": "17cd32d1",
+                "id": "1a0c1268",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -884,7 +942,7 @@
                 },
                 "elements": [
                     {
-                        "id": "e81f669a",
+                        "id": "4f7af520",
                         "settings": {
                             "title": "Concept",
                             "header_size": "h6",
@@ -916,7 +974,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "e0ee0bae",
+                        "id": "a4696293",
                         "settings": {
                             "title": "読まれない時代の、読むきっかけを作る。",
                             "header_size": "h2",
@@ -942,7 +1000,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "8f0a8cfd",
+                        "id": "8dfe8ee8",
                         "settings": {
                             "editor": "<p>広告もLPも、最初の壁は「読まれない」ことです。CharaBreakは文章をいきなり読ませるのではなく、ページそのものを遊べる対象に変えます。触る、攻撃する、守る、進む。その行為の中で、訪問者は自然に言葉へ接触していきます。</p>",
                             "text_color": "#607080",
@@ -970,7 +1028,7 @@
                 "elType": "container"
             },
             {
-                "id": "96c0a42c",
+                "id": "4e6fb43f",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -994,7 +1052,7 @@
                 },
                 "elements": [
                     {
-                        "id": "5e40b858",
+                        "id": "b561d446",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1052,7 +1110,7 @@
                         },
                         "elements": [
                             {
-                                "id": "9b7d8074",
+                                "id": "e9971865",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-stopwatch",
@@ -1099,7 +1157,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "37ecc8ef",
+                        "id": "9b2718c4",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1157,7 +1215,7 @@
                         },
                         "elements": [
                             {
-                                "id": "bb84c536",
+                                "id": "8a3c9e25",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-hand-sparkles",
@@ -1204,7 +1262,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "0a662083",
+                        "id": "c73cd813",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1262,7 +1320,7 @@
                         },
                         "elements": [
                             {
-                                "id": "1b7763bb",
+                                "id": "39b27620",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-users",
@@ -1317,7 +1375,7 @@
         "elType": "container"
     },
     {
-        "id": "4e989095",
+        "id": "0c2ffe3d",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1335,7 +1393,7 @@
         },
         "elements": [
             {
-                "id": "db149be8",
+                "id": "b96771c1",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -1355,7 +1413,7 @@
                 },
                 "elements": [
                     {
-                        "id": "cfb190eb",
+                        "id": "2cfef916",
                         "settings": {
                             "title": "Interactive Web",
                             "header_size": "h6",
@@ -1387,7 +1445,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "b77f5317",
+                        "id": "8a00f4ba",
                         "settings": {
                             "title": "壊すことを、マーケティング施策にする。",
                             "header_size": "h2",
@@ -1413,7 +1471,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "6cc551f5",
+                        "id": "c9b302dd",
                         "settings": {
                             "editor": "<p>CharaBreakは単なるミニゲームではありません。Webサイトの上に、滞在・回遊・読了・特典導線を生むインタラクティブレイヤーを追加します。ビジネスサイトの信頼感はそのままに、遊べる驚きでファンをつかみます。</p>",
                             "text_color": "rgba(251,250,244,0.82)",
@@ -1441,7 +1499,7 @@
                 "elType": "container"
             },
             {
-                "id": "97d70b44",
+                "id": "090ace7a",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -1465,7 +1523,7 @@
                 },
                 "elements": [
                     {
-                        "id": "87672ce1",
+                        "id": "3b1b778f",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1523,7 +1581,7 @@
                         },
                         "elements": [
                             {
-                                "id": "f6f9ef4e",
+                                "id": "c5ab5a4c",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-eye",
@@ -1570,7 +1628,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "9f83f905",
+                        "id": "e379199d",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1628,7 +1686,7 @@
                         },
                         "elements": [
                             {
-                                "id": "188540d2",
+                                "id": "d33b8ce9",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-route",
@@ -1675,7 +1733,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "10d0a83b",
+                        "id": "4f12b06b",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1733,7 +1791,7 @@
                         },
                         "elements": [
                             {
-                                "id": "48c03f13",
+                                "id": "1bc95792",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-ticket-alt",
@@ -1788,7 +1846,7 @@
         "elType": "container"
     },
     {
-        "id": "2db15e08",
+        "id": "c4a6f9d5",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1806,7 +1864,7 @@
         },
         "elements": [
             {
-                "id": "9c5b3a9a",
+                "id": "675d17de",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -1826,7 +1884,7 @@
                 },
                 "elements": [
                     {
-                        "id": "b76ce723",
+                        "id": "466ed730",
                         "settings": {
                             "title": "Game Loop",
                             "header_size": "h6",
@@ -1858,7 +1916,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "297e11ea",
+                        "id": "1aa6402e",
                         "settings": {
                             "title": "走る、攻撃する、守る、そして読む。",
                             "header_size": "h2",
@@ -1884,7 +1942,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "b1147ef7",
+                        "id": "3b56ff96",
                         "settings": {
                             "editor": "<p>プレイヤーはページの上に落ちてきて、文字や画像を足場に進みます。壊した文字、守った文字、敵から守ったページの記憶が、最後に本文の要約と重なります。遊びのあとに、読まれる構造です。</p>",
                             "text_color": "#607080",
@@ -1912,7 +1970,7 @@
                 "elType": "container"
             },
             {
-                "id": "abb00de3",
+                "id": "65444e36",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -1936,7 +1994,7 @@
                 },
                 "elements": [
                     {
-                        "id": "52689bc6",
+                        "id": "643fd613",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1994,7 +2052,7 @@
                         },
                         "elements": [
                             {
-                                "id": "a7c474bf",
+                                "id": "4ccb4efb",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-running",
@@ -2041,7 +2099,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "2d0b7822",
+                        "id": "c11944fe",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2099,7 +2157,7 @@
                         },
                         "elements": [
                             {
-                                "id": "ee09916a",
+                                "id": "d6b5430b",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-bolt",
@@ -2146,7 +2204,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "1e4a1499",
+                        "id": "54961e0b",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2204,7 +2262,7 @@
                         },
                         "elements": [
                             {
-                                "id": "1388677e",
+                                "id": "71b9aa91",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-shield-alt",
@@ -2251,7 +2309,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "10151b5d",
+                        "id": "1135c6ce",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2309,7 +2367,7 @@
                         },
                         "elements": [
                             {
-                                "id": "757e8c47",
+                                "id": "f8462400",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-flag-checkered",
@@ -2364,7 +2422,7 @@
         "elType": "container"
     },
     {
-        "id": "98a54f5d",
+        "id": "bb7e6e74",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "row",
@@ -2390,7 +2448,7 @@
         },
         "elements": [
             {
-                "id": "d0ca1664",
+                "id": "13df9a57",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -2410,7 +2468,7 @@
                 },
                 "elements": [
                     {
-                        "id": "3882648c",
+                        "id": "e94c9858",
                         "settings": {
                             "title": "Plans",
                             "header_size": "h6",
@@ -2442,7 +2500,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "9b0b9e11",
+                        "id": "19676137",
                         "settings": {
                             "title": "無料で試して、1サイト買い切りで広げる。",
                             "header_size": "h2",
@@ -2468,7 +2526,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "1172e41e",
+                        "id": "f8f6f57b",
                         "settings": {
                             "editor": "<p>無料版は1ページだけゲーム化できる入口。Proではページ数制限を外し、リンクゲートで複数ページを冒険化します。個人制作から企業サイトまで、導入しやすい1サイト単位の販売を想定しています。</p>",
                             "text_color": "rgba(251,250,244,0.82)",
@@ -2496,7 +2554,7 @@
                 "elType": "container"
             },
             {
-                "id": "a5b8b0a5",
+                "id": "269012ea",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -2520,7 +2578,7 @@
                 },
                 "elements": [
                     {
-                        "id": "c2321ac5",
+                        "id": "29f158bb",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2578,7 +2636,7 @@
                         },
                         "elements": [
                             {
-                                "id": "b700c178",
+                                "id": "2c8f8aee",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-seedling",
@@ -2625,7 +2683,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "d4ec7256",
+                        "id": "7e80c072",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2683,7 +2741,7 @@
                         },
                         "elements": [
                             {
-                                "id": "0ddf3497",
+                                "id": "fa20dc08",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-crown",
@@ -2730,7 +2788,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "211d9287",
+                        "id": "974afd26",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2788,7 +2846,7 @@
                         },
                         "elements": [
                             {
-                                "id": "45d2edc4",
+                                "id": "6bc1de24",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-globe",
@@ -2843,7 +2901,7 @@
         "elType": "container"
     },
     {
-        "id": "cbecd324",
+        "id": "df9430c2",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -2863,7 +2921,7 @@
         },
         "elements": [
             {
-                "id": "4bf0e4f8",
+                "id": "3312a95b",
                 "settings": {
                     "title": "まずは1ページ、遊べるWebに変えてみる。",
                     "header_size": "h2",
@@ -2890,7 +2948,7 @@
                 "elType": "widget"
             },
             {
-                "id": "9a73f5b6",
+                "id": "df20b5ac",
                 "settings": {
                     "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
                     "text_color": "rgba(251,250,244,0.78)",
@@ -2915,7 +2973,7 @@
                 "elType": "widget"
             },
             {
-                "id": "67d20743",
+                "id": "f4b9a4ea",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -2932,7 +2990,7 @@
                 },
                 "elements": [
                     {
-                        "id": "c4154601",
+                        "id": "0e295878",
                         "settings": {
                             "text": "Free Download",
                             "link": {
@@ -2988,7 +3046,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "73542f6e",
+                        "id": "714cd408",
                         "settings": {
                             "text": "Play Demo",
                             "link": {

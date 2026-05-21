@@ -157,11 +157,20 @@ class GW_Plugin
         $mode = in_array($mode, array('inherit', 'enabled', 'disabled'), true) ? $mode : 'inherit';
         $important_words = get_post_meta($post->ID, '_gaming_web_important_words', true);
         $stage_name = get_post_meta($post->ID, '_gaming_web_stage_name', true);
+        $visual_style = get_post_meta($post->ID, '_gaming_web_visual_style', true);
+        $visual_style = in_array($visual_style, array_merge(array('inherit'), array_keys(GW_Settings::visual_style_choices())), true) ? $visual_style : 'inherit';
         $reward_enabled = get_post_meta($post->ID, '_gaming_web_reward_enabled', true);
         $reward_title = get_post_meta($post->ID, '_gaming_web_reward_title', true);
         $reward_message = get_post_meta($post->ID, '_gaming_web_reward_message', true);
         $reward_coupon_code = get_post_meta($post->ID, '_gaming_web_reward_coupon_code', true);
         $reward_url = get_post_meta($post->ID, '_gaming_web_reward_url', true);
+        $world_map_include = get_post_meta($post->ID, '_gaming_web_world_map_include', true);
+        $world_map_include = $world_map_include === '0' ? '0' : '1';
+        $world_map_label = get_post_meta($post->ID, '_gaming_web_world_map_label', true);
+        $world_map_order = get_post_meta($post->ID, '_gaming_web_world_map_order', true);
+        $world_map_type = get_post_meta($post->ID, '_gaming_web_world_map_type', true);
+        $world_map_type = in_array($world_map_type, array('normal', 'reward', 'boss', 'final'), true) ? $world_map_type : 'normal';
+        $world_map_reward_label = get_post_meta($post->ID, '_gaming_web_world_map_reward_label', true);
         ?>
         <p>
             <label for="gaming-web-mode"><strong><?php esc_html_e('Page game mode', 'gaming-web'); ?></strong></label>
@@ -178,6 +187,15 @@ class GW_Plugin
         <p>
             <label for="gaming-web-stage-name"><strong><?php esc_html_e('Stage name', 'gaming-web'); ?></strong></label>
             <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="<?php esc_attr_e('Garden of Words', 'gaming-web'); ?>">
+        </p>
+        <p>
+            <label for="gaming-web-visual-style"><strong><?php esc_html_e('Visual style', 'gaming-web'); ?></strong></label>
+            <select name="gaming_web_visual_style" id="gaming-web-visual-style" class="widefat">
+                <option value="inherit" <?php selected($visual_style, 'inherit'); ?>><?php esc_html_e('Inherit global setting', 'gaming-web'); ?></option>
+                <?php foreach (GW_Settings::visual_style_choices() as $style_value => $style_label) : ?>
+                    <option value="<?php echo esc_attr($style_value); ?>" <?php selected($visual_style, $style_value); ?>><?php echo esc_html($style_label); ?></option>
+                <?php endforeach; ?>
+            </select>
         </p>
         <hr>
         <p>
@@ -202,6 +220,35 @@ class GW_Plugin
         <p>
             <label for="gaming-web-reward-url"><strong><?php esc_html_e('Reward URL', 'gaming-web'); ?></strong></label>
             <input type="url" name="gaming_web_reward_url" id="gaming-web-reward-url" class="widefat" value="<?php echo esc_url($reward_url); ?>" placeholder="https://example.com/special">
+        </p>
+        <hr>
+        <p>
+            <label>
+                <input type="hidden" name="gaming_web_world_map_include" value="0">
+                <input type="checkbox" name="gaming_web_world_map_include" value="1" <?php checked($world_map_include, '1'); ?>>
+                <strong><?php esc_html_e('Include in world map', 'gaming-web'); ?></strong>
+            </label>
+        </p>
+        <p>
+            <label for="gaming-web-world-map-label"><strong><?php esc_html_e('Map label', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_world_map_label" id="gaming-web-world-map-label" class="widefat" value="<?php echo esc_attr($world_map_label); ?>" placeholder="<?php esc_attr_e('Stage label on the field map', 'gaming-web'); ?>">
+        </p>
+        <p>
+            <label for="gaming-web-world-map-order"><strong><?php esc_html_e('Map order', 'gaming-web'); ?></strong></label>
+            <input type="number" min="0" step="1" name="gaming_web_world_map_order" id="gaming-web-world-map-order" class="widefat" value="<?php echo esc_attr($world_map_order); ?>" placeholder="0">
+        </p>
+        <p>
+            <label for="gaming-web-world-map-type"><strong><?php esc_html_e('Stage type', 'gaming-web'); ?></strong></label>
+            <select name="gaming_web_world_map_type" id="gaming-web-world-map-type" class="widefat">
+                <option value="normal" <?php selected($world_map_type, 'normal'); ?>><?php esc_html_e('Normal stage', 'gaming-web'); ?></option>
+                <option value="reward" <?php selected($world_map_type, 'reward'); ?>><?php esc_html_e('Reward stage', 'gaming-web'); ?></option>
+                <option value="boss" <?php selected($world_map_type, 'boss'); ?>><?php esc_html_e('Boss stage', 'gaming-web'); ?></option>
+                <option value="final" <?php selected($world_map_type, 'final'); ?>><?php esc_html_e('Final goal', 'gaming-web'); ?></option>
+            </select>
+        </p>
+        <p>
+            <label for="gaming-web-world-map-reward-label"><strong><?php esc_html_e('Map reward teaser', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_world_map_reward_label" id="gaming-web-world-map-reward-label" class="widefat" value="<?php echo esc_attr($world_map_reward_label); ?>" placeholder="<?php esc_attr_e('Coupon, bonus page, secret message...', 'gaming-web'); ?>">
         </p>
         <?php
     }
@@ -232,20 +279,38 @@ class GW_Plugin
 
         $important_words = sanitize_textarea_field(wp_unslash((string) ($_POST['gaming_web_important_words'] ?? '')));
         $stage_name = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_stage_name'] ?? '')));
+        $visual_style = sanitize_key((string) ($_POST['gaming_web_visual_style'] ?? 'inherit'));
+        if (!in_array($visual_style, array_merge(array('inherit'), array_keys(GW_Settings::visual_style_choices())), true)) {
+            $visual_style = 'inherit';
+        }
         $reward_enabled = (string) ($_POST['gaming_web_reward_enabled'] ?? '0') === '1' ? '1' : '0';
         $reward_title = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_reward_title'] ?? '')));
         $reward_message = sanitize_textarea_field(wp_unslash((string) ($_POST['gaming_web_reward_message'] ?? '')));
         $reward_coupon_code = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_reward_coupon_code'] ?? '')));
         $reward_url = esc_url_raw(wp_unslash((string) ($_POST['gaming_web_reward_url'] ?? '')));
+        $world_map_include = (string) ($_POST['gaming_web_world_map_include'] ?? '0') === '1' ? '1' : '0';
+        $world_map_label = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_world_map_label'] ?? '')));
+        $world_map_order = (string) max(0, absint($_POST['gaming_web_world_map_order'] ?? 0));
+        $world_map_type = sanitize_key((string) ($_POST['gaming_web_world_map_type'] ?? 'normal'));
+        if (!in_array($world_map_type, array('normal', 'reward', 'boss', 'final'), true)) {
+            $world_map_type = 'normal';
+        }
+        $world_map_reward_label = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_world_map_reward_label'] ?? '')));
 
         update_post_meta($post_id, '_gaming_web_mode', $mode);
         update_post_meta($post_id, '_gaming_web_important_words', $important_words);
         update_post_meta($post_id, '_gaming_web_stage_name', $stage_name);
+        update_post_meta($post_id, '_gaming_web_visual_style', $visual_style);
         update_post_meta($post_id, '_gaming_web_reward_enabled', $reward_enabled);
         update_post_meta($post_id, '_gaming_web_reward_title', $reward_title);
         update_post_meta($post_id, '_gaming_web_reward_message', $reward_message);
         update_post_meta($post_id, '_gaming_web_reward_coupon_code', $reward_coupon_code);
         update_post_meta($post_id, '_gaming_web_reward_url', $reward_url);
+        update_post_meta($post_id, '_gaming_web_world_map_include', $world_map_include);
+        update_post_meta($post_id, '_gaming_web_world_map_label', $world_map_label);
+        update_post_meta($post_id, '_gaming_web_world_map_order', $world_map_order);
+        update_post_meta($post_id, '_gaming_web_world_map_type', $world_map_type);
+        update_post_meta($post_id, '_gaming_web_world_map_reward_label', $world_map_reward_label);
     }
 
     private function is_enabled_for_current_post(): bool
@@ -285,13 +350,31 @@ class GW_Plugin
             'buttonLabel' => $this->localized_default_option(GW_Settings::OPTION_BUTTON_LABEL),
             'showFloatingButton' => GW_Settings::is_truthy(GW_Settings::OPTION_SHOW_FLOATING_BUTTON) ? '1' : '0',
             'characterName' => $this->localized_default_option(GW_Settings::OPTION_CHARACTER_NAME),
+            'visualStyle' => $this->visual_style_for_post($post_id),
+            'themeTokens' => array(),
             'importantWords' => $this->parse_important_words($important_words),
             'hasReward' => $this->has_clear_reward($post_id) ? '1' : '0',
+            'worldMap' => $this->world_map_config($post_id),
             'loggingEnabled' => GW_Settings::is_truthy(GW_Settings::OPTION_LOGGING_ENABLED),
             'debug' => GW_Settings::is_truthy(GW_Settings::OPTION_DEBUG),
             'locale' => determine_locale(),
             'messages' => array(),
         );
+    }
+
+    private function visual_style_for_post(int $post_id): string
+    {
+        $global_style = sanitize_key((string) GW_Settings::get(GW_Settings::OPTION_VISUAL_STYLE));
+        if (!GW_Settings::is_allowed_visual_style($global_style)) {
+            $global_style = 'auto';
+        }
+
+        $page_style = $post_id ? sanitize_key((string) get_post_meta($post_id, '_gaming_web_visual_style', true)) : '';
+        if (GW_Settings::is_allowed_visual_style($page_style)) {
+            return $page_style;
+        }
+
+        return $global_style;
     }
 
     private function parse_important_words(string $words): array
@@ -339,5 +422,153 @@ class GW_Plugin
         }
 
         return false;
+    }
+
+    private function world_map_config(int $current_post_id): array
+    {
+        if (!GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_ENABLED)) {
+            return array('enabled' => false);
+        }
+
+        $stages = $this->world_map_stages($current_post_id);
+        if (empty($stages)) {
+            return array('enabled' => false);
+        }
+
+        $required_count = absint(GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT));
+        if ($required_count <= 0) {
+            $required_count = count($stages);
+        }
+
+        return array(
+            'enabled' => true,
+            'title' => (string) GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_TITLE),
+            'goalLabel' => (string) GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_GOAL_LABEL),
+            'currentStageId' => $current_post_id > 0 ? 'post-' . $current_post_id : '',
+            'progressKey' => 'gaming_web_world_progress_' . substr(md5(home_url('/')), 0, 10),
+            'requiredClearCount' => min($required_count, count($stages)),
+            'showOnStart' => GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_SHOW_ON_START),
+            'showInHud' => GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_SHOW_IN_HUD),
+            'showAfterClear' => GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR),
+            'stages' => $stages,
+        );
+    }
+
+    private function world_map_stages(int $current_post_id): array
+    {
+        $enabled_types = GW_Settings::get(GW_Settings::OPTION_POST_TYPES);
+        $enabled_types = is_array($enabled_types) ? array_values(array_filter($enabled_types)) : array('page', 'post');
+        if (empty($enabled_types)) {
+            return array();
+        }
+
+        $posts = get_posts(array(
+            'post_type' => $enabled_types,
+            'post_status' => 'publish',
+            'posts_per_page' => 60,
+            'orderby' => array(
+                'menu_order' => 'ASC',
+                'title' => 'ASC',
+            ),
+            'suppress_filters' => false,
+        ));
+
+        $stages = array();
+        foreach ($posts as $post) {
+            if (!$post instanceof WP_Post || !$this->is_world_map_stage($post)) {
+                continue;
+            }
+
+            $stages[] = $this->world_map_stage_data($post);
+        }
+
+        usort($stages, static function (array $a, array $b): int {
+            $a_order = (int) ($a['order'] ?? 0);
+            $b_order = (int) ($b['order'] ?? 0);
+            if ($a_order !== $b_order) {
+                if ($a_order === 0) {
+                    return 1;
+                }
+                if ($b_order === 0) {
+                    return -1;
+                }
+                return $a_order <=> $b_order;
+            }
+
+            return strcasecmp((string) ($a['label'] ?? ''), (string) ($b['label'] ?? ''));
+        });
+
+        if ($current_post_id > 0) {
+            $current_id = 'post-' . $current_post_id;
+            $has_current = false;
+            foreach ($stages as $stage) {
+                if (($stage['id'] ?? '') === $current_id) {
+                    $has_current = true;
+                    break;
+                }
+            }
+
+            if (!$has_current) {
+                $current_post = get_post($current_post_id);
+                if ($current_post instanceof WP_Post) {
+                    array_unshift($stages, $this->world_map_stage_data($current_post));
+                }
+            }
+        }
+
+        $stages = array_slice($stages, 0, 24);
+
+        foreach ($stages as $index => &$stage) {
+            $stage['index'] = $index;
+            if ($index === count($stages) - 1 && $stage['type'] === 'normal') {
+                $stage['type'] = 'final';
+            }
+        }
+        unset($stage);
+
+        return $stages;
+    }
+
+    private function is_world_map_stage(WP_Post $post): bool
+    {
+        $enabled_types = GW_Settings::get(GW_Settings::OPTION_POST_TYPES);
+        $enabled_types = is_array($enabled_types) ? $enabled_types : array();
+        if (!in_array($post->post_type, $enabled_types, true)) {
+            return false;
+        }
+
+        if (get_post_meta($post->ID, '_gaming_web_mode', true) === 'disabled') {
+            return false;
+        }
+
+        return get_post_meta($post->ID, '_gaming_web_world_map_include', true) !== '0';
+    }
+
+    private function world_map_stage_data(WP_Post $post): array
+    {
+        $stage_name = trim((string) get_post_meta($post->ID, '_gaming_web_stage_name', true));
+        $map_label = trim((string) get_post_meta($post->ID, '_gaming_web_world_map_label', true));
+        $type = sanitize_key((string) get_post_meta($post->ID, '_gaming_web_world_map_type', true));
+        if (!in_array($type, array('normal', 'reward', 'boss', 'final'), true)) {
+            $type = $this->has_clear_reward($post->ID) ? 'reward' : 'normal';
+        }
+
+        $reward_label = trim((string) get_post_meta($post->ID, '_gaming_web_world_map_reward_label', true));
+        if ($reward_label === '' && $this->has_clear_reward($post->ID)) {
+            $reward_label = trim((string) get_post_meta($post->ID, '_gaming_web_reward_title', true));
+        }
+
+        return array(
+            'id' => 'post-' . $post->ID,
+            'pageId' => $post->ID,
+            'label' => $map_label !== '' ? $map_label : ($stage_name !== '' ? $stage_name : get_the_title($post)),
+            'title' => get_the_title($post),
+            'stageName' => $stage_name !== '' ? $stage_name : get_the_title($post),
+            'url' => get_permalink($post),
+            'type' => $type,
+            'order' => absint(get_post_meta($post->ID, '_gaming_web_world_map_order', true)),
+            'hasReward' => $this->has_clear_reward($post->ID),
+            'rewardLabel' => $reward_label,
+        );
     }
 }

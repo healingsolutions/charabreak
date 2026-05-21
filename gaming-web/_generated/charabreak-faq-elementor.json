@@ -1,6 +1,6 @@
 [
     {
-        "id": "c6595540",
+        "id": "0ffa347b",
         "settings": {
             "html_tag": "header",
             "content_width": "full",
@@ -30,33 +30,91 @@
         },
         "elements": [
             {
-                "id": "c85163e4",
+                "id": "b183c753",
                 "settings": {
-                    "title": "CharaBreak",
-                    "header_size": "h3",
-                    "title_color": "#fbfaf4",
-                    "typography_font_family": "Inter",
-                    "typography_typography": "custom",
-                    "typography_font_weight": "900",
-                    "typography_line_height": {
-                        "unit": "em",
-                        "size": 1.08,
+                    "content_width": "full",
+                    "width": {
+                        "unit": "%",
+                        "size": 30,
                         "sizes": []
                     },
-                    "_title": "title:: CharaBreakロゴ",
-                    "typography_font_size": {
-                        "unit": "px",
-                        "size": 24,
+                    "width_tablet": {
+                        "unit": "%",
+                        "size": 100,
                         "sizes": []
-                    }
+                    },
+                    "flex_direction": "row",
+                    "flex_align_items": "center",
+                    "flex_gap": {
+                        "column": "12",
+                        "row": "12",
+                        "isLinked": true,
+                        "unit": "px",
+                        "size": 12
+                    },
+                    "_title": "container:: CharaBreak brand mark"
                 },
-                "elements": [],
-                "isInner": false,
-                "widgetType": "heading",
-                "elType": "widget"
+                "elements": [
+                    {
+                        "id": "12002f05",
+                        "settings": {
+                            "image": {
+                                "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-logo-transparent-hd.png",
+                                "id": 334,
+                                "size": "",
+                                "alt": "CharaBreak logo mark",
+                                "source": "library"
+                            },
+                            "image_size": "full",
+                            "_title": "image:: CharaBreak logo mark",
+                            "width": {
+                                "unit": "px",
+                                "size": 42,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "px",
+                                "size": 36,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "image",
+                        "elType": "widget"
+                    },
+                    {
+                        "id": "f9f0f3d7",
+                        "settings": {
+                            "title": "CharaBreak",
+                            "header_size": "h3",
+                            "title_color": "#fbfaf4",
+                            "typography_font_family": "Inter",
+                            "typography_typography": "custom",
+                            "typography_font_weight": "900",
+                            "typography_line_height": {
+                                "unit": "em",
+                                "size": 1.08,
+                                "sizes": []
+                            },
+                            "_title": "title:: CharaBreakロゴ",
+                            "typography_font_size": {
+                                "unit": "px",
+                                "size": 24,
+                                "sizes": []
+                            }
+                        },
+                        "elements": [],
+                        "isInner": false,
+                        "widgetType": "heading",
+                        "elType": "widget"
+                    }
+                ],
+                "isInner": true,
+                "elType": "container"
             },
             {
-                "id": "669438a2",
+                "id": "8c92bff6",
                 "settings": {
                     "html_tag": "nav",
                     "content_width": "full",
@@ -74,7 +132,7 @@
                 },
                 "elements": [
                     {
-                        "id": "e6a49e4c",
+                        "id": "11417bc6",
                         "settings": {
                             "text": "Home",
                             "link": {
@@ -130,7 +188,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "e2a3e44e",
+                        "id": "81bf1877",
                         "settings": {
                             "text": "Features",
                             "link": {
@@ -186,7 +244,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "6494038c",
+                        "id": "c4bf754a",
                         "settings": {
                             "text": "Pricing",
                             "link": {
@@ -242,7 +300,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "f85b4879",
+                        "id": "e2b55be5",
                         "settings": {
                             "text": "Demo",
                             "link": {
@@ -298,7 +356,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "e77e227a",
+                        "id": "83f6f54f",
                         "settings": {
                             "text": "FAQ",
                             "link": {
@@ -354,7 +412,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "26f540b4",
+                        "id": "ac2ddfb4",
                         "settings": {
                             "text": "Play",
                             "link": {
@@ -419,7 +477,7 @@
         "elType": "container"
     },
     {
-        "id": "4b452eda",
+        "id": "fd076c87",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -437,7 +495,7 @@
         },
         "elements": [
             {
-                "id": "dc3dd647",
+                "id": "1e69ff03",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -457,7 +515,7 @@
                 },
                 "elements": [
                     {
-                        "id": "3ebbc5e2",
+                        "id": "75f27205",
                         "settings": {
                             "title": "FAQ",
                             "header_size": "h6",
@@ -489,7 +547,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "ca851d98",
+                        "id": "d378728d",
                         "settings": {
                             "title": "配布、販売、ビジネス活用のよくある質問。",
                             "header_size": "h2",
@@ -515,7 +573,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "02661d6e",
+                        "id": "1dc35eb8",
                         "settings": {
                             "editor": "<p>無料配布からFreemius販売、インタラクティブWeb施策としての使い方まで、CharaBreakを世界に出すために必要な情報をまとめます。</p>",
                             "text_color": "#607080",
@@ -543,7 +601,47 @@
                 "elType": "container"
             },
             {
-                "id": "6cac963d",
+                "id": "53620b64",
+                "settings": {
+                    "image": {
+                        "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-boss-gate.png",
+                        "id": 330,
+                        "size": "",
+                        "alt": "中ボスとゲートの世界観",
+                        "source": "library"
+                    },
+                    "image_size": "full",
+                    "_title": "image:: 中ボスとゲートの世界観",
+                    "width": {
+                        "unit": "%",
+                        "size": 82,
+                        "sizes": []
+                    },
+                    "align": "center",
+                    "border_radius": {
+                        "unit": "px",
+                        "top": "8",
+                        "right": "8",
+                        "bottom": "8",
+                        "left": "8",
+                        "isLinked": false
+                    },
+                    "box_shadow_box_shadow_type": "yes",
+                    "box_shadow_box_shadow": {
+                        "horizontal": 0,
+                        "vertical": 24,
+                        "blur": 72,
+                        "spread": 0,
+                        "color": "rgba(8,20,31,0.22)"
+                    }
+                },
+                "elements": [],
+                "isInner": false,
+                "widgetType": "image",
+                "elType": "widget"
+            },
+            {
+                "id": "8ddc0cce",
                 "settings": {
                     "tabs": [
                         {
@@ -607,7 +705,7 @@
         "elType": "container"
     },
     {
-        "id": "126fd3ce",
+        "id": "42359f22",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -627,7 +725,7 @@
         },
         "elements": [
             {
-                "id": "57195e6b",
+                "id": "4bcf6d05",
                 "settings": {
                     "title": "まずは1ページ、遊べるWebに変えてみる。",
                     "header_size": "h2",
@@ -654,7 +752,7 @@
                 "elType": "widget"
             },
             {
-                "id": "d5fc8344",
+                "id": "89836eae",
                 "settings": {
                     "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
                     "text_color": "rgba(251,250,244,0.78)",
@@ -679,7 +777,7 @@
                 "elType": "widget"
             },
             {
-                "id": "6891b937",
+                "id": "40af40af",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -696,7 +794,7 @@
                 },
                 "elements": [
                     {
-                        "id": "c2e47616",
+                        "id": "cde90fec",
                         "settings": {
                             "text": "Free Download",
                             "link": {
@@ -752,7 +850,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "99cb4513",
+                        "id": "40b37da4",
                         "settings": {
                             "text": "Play Demo",
                             "link": {

@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.2.10';
-import { StageOverlay } from './stage-overlay.js?v=0.2.10';
-import { InteractionEngine } from './interaction-engine.js?v=0.2.10';
-import { TextBreaker } from './text-breaker.js?v=0.2.10';
-import { ImageBreaker } from './image-breaker.js?v=0.2.10';
+import { scanGameTargets } from './dom-scanner.js?v=0.2.19';
+import { StageOverlay } from './stage-overlay.js?v=0.2.19';
+import { InteractionEngine } from './interaction-engine.js?v=0.2.19';
+import { TextBreaker } from './text-breaker.js?v=0.2.19';
+import { ImageBreaker } from './image-breaker.js?v=0.2.19';
 
 export class GamingWebCore {
     constructor(config = {}) {
@@ -44,6 +44,8 @@ export class GamingWebCore {
             messages: this.config.messages,
             importantWords: this.config.importantWords || [],
             hasReward: this.config.hasReward === '1' || this.config.hasReward === true,
+            visualStyle: this.config.visualStyle || 'auto',
+            themeTokens: this.config.themeTokens || {},
             reducedMotion,
             textBreaker: this.textBreaker,
             imageBreaker: this.imageBreaker,
@@ -52,6 +54,13 @@ export class GamingWebCore {
                 const nextEnabled = await this.audio?.setBgmEnabled(enabled);
                 this.audio?.play('uiMove', { volume: 0.16 });
                 this.overlay?.setBgmEnabled(Boolean(nextEnabled));
+            },
+            worldMapEnabled: Boolean(this.config.worldMap?.enabled && this.config.worldMap?.showInHud),
+            worldMapAfterClear: Boolean(this.config.worldMap?.enabled && this.config.worldMap?.showAfterClear),
+            onWorldMapOpen: () => {
+                if (typeof this.config.onWorldMapOpen === 'function') {
+                    this.config.onWorldMapOpen();
+                }
             },
             onNavigate: (href) => {
                 if (typeof this.config.onNavigate === 'function') {
@@ -75,11 +84,20 @@ export class GamingWebCore {
                 this.restart();
             },
             onStageClear: (detail) => {
-                return this.logger?.log('stage_soft_clear', {
+                const payload = {
                     stage_name: this.config.stageName,
                     inventory_count: this.engine?.inventory.length || 0,
                     ...detail,
-                }) || Promise.resolve({ skipped: true });
+                };
+                const request = this.logger?.log('stage_soft_clear', payload) || Promise.resolve({ skipped: true });
+
+                return Promise.resolve(request).then((response) => {
+                    if (typeof this.config.onStageClear === 'function') {
+                        this.config.onStageClear(payload, response);
+                    }
+
+                    return response;
+                });
             },
             onExit: () => this.stop(),
             onInventoryOpen: () => {

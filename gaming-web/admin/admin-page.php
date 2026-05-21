@@ -10,6 +10,14 @@ $post_types = GW_Settings::get(GW_Settings::OPTION_POST_TYPES);
 $post_types = is_array($post_types) ? $post_types : array();
 $button_label = GW_Settings::get(GW_Settings::OPTION_BUTTON_LABEL);
 $character_name = GW_Settings::get(GW_Settings::OPTION_CHARACTER_NAME);
+$visual_style = GW_Settings::get(GW_Settings::OPTION_VISUAL_STYLE);
+$world_map_enabled = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_ENABLED);
+$world_map_title = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_TITLE);
+$world_map_goal_label = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_GOAL_LABEL);
+$world_map_required_clear_count = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT);
+$world_map_show_on_start = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_SHOW_ON_START);
+$world_map_show_in_hud = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_SHOW_IN_HUD);
+$world_map_show_after_clear = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR);
 $logging_enabled = GW_Settings::get(GW_Settings::OPTION_LOGGING_ENABLED);
 $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
 ?>
@@ -26,6 +34,10 @@ $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_ENABLED); ?>" value="0">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_SHOW_FLOATING_BUTTON); ?>" value="0">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_POST_TYPES); ?>[]" value="">
+        <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_ENABLED); ?>" value="0">
+        <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_SHOW_ON_START); ?>" value="0">
+        <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_SHOW_IN_HUD); ?>" value="0">
+        <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR); ?>" value="0">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_LOGGING_ENABLED); ?>" value="0">
         <input type="hidden" name="<?php echo esc_attr(GW_Settings::OPTION_DEBUG); ?>" value="0">
 
@@ -82,6 +94,79 @@ $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
                     </th>
                     <td>
                         <input type="text" id="gaming-web-character-name" name="<?php echo esc_attr(GW_Settings::OPTION_CHARACTER_NAME); ?>" value="<?php echo esc_attr($character_name); ?>" class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="gaming-web-visual-style"><?php esc_html_e('Visual style', 'gaming-web'); ?></label>
+                    </th>
+                    <td>
+                        <select id="gaming-web-visual-style" name="<?php echo esc_attr(GW_Settings::OPTION_VISUAL_STYLE); ?>">
+                            <?php foreach (GW_Settings::visual_style_choices() as $style_value => $style_label) : ?>
+                                <option value="<?php echo esc_attr($style_value); ?>" <?php selected($visual_style, $style_value); ?>><?php echo esc_html($style_label); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="description">
+                            <?php esc_html_e('Auto respects each page first, then lightly adds game accents. Pastel softens chests, jewels, enemies, and glow.', 'gaming-web'); ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><?php esc_html_e('World map', 'gaming-web'); ?></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_ENABLED); ?>" value="1" <?php checked($world_map_enabled, '1'); ?>>
+                            <?php esc_html_e('Show the site as a stage field map', 'gaming-web'); ?>
+                        </label>
+                        <p class="description">
+                            <?php esc_html_e('Enabled pages become connected stages. Progress is stored in the visitor browser for this MVP.', 'gaming-web'); ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="gaming-web-world-map-title"><?php esc_html_e('World map title', 'gaming-web'); ?></label>
+                    </th>
+                    <td>
+                        <input type="text" id="gaming-web-world-map-title" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_TITLE); ?>" value="<?php echo esc_attr($world_map_title); ?>" class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="gaming-web-world-map-goal-label"><?php esc_html_e('Final goal label', 'gaming-web'); ?></label>
+                    </th>
+                    <td>
+                        <input type="text" id="gaming-web-world-map-goal-label" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_GOAL_LABEL); ?>" value="<?php echo esc_attr($world_map_goal_label); ?>" class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="gaming-web-world-map-required-clear-count"><?php esc_html_e('Required clears for final gate', 'gaming-web'); ?></label>
+                    </th>
+                    <td>
+                        <input type="number" min="0" step="1" id="gaming-web-world-map-required-clear-count" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT); ?>" value="<?php echo esc_attr($world_map_required_clear_count); ?>" class="small-text">
+                        <p class="description">
+                            <?php esc_html_e('Use 0 to require all mapped stages.', 'gaming-web'); ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><?php esc_html_e('World map timing', 'gaming-web'); ?></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_SHOW_ON_START); ?>" value="1" <?php checked($world_map_show_on_start, '1'); ?>>
+                            <?php esc_html_e('Show before game start', 'gaming-web'); ?>
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_SHOW_IN_HUD); ?>" value="1" <?php checked($world_map_show_in_hud, '1'); ?>>
+                            <?php esc_html_e('Show MAP button in game HUD', 'gaming-web'); ?>
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="<?php echo esc_attr(GW_Settings::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR); ?>" value="1" <?php checked($world_map_show_after_clear, '1'); ?>>
+                            <?php esc_html_e('Show map action after stage clear', 'gaming-web'); ?>
+                        </label>
                     </td>
                 </tr>
                 <tr>

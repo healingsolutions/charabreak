@@ -11,6 +11,14 @@ class GW_Settings
     public const OPTION_POST_TYPES = 'gaming_web_post_types';
     public const OPTION_BUTTON_LABEL = 'gaming_web_button_label';
     public const OPTION_CHARACTER_NAME = 'gaming_web_character_name';
+    public const OPTION_VISUAL_STYLE = 'gaming_web_visual_style';
+    public const OPTION_WORLD_MAP_ENABLED = 'gaming_web_world_map_enabled';
+    public const OPTION_WORLD_MAP_TITLE = 'gaming_web_world_map_title';
+    public const OPTION_WORLD_MAP_GOAL_LABEL = 'gaming_web_world_map_goal_label';
+    public const OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT = 'gaming_web_world_map_required_clear_count';
+    public const OPTION_WORLD_MAP_SHOW_ON_START = 'gaming_web_world_map_show_on_start';
+    public const OPTION_WORLD_MAP_SHOW_IN_HUD = 'gaming_web_world_map_show_in_hud';
+    public const OPTION_WORLD_MAP_SHOW_AFTER_CLEAR = 'gaming_web_world_map_show_after_clear';
     public const OPTION_LOGGING_ENABLED = 'gaming_web_logging_enabled';
     public const OPTION_DEBUG = 'gaming_web_debug';
 
@@ -22,6 +30,14 @@ class GW_Settings
             self::OPTION_POST_TYPES => array('page', 'post'),
             self::OPTION_BUTTON_LABEL => 'Game Mode',
             self::OPTION_CHARACTER_NAME => 'Pico',
+            self::OPTION_VISUAL_STYLE => 'auto',
+            self::OPTION_WORLD_MAP_ENABLED => '1',
+            self::OPTION_WORLD_MAP_TITLE => 'CharaBreak World',
+            self::OPTION_WORLD_MAP_GOAL_LABEL => 'Final Gate',
+            self::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT => '3',
+            self::OPTION_WORLD_MAP_SHOW_ON_START => '1',
+            self::OPTION_WORLD_MAP_SHOW_IN_HUD => '1',
+            self::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR => '1',
             self::OPTION_LOGGING_ENABLED => '1',
             self::OPTION_DEBUG => '0',
         );
@@ -86,6 +102,54 @@ class GW_Settings
             'default' => 'Pico',
         ));
 
+        register_setting('gaming_web_settings', self::OPTION_VISUAL_STYLE, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_visual_style'),
+            'default' => 'auto',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_ENABLED, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_checkbox'),
+            'default' => '1',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_TITLE, array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => 'CharaBreak World',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_GOAL_LABEL, array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => 'Final Gate',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_non_negative_int_string'),
+            'default' => '3',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_SHOW_ON_START, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_checkbox'),
+            'default' => '1',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_SHOW_IN_HUD, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_checkbox'),
+            'default' => '1',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_checkbox'),
+            'default' => '1',
+        ));
+
         register_setting('gaming_web_settings', self::OPTION_LOGGING_ENABLED, array(
             'type' => 'string',
             'sanitize_callback' => array($this, 'sanitize_checkbox'),
@@ -133,6 +197,33 @@ class GW_Settings
         $value = is_array($value) ? $value : array();
 
         return array_values(array_intersect($allowed, array_map('sanitize_key', $value)));
+    }
+
+    public function sanitize_visual_style($value): string
+    {
+        $value = sanitize_key((string) $value);
+
+        return self::is_allowed_visual_style($value) ? $value : 'auto';
+    }
+
+    public function sanitize_non_negative_int_string($value): string
+    {
+        return (string) max(0, absint($value));
+    }
+
+    public static function visual_style_choices(): array
+    {
+        return array(
+            'auto' => __('Auto', 'gaming-web'),
+            'soft' => __('Soft', 'gaming-web'),
+            'pastel' => __('Pastel', 'gaming-web'),
+            'neon' => __('Neon', 'gaming-web'),
+        );
+    }
+
+    public static function is_allowed_visual_style(string $value): bool
+    {
+        return array_key_exists($value, self::visual_style_choices());
     }
 
     public static function get(string $key)

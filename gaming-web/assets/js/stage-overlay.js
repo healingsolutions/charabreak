@@ -1,4 +1,4 @@
-import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.10';
+import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.18';
 
 const UI_TEXT_EN = {
     defaultCharacter: 'Pico',
@@ -30,12 +30,13 @@ const UI_TEXT_EN = {
     stageFailed: 'OUT! A passphrase letter disappeared!',
     lifeLabel: 'LIFE',
     collectedLabel: 'Guarded letters',
-    collectMission: 'Hold X to raise a letter / Guard 3+ letters and reach GOAL',
-    goalNeedsLetters: 'Guard {count} more letters!',
-    goalReadyWithLetters: 'You guarded 3+ letters! Go to GOAL!',
-    treasureTitle: 'Guard-letter Target',
+    collectMission: 'Open 3 treasure chests to unlock GOAL / Letters are optional memories',
+    goalNeedsChests: 'Open {count} more treasure chests!',
+    goalReadyWithChests: 'You opened 3 treasure chests! Go to GOAL!',
+    chestProgressLabel: 'Chests',
+    treasureTitle: 'Guarded Letters',
     treasureEmpty: 'None yet',
-    treasureHint: 'Hold X to raise a letter underfoot',
+    treasureHint: 'Hold X to raise a favorite letter underfoot',
     treasureHold: 'Letter raised! Guard it for 3 seconds!',
     treasurePlaced: 'You placed the letter back down!',
     treasureStored: 'Carved "{char}" into your guard-letter target!',
@@ -97,16 +98,25 @@ const UI_TEXT_EN = {
     bgmOn: 'BGM',
     bgmOff: 'BGM',
     controlsToggle: 'CTRL',
+    mapToggle: 'MAP',
     controlsClose: 'Close',
     controlGuideTitle: 'QUICK MENU',
     controlGuideKeys: 'CTRL: Controls / J Hit / K-X Letters / Space Jump / L Shield',
     controlGuidePad: 'Gamepad supported',
     introTitle: 'Use the page as your platform',
-    introLead: 'Land on letters, cross images and buttons, and move downward. Guard 3 or more letters to bring the GOAL closer.',
+    introLead: 'Land on letters, cross images and buttons, and move downward. Open 3 treasure chests to bring the GOAL closer.',
     introKeys: 'J: Attack / K-X: Pick up or throw letters / L: Shield / Space: Jump',
     introPad: 'Gamepads are supported too',
     introStart: 'START',
     introDrop: 'Dropping in!',
+    chestAppear: 'A treasure chest shimmered nearby!',
+    chestOpen: 'Treasure opened!',
+    chestReady: 'All 3 treasure chests are open! Head for GOAL!',
+    itemHeal: 'Heart restored!',
+    itemShield: 'Shield boosted for a moment!',
+    itemHammer: 'Hammer power boosted!',
+    itemHint: 'A guard-letter hint glows: "{char}"',
+    itemJewel: 'Score jewel +1!',
 };
 
 const UI_TEXT_JA = {
@@ -139,12 +149,13 @@ const UI_TEXT_JA = {
     stageFailed: '\u30a2\u30a6\u30c8\uff01\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u6d88\u3048\u305f\uff01',
     lifeLabel: 'LIFE',
     collectedLabel: '\u5b88\u3063\u305f\u6587\u5b57',
-    collectMission: 'X\u9577\u62bc\u3057\u3067\u6587\u5b57\u3092\u63b2\u3052\u308b / 3\u6587\u5b57\u4ee5\u4e0a\u5b88\u3063\u3066GOAL\u3078',
-    goalNeedsLetters: '\u3042\u3068{count}\u6587\u5b57\u3001\u5b88\u308d\u3046\uff01',
-    goalReadyWithLetters: '3\u6587\u5b57\u4ee5\u4e0a\u5b88\u3063\u305f\uff01GOAL\u3078\uff01',
-    treasureTitle: '\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19',
+    collectMission: '\u5b9d\u7bb1\u30923\u3064\u958b\u3051\u308b\u3068GOAL\u3078 / \u6587\u5b57\u96c6\u3081\u306f\u601d\u3044\u51fa',
+    goalNeedsChests: '\u3042\u3068{count}\u500b\u3001\u5b9d\u7bb1\u3092\u958b\u3051\u3088\u3046\uff01',
+    goalReadyWithChests: '\u5b9d\u7bb1\u30923\u3064\u958b\u3051\u305f\uff01GOAL\u3078\uff01',
+    chestProgressLabel: '\u5b9d\u7bb1',
+    treasureTitle: '\u96c6\u3081\u305f\u6587\u5b57',
     treasureEmpty: '\u307e\u3060\u306a\u3057',
-    treasureHint: 'X\u9577\u62bc\u3057\u3067\u8db3\u5143\u306e\u6587\u5b57\u3092\u63b2\u3052\u308b',
+    treasureHint: 'X\u9577\u62bc\u3057\u3067\u597d\u304d\u306a\u6587\u5b57\u3092\u96c6\u3081\u3089\u308c\u308b',
     treasureHold: '\u6587\u5b57\u3092\u63b2\u3052\u305f\uff01 3\u79d2\u5b88\u308d\u3046\uff01',
     treasurePlaced: '\u6587\u5b57\u3092\u305d\u306e\u5834\u306b\u7f6e\u3044\u305f\uff01',
     treasureStored: '\u300c{char}\u300d\u3092\u5b88\u308b\u6587\u5b57\u306e\u76ee\u6a19\u306b\u523b\u3093\u3060\uff01',
@@ -206,16 +217,25 @@ const UI_TEXT_JA = {
     bgmOn: 'BGM',
     bgmOff: 'BGM',
     controlsToggle: 'CTRL',
+    mapToggle: 'MAP',
     controlsClose: '\u9589\u3058\u308b',
     controlGuideTitle: 'QUICK MENU',
     controlGuideKeys: 'CTRL\u3067\u64cd\u4f5c\u8868\u793a / J\u653b\u6483 K\u30fbX\u6587\u5b57 Space\u30b8\u30e3\u30f3\u30d7 L\u76fe',
     controlGuidePad: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3082OK',
     introTitle: '\u30da\u30fc\u30b8\u3092\u8db3\u5834\u306b\u3057\u3066\u9032\u3082\u3046',
-    introLead: '\u6587\u5b57\u306b\u7740\u5730\u3057\u3066\u3001\u753b\u50cf\u3084\u30dc\u30bf\u30f3\u3092\u6e21\u308a\u306a\u304c\u3089\u4e0b\u3078\u3002\u5b88\u308a\u305f\u3044\u6587\u5b57\u30923\u3064\u898b\u3064\u3051\u308b\u3068GOAL\u304c\u8fd1\u3065\u304d\u307e\u3059\u3002',
+    introLead: '\u6587\u5b57\u306b\u7740\u5730\u3057\u3066\u3001\u753b\u50cf\u3084\u30dc\u30bf\u30f3\u3092\u6e21\u308a\u306a\u304c\u3089\u4e0b\u3078\u3002\u5b9d\u7bb1\u30923\u3064\u958b\u3051\u308b\u3068GOAL\u304c\u8fd1\u3065\u304d\u307e\u3059\u3002',
     introKeys: 'J: \u653b\u6483 / K\u30fbX: \u6587\u5b57\u3092\u6301\u3064\u30fb\u6295\u3052\u308b / L: \u76fe / Space: \u30b8\u30e3\u30f3\u30d7',
     introPad: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3082\u4f7f\u3048\u307e\u3059',
     introStart: 'START',
     introDrop: '\u4e0a\u304b\u3089\u3044\u304f\u3088\uff01',
+    chestAppear: '\u5b9d\u7bb1\u304c\u304d\u3089\u3063\u3068\u73fe\u308c\u305f\uff01',
+    chestOpen: '\u5b9d\u7bb1\u304c\u958b\u3044\u305f\uff01',
+    chestReady: '\u5b9d\u7bb1\u304c3\u3064\u305d\u308d\u3063\u305f\uff01GOAL\u3078\uff01',
+    itemHeal: '\u30cf\u30fc\u30c8\u304c\u56de\u5fa9\uff01',
+    itemShield: '\u3057\u3070\u3089\u304f\u76fe\u304c\u5f37\u304f\u306a\u3063\u305f\uff01',
+    itemHammer: '\u30cf\u30f3\u30de\u30fc\u304c\u5f37\u304f\u306a\u3063\u305f\uff01',
+    itemHint: '\u5b88\u308b\u6587\u5b57\u306e\u30d2\u30f3\u30c8\u300c{char}\u300d\u304c\u5149\u3063\u305f\uff01',
+    itemJewel: '\u30b9\u30b3\u30a2\u30b8\u30e5\u30a8\u30eb +1\uff01',
 };
 
 const UI_TEXT = localizedUiText(UI_TEXT_EN, {
@@ -258,12 +278,20 @@ const CAMERA_FOLLOW_EASE = 8.2;
 const LINK_GATE_DWELL_MS = 980;
 const LINK_GATE_STILL_SPEED = 54;
 const LINK_GATE_MAX_VERTICAL_SPEED = 90;
+const CHEST_WIDTH = 48;
+const CHEST_HEIGHT = 38;
+const CHEST_REVEAL_PROGRESS = 0.18;
+const CHEST_MIN_INTERVAL = 8500;
+const CHEST_MAX_INTERVAL = 14500;
+const CHEST_ITEM_TYPES = ['heal', 'shield', 'hammer', 'hint', 'jewel'];
+const ITEM_EFFECT_DURATION_MS = 12000;
 const HUD_GATE_SAFE_MARGIN = 12;
 const ENEMY_MISSILE_SPEED = 270;
 const ENEMY_MISSILE_LIFETIME = 3600;
 const RETURN_ROUTE_REVEAL_PROGRESS = 0.58;
 const PLAYER_MAX_LIFE = 3;
 const GOAL_REQUIRED_LETTERS = 3;
+const GOAL_REQUIRED_CHESTS = 3;
 const THROW_HOLD_MS = 400;
 const TREASURE_STORE_DELAY_MS = 3000;
 const BOSS_MISSILE_WARNING_MS = 560;
@@ -287,6 +315,8 @@ export class StageOverlay {
         this.messages = options.messages || {};
         this.importantWords = Array.isArray(options.importantWords) ? options.importantWords : [];
         this.hasReward = Boolean(options.hasReward);
+        this.visualStyle = normalizeVisualStyle(options.visualStyle || 'auto');
+        this.themeTokens = normalizeThemeTokens(options.themeTokens || {});
         this.reducedMotion = Boolean(options.reducedMotion);
         this.onExit = options.onExit || (() => {});
         this.onRetry = options.onRetry || (() => {});
@@ -294,11 +324,14 @@ export class StageOverlay {
         this.onBgmToggle = options.onBgmToggle || (() => {});
         this.onStageClear = options.onStageClear || (() => {});
         this.onTreasureCollect = options.onTreasureCollect || (() => {});
+        this.onWorldMapOpen = options.onWorldMapOpen || (() => {});
         this.onNavigate = options.onNavigate || ((href) => {
             window.location.href = href;
         });
         this.onRunnerSound = options.onRunnerSound || (() => {});
         this.bgmEnabled = Boolean(options.bgmEnabled);
+        this.worldMapEnabled = Boolean(options.worldMapEnabled);
+        this.worldMapAfterClear = Boolean(options.worldMapAfterClear);
         this.textBreaker = options.textBreaker || null;
         this.imageBreaker = options.imageBreaker || null;
         this.root = null;
@@ -307,6 +340,7 @@ export class StageOverlay {
         this.inventoryList = null;
         this.inventoryToggle = null;
         this.bgmToggle = null;
+        this.worldMapToggle = null;
         this.inventoryPanel = null;
         this.missionHud = null;
         this.missionGoal = null;
@@ -374,7 +408,14 @@ export class StageOverlay {
         this.lastEnemySpawnAt = 0;
         this.projectileLayer = null;
         this.projectiles = [];
+        this.chestLayer = null;
+        this.chests = [];
+        this.chestSequence = 0;
+        this.nextChestAt = 0;
+        this.itemEffects = createItemEffects();
+        this.scoreJewels = 0;
         this.lockedEnemyId = null;
+        this.lockedEnemyManual = false;
         this.heldLetter = null;
         this.heldLetterSequence = 0;
         this.placedLetters = [];
@@ -396,6 +437,8 @@ export class StageOverlay {
         this.root = document.createElement('div');
         this.root.className = `gw-stage${this.reducedMotion ? ' gw-stage--reduced' : ''}`;
         this.root.setAttribute('data-gaming-web-stage', 'active');
+        this.root.dataset.gwVisualStyle = this.visualStyle;
+        applyThemeTokens(this.root, this.themeTokens);
 
         this.effectLayer = document.createElement('div');
         this.effectLayer.className = 'gw-effect-layer';
@@ -441,6 +484,16 @@ export class StageOverlay {
             this.onBgmToggle(!this.bgmEnabled);
         });
 
+        this.worldMapToggle = document.createElement('button');
+        this.worldMapToggle.type = 'button';
+        this.worldMapToggle.className = 'gw-world-map-toggle';
+        this.worldMapToggle.textContent = UI_TEXT.mapToggle;
+        this.worldMapToggle.hidden = !this.worldMapEnabled;
+        this.worldMapToggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.onWorldMapOpen();
+        });
+
         this.inventoryPanel = document.createElement('div');
         this.inventoryPanel.className = 'gw-inventory-panel';
         this.inventoryPanel.hidden = true;
@@ -453,7 +506,7 @@ export class StageOverlay {
         this.inventoryList.className = 'gw-inventory-list';
 
         this.inventoryPanel.append(inventoryTitle, this.inventoryList);
-        controls.append(this.runnerControlsToggle, this.inventoryToggle, this.bgmToggle, exitButton, this.inventoryPanel);
+        controls.append(this.runnerControlsToggle, this.worldMapToggle, this.inventoryToggle, this.bgmToggle, exitButton, this.inventoryPanel);
 
         this.speech = document.createElement('div');
         this.speech.className = 'gw-speech';
@@ -478,6 +531,8 @@ export class StageOverlay {
         this.root?.remove();
         this.root = null;
         this.effectLayer = null;
+        this.chestLayer = null;
+        this.worldMapToggle = null;
         this.missionHud = null;
         this.missionGoal = null;
         this.missionTreasure = null;
@@ -599,10 +654,10 @@ export class StageOverlay {
                 const critical = this.criticalWord
                     ? ` / ${UI_TEXT.criticalGuard}\u300c${this.criticalWord}\u300d`
                     : '';
-                const collected = this.collectedLetterCount();
-                const collection = collected >= GOAL_REQUIRED_LETTERS
-                    ? UI_TEXT.goalReadyWithLetters
-                    : `${UI_TEXT.collectMission} (${collected}/${goalLetterTargetLabel()})`;
+                const opened = this.openedChestCount();
+                const collection = this.hasGoalChests()
+                    ? UI_TEXT.goalReadyWithChests
+                    : `${UI_TEXT.collectMission} (${Math.min(opened, GOAL_REQUIRED_CHESTS)}/${GOAL_REQUIRED_CHESTS})`;
                 this.missionGoal.textContent = this.goalRevealed
                     ? `${collection}${critical}`
                     : `${collection} / ${UI_TEXT.missionProtect}${critical}`;
@@ -616,8 +671,8 @@ export class StageOverlay {
         if (this.missionTreasure) {
             const letters = this.normalizedTreasureLetters();
             const letterLabel = letters.length
-                ? `${letters.join('\u30fb')} ${letters.length}/${goalLetterTargetLabel()}`
-                : `- 0/${goalLetterTargetLabel()}`;
+                ? letters.join('\u30fb')
+                : UI_TEXT.treasureEmpty;
             this.missionTreasure.innerHTML = `
                 <strong>${UI_TEXT.treasureTitle}</strong>
                 <span>${escapeHtml(letterLabel)}</span>
@@ -643,6 +698,14 @@ export class StageOverlay {
         return this.normalizedTreasureLetters().length;
     }
 
+    openedChestCount() {
+        return Math.max(0, this.stageStats.chestsOpened || 0);
+    }
+
+    hasGoalChests() {
+        return this.openedChestCount() >= GOAL_REQUIRED_CHESTS;
+    }
+
     treasureWord() {
         return this.normalizedTreasureLetters().join('');
     }
@@ -650,10 +713,10 @@ export class StageOverlay {
     treasureLettersLabel() {
         const letters = this.normalizedTreasureLetters();
         if (letters.length === 0) {
-            return `${UI_TEXT.treasureEmpty} ${this.collectedLetterCount()}/${goalLetterTargetLabel()}`;
+            return UI_TEXT.treasureEmpty;
         }
 
-        return `${letters.join('\u30fb')} ${this.collectedLetterCount()}/${goalLetterTargetLabel()}`;
+        return letters.join('\u30fb');
     }
 
     normalizedTreasureLetters() {
@@ -686,6 +749,12 @@ export class StageOverlay {
         this.roomTransition = null;
         this.stageStats = createStageStats(this.textBreaker?.countTotalChars?.() || 0);
         this.treasureLetters = [];
+        this.chests = [];
+        this.chestSequence = 0;
+        this.nextChestAt = currentTime() + randomBetween(3600, 6400);
+        this.itemEffects = createItemEffects();
+        this.scoreJewels = 0;
+        this.root?.classList.remove('gw-stage--shield-boost', 'gw-stage--hammer-boost');
         this.endRollItems = this.buildEndRollItems(targets);
         this.endRollSummary = this.buildPageSummary(targets);
         const critical = this.textBreaker?.markImportantChars?.([this.buildCriticalWord(targets)]);
@@ -706,6 +775,7 @@ export class StageOverlay {
         this.mountLinkGates(targets);
         this.mountEnemyLayer();
         this.mountProjectileLayer();
+        this.mountChestLayer();
         this.mountGoalGate();
         this.mountReturnRoute();
         this.runner = document.createElement('div');
@@ -1103,6 +1173,7 @@ export class StageOverlay {
         this.projectiles = [];
         this.enemyMissiles = [];
         this.lockedEnemyId = null;
+        this.lockedEnemyManual = false;
         this.playBounds = null;
         this.rooms = [];
         this.roomIndex = 0;
@@ -1224,7 +1295,9 @@ export class StageOverlay {
                 return;
             }
             this.maybeSpawnEnemies(time);
+            this.maybeSpawnChests(time);
             this.updateEnemies(delta, time);
+            this.updateChests(delta, time);
             this.syncLockedEnemy();
             this.updateProjectiles(delta);
             this.updateEnemyMissiles(delta, time);
@@ -1610,6 +1683,253 @@ export class StageOverlay {
         this.effectLayer?.appendChild(this.projectileLayer);
     }
 
+    mountChestLayer() {
+        this.chestLayer?.remove();
+        this.chestLayer = document.createElement('div');
+        this.chestLayer.className = 'gw-chest-layer';
+        this.chestLayer.setAttribute('aria-hidden', 'true');
+        this.effectLayer?.appendChild(this.chestLayer);
+    }
+
+    maybeSpawnChests(time) {
+        if (!this.chestLayer || this.stageCleared || this.stageFailed || this.roomTransition) {
+            return;
+        }
+
+        const progress = pageScrollProgress();
+        if (progress < CHEST_REVEAL_PROGRESS || time < this.nextChestAt) {
+            return;
+        }
+
+        const activeCount = this.chests.filter((chest) => !chest.opened && chest.element?.isConnected).length;
+        const maxActive = progress > 0.62 ? 3 : (progress > 0.34 ? 2 : 1);
+        if (activeCount >= maxActive) {
+            return;
+        }
+
+        this.spawnChest();
+        this.nextChestAt = time + randomBetween(CHEST_MIN_INTERVAL, CHEST_MAX_INTERVAL);
+    }
+
+    spawnChest() {
+        const bounds = this.currentPlayBounds();
+        const width = CHEST_WIDTH;
+        const height = CHEST_HEIGHT;
+        const leftLimit = Math.max(18, bounds.left + 18);
+        const rightLimit = Math.min(window.innerWidth - width - 18, bounds.right - width - 18);
+        const x = clamp(randomBetween(leftLimit, Math.max(leftLimit, rightLimit)), 18, window.innerWidth - width - 18);
+        const minY = Math.max(116, window.innerHeight * 0.36);
+        const maxY = Math.max(minY, window.innerHeight - height - 132);
+        const y = clamp(randomBetween(minY, maxY), 96, window.innerHeight - height - 86);
+        const itemType = this.pickChestItem();
+        const element = document.createElement('div');
+        element.className = `gw-treasure-chest gw-treasure-chest--${itemType}`;
+        element.innerHTML = `
+            <span class="gw-treasure-chest__glow"></span>
+            <span class="gw-treasure-chest__lid"></span>
+            <span class="gw-treasure-chest__body"></span>
+            <span class="gw-treasure-chest__lock"></span>
+        `;
+        element.style.left = `${x}px`;
+        element.style.top = `${y}px`;
+        this.chestLayer?.appendChild(element);
+
+        this.chests.push({
+            id: `chest-${++this.chestSequence}`,
+            itemType,
+            element,
+            opened: false,
+            width,
+            height,
+        });
+
+        this.showMessage(UI_TEXT.chestAppear, 1500);
+    }
+
+    pickChestItem() {
+        const weighted = CHEST_ITEM_TYPES.slice();
+        if (this.playerLife < PLAYER_MAX_LIFE) {
+            weighted.push('heal', 'heal');
+        }
+        if (!this.shieldBoostActive()) {
+            weighted.push('shield');
+        }
+        if (!this.hammerBoostActive()) {
+            weighted.push('hammer');
+        }
+        if (this.collectedLetterCount() < GOAL_REQUIRED_LETTERS) {
+            weighted.push('hint', 'hint');
+        }
+
+        return weighted[Math.floor(Math.random() * weighted.length)] || 'jewel';
+    }
+
+    updateChests() {
+        const before = this.chests.length;
+        this.chests = this.chests.filter((chest) => chest.element?.isConnected);
+        if (before !== this.chests.length) {
+            this.nextChestAt = Math.max(this.nextChestAt, currentTime() + 3000);
+        }
+
+        this.root?.classList.toggle('gw-stage--shield-boost', this.shieldBoostActive());
+        this.root?.classList.toggle('gw-stage--hammer-boost', this.hammerBoostActive());
+    }
+
+    hitChestAtRect(rect, options = {}) {
+        let bestChest = null;
+        let bestOverlap = 0;
+
+        for (const chest of this.chests) {
+            if (chest.opened || !chest.element?.isConnected) {
+                continue;
+            }
+
+            const chestRect = chest.element.getBoundingClientRect();
+            const overlap = rectOverlapArea(rect, chestRect);
+            if (overlap > bestOverlap) {
+                bestOverlap = overlap;
+                bestChest = chest;
+            }
+        }
+
+        if (!bestChest || bestOverlap < 18) {
+            return null;
+        }
+
+        const chestRect = bestChest.element.getBoundingClientRect();
+        this.openChest(bestChest, {
+            charged: Boolean(options.charged),
+            rect: chestRect,
+        });
+
+        return {
+            count: 1,
+            item_type: bestChest.itemType,
+            rect: chestRect,
+        };
+    }
+
+    openChest(chest, options = {}) {
+        if (!chest || chest.opened) {
+            return;
+        }
+
+        chest.opened = true;
+        chest.element.classList.add('gw-treasure-chest--open');
+        this.bumpStageStat('chestsOpened', 1);
+        this.impactBurstAt(options.rect || chest.element.getBoundingClientRect(), options.charged ? 'hard' : 'medium');
+        this.spawnItemBurst(options.rect || chest.element.getBoundingClientRect(), chest.itemType);
+        this.grantChestItem(chest.itemType);
+        this.updateGoalGate(true);
+        if (this.openedChestCount() === GOAL_REQUIRED_CHESTS) {
+            const timer = window.setTimeout(() => {
+                this.showMessage(UI_TEXT.chestReady, 1800);
+                this.onRunnerSound('cheer', { volume: 0.11, rate: 1.06 });
+                this.timers.delete(timer);
+            }, 520);
+            this.timers.add(timer);
+        }
+        this.shakeScreen(options.charged ? 'medium' : 'soft');
+        this.onRunnerSound('collect', { volume: 0.12, rate: 1.05 });
+        this.removeLater(chest.element, 900);
+    }
+
+    grantChestItem(itemType) {
+        const now = currentTime();
+
+        if (itemType === 'heal') {
+            this.playerLife = Math.min(PLAYER_MAX_LIFE, this.playerLife + 1);
+            this.showMessage(UI_TEXT.itemHeal, 1400);
+            this.updateMissionHud(true);
+            return;
+        }
+
+        if (itemType === 'shield') {
+            this.itemEffects.shieldUntil = now + ITEM_EFFECT_DURATION_MS;
+            this.root?.classList.add('gw-stage--shield-boost');
+            this.showMessage(UI_TEXT.itemShield, 1700);
+            return;
+        }
+
+        if (itemType === 'hammer') {
+            this.itemEffects.hammerUntil = now + ITEM_EFFECT_DURATION_MS;
+            this.root?.classList.add('gw-stage--hammer-boost');
+            this.showMessage(UI_TEXT.itemHammer, 1700);
+            return;
+        }
+
+        if (itemType === 'hint') {
+            const char = this.pickHintChar();
+            this.showHintLetter(char);
+            this.showMessage(UI_TEXT.itemHint.replace('{char}', char || '?'), 2100);
+            return;
+        }
+
+        this.scoreJewels += 1;
+        this.bumpStageStat('scoreJewels', 1);
+        this.showMessage(UI_TEXT.itemJewel, 1400);
+    }
+
+    shieldBoostActive() {
+        return currentTime() < (this.itemEffects?.shieldUntil || 0);
+    }
+
+    hammerBoostActive() {
+        return currentTime() < (this.itemEffects?.hammerUntil || 0);
+    }
+
+    pickHintChar() {
+        const treasure = this.normalizedTreasureLetters();
+        const importantChars = this.importantWords
+            .flatMap((word) => treasureCharsFrom(word))
+            .filter(Boolean);
+        const unusedImportant = importantChars.find((char) => !treasure.includes(char));
+        if (unusedImportant) {
+            return unusedImportant;
+        }
+
+        const candidate = this.textBreaker?.findLetterNearRect?.(this.runnerPickupRect?.(), { preserve: true });
+        if (candidate?.char) {
+            return candidate.char;
+        }
+
+        const titleChars = treasureCharsFrom(document.title || UI_TEXT.treasureTitle);
+        return titleChars.find((char) => !treasure.includes(char)) || titleChars[0] || '?';
+    }
+
+    showHintLetter(char) {
+        const rect = this.runnerPhysicsRect();
+        const hint = document.createElement('span');
+        hint.className = 'gw-item-hint-letter';
+        hint.textContent = char || '?';
+        hint.style.left = `${rect.left + rect.width / 2}px`;
+        hint.style.top = `${Math.max(64, rect.top - 18)}px`;
+        this.addTemporaryEffect(hint, 1600);
+    }
+
+    spawnItemBurst(rect, itemType = 'jewel') {
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const burst = document.createElement('span');
+        burst.className = `gw-item-burst gw-item-burst--${itemType}`;
+        burst.textContent = itemGlyph(itemType);
+        burst.style.left = `${centerX}px`;
+        burst.style.top = `${centerY}px`;
+        this.addTemporaryEffect(burst, 860);
+
+        for (let index = 0; index < 10; index += 1) {
+            const chip = document.createElement('span');
+            chip.className = `gw-jewel-chip gw-jewel-chip--${itemType}`;
+            chip.style.left = `${centerX + randomBetween(-12, 12)}px`;
+            chip.style.top = `${centerY + randomBetween(-10, 10)}px`;
+            chip.style.setProperty('--gw-x', `${randomBetween(-96, 96)}px`);
+            chip.style.setProperty('--gw-y', `${randomBetween(-96, 46)}px`);
+            chip.style.setProperty('--gw-r', `${randomBetween(-160, 160)}deg`);
+            chip.style.setProperty('--gw-d', `${randomBetween(0, 80)}ms`);
+            this.addTemporaryEffect(chip, 760);
+        }
+    }
+
     mountReturnRoute() {
         this.returnRoute?.remove();
         this.returnRoute = document.createElement('div');
@@ -1704,8 +2024,9 @@ export class StageOverlay {
 
     spawnEnemy(type = 'minion') {
         const boss = type === 'boss';
+        const variant = boss ? 'guardian' : `bug-${Math.floor(Math.random() * 3) + 1}`;
         const element = document.createElement('div');
-        element.className = `gw-enemy gw-enemy--${type}`;
+        element.className = `gw-enemy gw-enemy--${type} gw-enemy--${variant}`;
         element.innerHTML = `
             <span class="gw-enemy__shadow"></span>
             <span class="gw-enemy__body"></span>
@@ -1736,11 +2057,12 @@ export class StageOverlay {
             defeated: false,
             countedDefeat: false,
             hitUntil: 0,
-            nextAttackAt: currentTime() + (boss ? 1100 : 1700),
+            nextAttackAt: currentTime() + (boss ? 1050 : 1250),
             nextMissileAt: boss ? currentTime() + randomBetween(BOSS_MISSILE_MIN_INTERVAL, BOSS_MISSILE_MAX_INTERVAL) : Infinity,
             nextTargetPickAt: 0,
             targetRect: null,
             roamUntil: 0,
+            variant,
         };
 
         this.enemies.push(enemy);
@@ -1775,7 +2097,7 @@ export class StageOverlay {
 
             if (distance < (enemy.type === 'boss' ? 96 : 72) && time > enemy.nextAttackAt) {
                 this.enemyAttackPage(enemy);
-                enemy.nextAttackAt = time + (enemy.type === 'boss' ? 1550 : 2300);
+                enemy.nextAttackAt = time + (enemy.type === 'boss' ? 1450 : 1850);
                 enemy.targetRect = this.enemyRoamTarget(enemy);
                 enemy.nextTargetPickAt = time + randomBetween(900, 1600);
                 enemy.roamUntil = time + randomBetween(900, 1500);
@@ -1824,6 +2146,7 @@ export class StageOverlay {
         }
 
         this.lockedEnemyId = null;
+        this.lockedEnemyManual = false;
         this.showMessage(UI_TEXT.lockLost, 900);
     }
 
@@ -1832,6 +2155,7 @@ export class StageOverlay {
 
         if (enemies.length === 0) {
             this.lockedEnemyId = null;
+            this.lockedEnemyManual = false;
             this.showMessage(UI_TEXT.noEnemy, 900);
             return;
         }
@@ -1850,6 +2174,7 @@ export class StageOverlay {
         const currentIndex = enemies.findIndex((enemy) => enemy.id === this.lockedEnemyId);
         const nextEnemy = enemies[(currentIndex + 1) % enemies.length];
         this.lockedEnemyId = nextEnemy.id;
+        this.lockedEnemyManual = true;
         this.renderEnemy(nextEnemy);
         this.impactBurstAt(this.enemyRect(nextEnemy), 'soft');
         this.onRunnerSound('lock', { volume: 0.24 });
@@ -1873,6 +2198,7 @@ export class StageOverlay {
         }
 
         this.lockedEnemyId = enemy.id;
+        this.lockedEnemyManual = false;
         this.renderEnemy(enemy);
             this.onRunnerSound('lock', { volume: 0.14 });
         return enemy;
@@ -1925,15 +2251,59 @@ export class StageOverlay {
         return true;
     }
 
-    collectTreasureLetter() {
-        if (!this.runnerState) {
+    pickAndThrowAtChest(chest) {
+        if (!chest || chest.opened || !chest.element?.isConnected) {
             return false;
         }
 
-        if (this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS) {
-            this.showMessage(UI_TEXT.goalReadyWithLetters, 1100);
-            this.impactBurstAt(this.runnerHandRect(), 'soft');
+        if (this.heldLetter) {
+            return this.launchWordProjectile({
+                targetChestId: chest.id,
+                preferChest: true,
+            });
+        }
+
+        const pickupRect = this.runnerPickupRect();
+        const picked = this.textBreaker?.pickCharAtRect(pickupRect, {
+            centerX: this.runnerState.x + RUNNER_WIDTH / 2,
+            centerY: this.runnerState.y + RUNNER_HEIGHT,
+        });
+
+        if (!picked?.char) {
+            this.showMessage(UI_TEXT.noFootWord, 1100);
+            this.impactBurstAt(pickupRect, 'soft');
+            this.shakeScreen('soft');
             return true;
+        }
+
+        if (this.criticalDestroyed(picked)) {
+            this.bumpStageStat('playerBroken', 1);
+            this.impactBurstAt(picked.rect, 'char');
+            this.shakeScreen('hard');
+            this.failStage('critical_player_pickup');
+            return true;
+        }
+
+        this.rebuildRoomCollisionCache();
+        this.holdLetter(picked);
+        const targetChestId = chest.id;
+        const timer = window.setTimeout(() => {
+            this.timers.delete(timer);
+            if (this.heldLetter) {
+                this.launchWordProjectile({
+                    targetChestId,
+                    preferChest: true,
+                });
+            }
+        }, this.reducedMotion ? 40 : 120);
+        this.timers.add(timer);
+
+        return true;
+    }
+
+    collectTreasureLetter() {
+        if (!this.runnerState) {
+            return false;
         }
 
         let picked = null;
@@ -2297,8 +2667,8 @@ export class StageOverlay {
         this.stageStats.lettersCollected = this.collectedLetterCount();
         this.updateGoalGate(true);
         this.updateMissionHud(true);
-        this.impactBurstAt(impactRect, this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'char');
-        this.shakeScreen(this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS ? 'medium' : 'soft');
+        this.impactBurstAt(impactRect, 'char');
+        this.shakeScreen('soft');
         this.onRunnerSound('collect', { volume: 0.13, rate: 1.08 });
         this.onTreasureCollect({
             word: treasureChar,
@@ -2306,12 +2676,7 @@ export class StageOverlay {
             letters_collected: this.collectedLetterCount(),
             letters_required: GOAL_REQUIRED_LETTERS,
         });
-        this.showMessage(
-            this.collectedLetterCount() === GOAL_REQUIRED_LETTERS
-                ? UI_TEXT.goalReadyWithLetters
-                : UI_TEXT.treasureStored.replace('{char}', treasureChar),
-            1300
-        );
+        this.showMessage(UI_TEXT.treasureStored.replace('{char}', treasureChar), 1300);
         return true;
     }
 
@@ -2390,14 +2755,8 @@ export class StageOverlay {
         element.style.height = `${Math.max(picked.rect?.height || WORD_THROW_SIZE, WORD_THROW_SIZE)}px`;
     }
 
-    launchWordProjectile() {
+    launchWordProjectile(options = {}) {
         if (!this.runnerState || !this.projectileLayer || !this.heldLetter) {
-            return false;
-        }
-
-        const enemy = this.lockedEnemy();
-        if (!enemy) {
-            this.showMessage(UI_TEXT.lockHint, 1200);
             return false;
         }
 
@@ -2407,9 +2766,24 @@ export class StageOverlay {
         const handRect = this.runnerHandRect();
         const startX = handRect.left + handRect.width / 2;
         const startY = handRect.top + handRect.height / 2;
-        const targetRect = this.enemyRect(enemy);
-        const targetX = targetRect.left + targetRect.width / 2;
-        const targetY = targetRect.top + targetRect.height / 2;
+        const forcedChest = options.targetChestId
+            ? this.chests.find((chest) => chest.id === options.targetChestId && !chest.opened && chest.element?.isConnected)
+            : null;
+        const manualEnemy = !options.preferChest && this.lockedEnemyManual ? this.lockedEnemy() : null;
+        const enemy = manualEnemy;
+        const chest = forcedChest || (enemy ? null : this.nearestChestFromPoint(startX, startY, this.runnerState.direction));
+        const fallbackEnemy = !chest && !enemy && !options.preferChest ? this.lockedEnemy() : null;
+        const targetEnemy = enemy || fallbackEnemy;
+        const targetRect = enemy
+            ? this.enemyRect(enemy)
+            : (targetEnemy ? this.enemyRect(targetEnemy) : null)
+            || (chest ? chest.element.getBoundingClientRect() : null);
+        const targetX = targetRect
+            ? targetRect.left + targetRect.width / 2
+            : startX + this.runnerState.direction * 560;
+        const targetY = targetRect
+            ? targetRect.top + targetRect.height / 2
+            : startY - 22;
         const dx = targetX - startX;
         const dy = targetY - startY;
         const distance = Math.max(1, Math.hypot(dx, dy));
@@ -2430,7 +2804,8 @@ export class StageOverlay {
             vx: (dx / distance) * speed,
             vy: (dy / distance) * speed,
             age: 0,
-            targetId: enemy.id,
+            targetId: targetEnemy?.id || chest?.id || '',
+            targetType: targetEnemy ? 'enemy' : (chest ? 'chest' : 'free'),
             direction: this.runnerState.direction,
             char: held.char,
             damage: power.damage,
@@ -2445,6 +2820,52 @@ export class StageOverlay {
         return true;
     }
 
+    nearestChestFromPoint(x, y, direction = 1) {
+        let bestChest = null;
+        let bestScore = Infinity;
+        const facing = direction >= 0 ? 1 : -1;
+
+        for (const chest of this.chests) {
+            if (chest.opened || !chest.element?.isConnected) {
+                continue;
+            }
+
+            const rect = chest.element.getBoundingClientRect();
+            if (rect.bottom < -20 || rect.top > window.innerHeight + 20) {
+                continue;
+            }
+
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const dx = centerX - x;
+            if (dx * facing < -18) {
+                continue;
+            }
+
+            const dy = centerY - y;
+            const score = Math.hypot(dx, dy) + Math.abs(dy) * 0.32;
+            if (score < bestScore) {
+                bestScore = score;
+                bestChest = chest;
+            }
+        }
+
+        return bestChest;
+    }
+
+    nearestChestFromRunner() {
+        if (!this.runnerState) {
+            return null;
+        }
+
+        const handRect = this.runnerHandRect();
+        return this.nearestChestFromPoint(
+            handRect.left + handRect.width / 2,
+            handRect.top + handRect.height / 2,
+            this.runnerState.direction
+        );
+    }
+
     updateProjectiles(delta) {
         if (this.projectiles.length === 0) {
             return;
@@ -2454,11 +2875,19 @@ export class StageOverlay {
 
         for (const projectile of this.projectiles) {
             projectile.age += delta * 1000;
-            const target = this.enemies.find((enemy) => enemy.id === projectile.targetId && !enemy.defeated)
-                || this.nearestEnemyFromPoint(projectile.x, projectile.y, projectile.direction);
+            let target = null;
+            let targetRect = null;
+            if (projectile.targetType === 'chest') {
+                target = this.chests.find((chest) => chest.id === projectile.targetId && !chest.opened && chest.element?.isConnected)
+                    || this.nearestChestFromPoint(projectile.x, projectile.y, projectile.direction);
+                targetRect = target?.element?.getBoundingClientRect?.() || null;
+            } else {
+                target = this.enemies.find((enemy) => enemy.id === projectile.targetId && !enemy.defeated)
+                    || this.nearestEnemyFromPoint(projectile.x, projectile.y, projectile.direction);
+                targetRect = target ? this.enemyRect(target) : null;
+            }
 
-            if (target) {
-                const targetRect = this.enemyRect(target);
+            if (targetRect) {
                 const targetX = targetRect.left + targetRect.width / 2;
                 const targetY = targetRect.top + targetRect.height / 2;
                 const dx = targetX - projectile.x;
@@ -2484,6 +2913,17 @@ export class StageOverlay {
                 right: projectile.x + hitbox / 2,
                 bottom: projectile.y + hitbox / 2,
             };
+            const chestHit = this.hitChestAtRect(shotRect, {
+                projectile: true,
+                charged: (projectile.damage || 1) > 1,
+            });
+
+            if (chestHit) {
+                projectile.element.classList.add('gw-word-shot--hit');
+                this.removeLater(projectile.element, 180);
+                continue;
+            }
+
             const hitEnemy = this.enemyAtRect(shotRect, 10);
 
             if (hitEnemy) {
@@ -2891,9 +3331,10 @@ export class StageOverlay {
 
     damageEnemy(enemy, options = {}) {
         const direction = options.knockbackDirection || this.runnerState?.direction || (enemy.vx >= 0 ? 1 : -1);
-        const damage = options.damage || 1;
+        const baseDamage = options.damage || 1;
         const projectile = Boolean(options.projectile);
         const charged = Boolean(options.charged);
+        const damage = baseDamage + (!projectile && this.hammerBoostActive() ? 1 : 0);
         const impactRect = options.impactRect || this.enemyRect(enemy);
         const intensity = options.intensity || (enemy.type === 'boss' ? 'hard' : 'medium');
         const shake = options.shake || (charged || intensity === 'hard' ? 'medium' : (intensity === 'medium' ? 'soft' : 'soft'));
@@ -2908,6 +3349,10 @@ export class StageOverlay {
         if (enemy.hp <= 0) {
             enemy.defeated = true;
             enemy.element.classList.add('gw-enemy--defeated');
+            if (this.lockedEnemyId === enemy.id) {
+                this.lockedEnemyId = null;
+                this.lockedEnemyManual = false;
+            }
             if (!enemy.countedDefeat) {
                 enemy.countedDefeat = true;
                 this.bumpStageStat('enemiesDefeated', 1);
@@ -3221,10 +3666,11 @@ export class StageOverlay {
         this.goalGate.hidden = false;
         this.goalRevealed = true;
         this.nextGoalHref = this.currentGoalHref();
-        const hasLetters = this.collectedLetterCount() >= GOAL_REQUIRED_LETTERS;
-        const label = hasLetters
+        const hasChests = this.hasGoalChests();
+        const opened = Math.min(this.openedChestCount(), GOAL_REQUIRED_CHESTS);
+        const label = hasChests
             ? (this.nextGoalHref ? UI_TEXT.goalNext : UI_TEXT.goalEnd)
-            : `${this.collectedLetterCount()}/${goalLetterTargetLabel()}`;
+            : `${UI_TEXT.chestProgressLabel} ${opened}/${GOAL_REQUIRED_CHESTS}`;
         this.goalGate.innerHTML = `<span>${UI_TEXT.goalGate}</span><small>${label}</small>`;
 
         const bounds = this.currentPlayBounds();
@@ -3235,7 +3681,7 @@ export class StageOverlay {
         this.goalGate.style.width = `${width}px`;
 
         if ((wasHidden || force) && wasHidden) {
-            this.showMessage(hasLetters ? UI_TEXT.goalReady : UI_TEXT.treasureHint, 2200);
+            this.showMessage(hasChests ? UI_TEXT.goalReady : UI_TEXT.collectMission, 2200);
             this.onRunnerSound('cheer', { volume: 0.12, rate: 1.04 });
         }
 
@@ -3266,10 +3712,10 @@ export class StageOverlay {
             return;
         }
 
-        if (this.collectedLetterCount() < GOAL_REQUIRED_LETTERS) {
-            const remaining = GOAL_REQUIRED_LETTERS - this.collectedLetterCount();
+        if (!this.hasGoalChests()) {
+            const remaining = GOAL_REQUIRED_CHESTS - Math.min(this.openedChestCount(), GOAL_REQUIRED_CHESTS);
             this.gateCooldownUntil = currentTime() + 1000;
-            this.showMessage(UI_TEXT.goalNeedsLetters.replace('{count}', String(remaining)), 1300);
+            this.showMessage(UI_TEXT.goalNeedsChests.replace('{count}', String(remaining)), 1300);
             this.onRunnerSound('uiCancel', { volume: 0.08, rate: 1.05 });
             return;
         }
@@ -3282,7 +3728,15 @@ export class StageOverlay {
             return;
         }
 
-        const damage = Math.max(1, Math.round(amount));
+        const incoming = Math.max(1, Math.round(amount));
+        const damage = this.shieldBoostActive() ? Math.max(0, incoming - 1) : incoming;
+        if (damage <= 0) {
+            this.impactBurstAt(this.runnerPhysicsRect(), 'soft');
+            this.showMessage(UI_TEXT.itemShield, 900);
+            this.onRunnerSound('uiMove', { volume: 0.08, rate: 1.1 });
+            return;
+        }
+
         this.playerLife = Math.max(0, this.playerLife - damage);
         const rect = this.runnerPhysicsRect();
         this.runner?.classList.add('gw-pixel-runner--damage');
@@ -3406,6 +3860,7 @@ export class StageOverlay {
             }
             if (this.lockedEnemyId === enemy.id) {
                 this.lockedEnemyId = null;
+                this.lockedEnemyManual = false;
             }
 
             const delay = this.reducedMotion ? 0 : index * 140;
@@ -3437,6 +3892,7 @@ export class StageOverlay {
 
         if (this.lockedEnemyId === enemy.id) {
             this.lockedEnemyId = null;
+            this.lockedEnemyManual = false;
         }
 
         enemy.element.classList.remove('gw-enemy--hit', 'gw-enemy--attack', 'gw-enemy--locked');
@@ -3496,12 +3952,16 @@ export class StageOverlay {
             enemy_defeated_count: this.stageStats.enemiesDefeated,
             gates_broken: this.stageStats.gatesBroken,
             images_damaged: this.stageStats.imagesDamaged,
+            goal_condition: 'chests_opened',
             letters_collected: this.collectedLetterCount(),
             letters_required: GOAL_REQUIRED_LETTERS,
             treasure_letters: this.treasureLetters.slice(),
             treasure_word: this.treasureWord(),
             critical_word: this.criticalWord || '',
             critical_lost: Boolean(this.criticalWordLost),
+            chests_opened: this.stageStats.chestsOpened,
+            chests_required: GOAL_REQUIRED_CHESTS,
+            score_jewels: this.scoreJewels,
             player_life: this.playerLife,
             failed: Boolean(this.stageFailed),
             next_href: this.nextGoalHref || '',
@@ -3519,6 +3979,9 @@ export class StageOverlay {
         const stats = this.stageResult('end_roll');
         const nextButton = this.nextGoalHref
             ? `<button type="button" class="gw-end-roll__next">${UI_TEXT.goalNext}</button>`
+            : '';
+        const mapButton = this.worldMapAfterClear
+            ? `<button type="button" class="gw-end-roll__map">${UI_TEXT.mapToggle}</button>`
             : '';
         const memoryItems = this.endRollItems.length > 0
             ? this.endRollItems.map((item) => `<p>${escapeHtml(item)}</p>`).join('')
@@ -3538,7 +4001,8 @@ export class StageOverlay {
                 <h2>${UI_TEXT.stageClear}</h2>
                 <dl class="gw-end-roll__stats">
                     <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${stats.protected_count}</dd></div>
-                    <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${escapeHtml(treasureWord || `${stats.letters_collected}/${stats.letters_required}`)}</dd></div>
+                    <div><dt>${UI_TEXT.chestProgressLabel}</dt><dd>${Math.min(stats.chests_opened, stats.chests_required)}/${stats.chests_required}</dd></div>
+                    <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${escapeHtml(treasureWord || UI_TEXT.treasureEmpty)}</dd></div>
                     <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${stats.player_broken_count}</dd></div>
                     <div><dt>${UI_TEXT.lostLabel}</dt><dd>${stats.enemy_broken_count}</dd></div>
                     <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${stats.enemy_defeated_count}</dd></div>
@@ -3561,6 +4025,7 @@ export class StageOverlay {
                     </div>
                 </div>
                 <div class="gw-end-roll__actions">
+                    ${mapButton}
                     ${nextButton}
                     <button type="button" class="gw-end-roll__close">${UI_TEXT.endRollClose}</button>
                 </div>
@@ -3580,6 +4045,10 @@ export class StageOverlay {
             if (this.nextGoalHref) {
                 this.onNavigate(this.nextGoalHref);
             }
+        });
+        this.endRoll.querySelector('.gw-end-roll__map')?.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.onWorldMapOpen();
         });
     }
 
@@ -4553,6 +5022,11 @@ export class StageOverlay {
             return;
         }
 
+        const chestHit = this.hitChestAtRect(attackRect);
+        if (chestHit?.count > 0) {
+            return;
+        }
+
         const placedBreak = this.destroyPlacedLettersAtRect(attackRect, { limit: 1 });
         if (placedBreak?.count > 0) {
             this.bumpStageStat('playerBroken', placedBreak.count);
@@ -4647,6 +5121,11 @@ export class StageOverlay {
             return;
         }
 
+        const chestHit = this.hitChestAtRect(chargedRect, { charged: full });
+        if (chestHit?.count > 0) {
+            return;
+        }
+
         const placedBreak = this.destroyPlacedLettersAtRect(chargedRect, { limit: full ? 4 : 2 });
         if (placedBreak?.count > 0) {
             this.bumpStageStat('playerBroken', placedBreak.count);
@@ -4726,7 +5205,24 @@ export class StageOverlay {
         this.runnerState.attackLockedUntil = now + 250;
         this.playRunnerStrike();
 
+        if (this.heldLetter) {
+            this.launchWordProjectile();
+            return;
+        }
+
+        if (!this.lockedEnemy()) {
+            const chest = this.nearestChestFromRunner();
+            if (chest && this.pickAndThrowAtChest(chest)) {
+                return;
+            }
+        }
+
         if (this.activeEnemies().length > 0 && this.pickAndThrowAtLock({ autoLock: true })) {
+            return;
+        }
+
+        const chest = this.nearestChestFromRunner();
+        if (chest && this.pickAndThrowAtChest(chest)) {
             return;
         }
 
@@ -5671,7 +6167,33 @@ function createStageStats(totalChars = 0) {
         gatesBroken: 0,
         imagesDamaged: 0,
         lettersCollected: 0,
+        chestsOpened: 0,
+        scoreJewels: 0,
     };
+}
+
+function createItemEffects() {
+    return {
+        shieldUntil: 0,
+        hammerUntil: 0,
+    };
+}
+
+function itemGlyph(itemType) {
+    if (itemType === 'heal') {
+        return '\u2665';
+    }
+    if (itemType === 'shield') {
+        return '\u25c6';
+    }
+    if (itemType === 'hammer') {
+        return '\u2736';
+    }
+    if (itemType === 'hint') {
+        return '?';
+    }
+
+    return '\u25c6';
 }
 
 function renderLifeHearts(life = 0) {
@@ -5682,6 +6204,50 @@ function renderLifeHearts(life = 0) {
 
 function goalLetterTargetLabel() {
     return `${GOAL_REQUIRED_LETTERS}+`;
+}
+
+function normalizeVisualStyle(value) {
+    const style = String(value || 'auto').toLowerCase();
+    return ['auto', 'soft', 'pastel', 'neon', 'dark'].includes(style) ? style : 'auto';
+}
+
+function normalizeThemeTokens(tokens) {
+    return tokens && typeof tokens === 'object' ? tokens : {};
+}
+
+function applyThemeTokens(root, tokens = {}) {
+    if (!root) {
+        return;
+    }
+
+    const map = {
+        accent: '--gw-theme-accent',
+        accentRgb: '--gw-theme-accent-rgb',
+        accentSoft: '--gw-theme-accent-soft',
+        gold: '--gw-theme-gold',
+        goldRgb: '--gw-theme-gold-rgb',
+        danger: '--gw-theme-danger',
+        dangerRgb: '--gw-theme-danger-rgb',
+        panel: '--gw-theme-panel',
+        panelText: '--gw-theme-panel-text',
+        panelTextRgb: '--gw-theme-panel-text-rgb',
+        radius: '--gw-theme-radius',
+        glowStrength: '--gw-theme-glow',
+        shadow: '--gw-theme-shadow',
+    };
+
+    Object.entries(map).forEach(([key, cssVar]) => {
+        const value = String(tokens[key] || '').trim();
+        if (!value || !isSafeCssToken(value)) {
+            return;
+        }
+
+        root.style.setProperty(cssVar, value);
+    });
+}
+
+function isSafeCssToken(value) {
+    return /^[#a-zA-Z0-9(),.%\s-]+$/.test(value);
 }
 
 function runnerGroundY() {

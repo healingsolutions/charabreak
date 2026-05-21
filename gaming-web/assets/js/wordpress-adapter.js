@@ -1,6 +1,8 @@
-import { GamingWebCore } from './gaming-web-core.js?v=0.2.10';
-import { GamingWebLogger } from './logger.js?v=0.2.10';
-import { AudioManager } from './audio-manager.js?v=0.2.10';
+import { GamingWebCore } from './gaming-web-core.js?v=0.2.19';
+import { GamingWebLogger } from './logger.js?v=0.2.19';
+import { AudioManager } from './audio-manager.js?v=0.2.19';
+import { resolveVisualTheme } from './visual-theme.js?v=0.2.19';
+import { GamingWebWorldMap } from './world-map.js?v=0.2.19';
 
 const RESUME_KEY = 'gaming_web_resume_mode';
 
@@ -12,11 +14,28 @@ ready(() => {
     }
 
     config.audioBase = config.audioBase || `${pluginAssetBase()}audio/`;
+    const visualTheme = resolveVisualTheme(config.visualStyle || 'auto', document);
+    config.visualStyle = visualTheme.style;
+    config.themeTokens = {
+        ...(config.themeTokens || {}),
+        ...visualTheme.tokens,
+    };
 
     const logger = new GamingWebLogger(config);
     const audio = new AudioManager({
         baseUrl: config.audioBase,
         debug: config.debug,
+    });
+    const worldMap = new GamingWebWorldMap(config, {
+        isGameActive: () => core?.isActive?.() || false,
+        onStart: () => beginGame(lastStartTrigger),
+        onNavigate: (href) => {
+            storeResumeMode(true);
+            window.location.href = href;
+        },
+        onSound: (name, options) => {
+            audio.play(name, options);
+        },
     });
 
     const floatingButton = shouldShowFloatingButton(config) ? createFloatingButton(config) : null;
@@ -26,6 +45,12 @@ ready(() => {
         ...config,
         logger,
         audio,
+        onWorldMapOpen: () => {
+            worldMap.open({ mode: 'hud', onStart: () => beginGame(lastStartTrigger) });
+        },
+        onStageClear: (detail, response) => {
+            worldMap.markStageCleared(detail, response);
+        },
         onNavigate: (href) => {
             storeResumeMode(true);
             window.location.href = href;
@@ -43,7 +68,7 @@ ready(() => {
         },
     });
 
-    function startGame(trigger = null) {
+    function beginGame(trigger = null) {
         if (core.isActive()) {
             return;
         }
@@ -57,6 +82,24 @@ ready(() => {
         }
 
         core.start();
+    }
+
+    function startGame(trigger = null, options = {}) {
+        if (core.isActive()) {
+            return;
+        }
+
+        lastStartTrigger = trigger;
+
+        if (!options.skipWorldMap && shouldShowWorldMapOnStart(config, worldMap)) {
+            worldMap.open({
+                mode: 'start',
+                onStart: () => beginGame(trigger),
+            });
+            return;
+        }
+
+        beginGame(trigger);
     }
 
     if (floatingButton) {
@@ -81,6 +124,7 @@ ready(() => {
         start: () => startGame(null),
         stop: () => core.stop(),
         isActive: () => core.isActive(),
+        openWorldMap: () => worldMap.open({ mode: core.isActive() ? 'hud' : 'browse', onStart: () => beginGame(null) }),
     };
 
     if (readResumeMode()) {
@@ -90,7 +134,7 @@ ready(() => {
         }
 
         window.setTimeout(() => {
-            core.start();
+            startGame(null, { skipWorldMap: true });
         }, 260);
     }
 });
@@ -116,6 +160,13 @@ function shouldShowFloatingButton(config) {
     return config.showFloatingButton !== false
         && config.showFloatingButton !== '0'
         && config.showFloatingButton !== 0;
+}
+
+function shouldShowWorldMapOnStart(config, worldMap) {
+    return worldMap?.isEnabled?.()
+        && config.worldMap?.showOnStart !== false
+        && config.worldMap?.showOnStart !== '0'
+        && config.worldMap?.showOnStart !== 0;
 }
 
 function resolveConfig() {

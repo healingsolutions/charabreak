@@ -1,7 +1,16 @@
 {
   "brand": {
     "name": "CharaBreak",
-    "tagline": "Web pages become playable stages."
+    "tagline": "Web pages become playable stages.",
+    "visualWorld": "Dark voxel fantasy, neon cyan, gold rewards, pixel character with hammer, breakable web panels"
+  },
+  "assets": {
+    "logo": "gaming-web/assets/brand/charabreak-logo-transparent-hd.png",
+    "hero": "gaming-web/assets/brand/charabreak-hero-smash.png",
+    "features": "gaming-web/assets/brand/charabreak-feature-dashboard.png",
+    "demo": "gaming-web/assets/brand/charabreak-demo-world.png",
+    "pricing": "gaming-web/assets/brand/charabreak-pricing-worlds.png",
+    "faq": "gaming-web/assets/brand/charabreak-boss-gate.png"
   },
   "colors": {
     "ink": "#08141f",
