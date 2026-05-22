@@ -1,73 +1,195 @@
-# Gaming Web Plugin
+# CharaBreak
 
-Gaming Web adds a light, playful mode to enabled WordPress pages. The MVP keeps destructive effects temporary: game mode may wrap visible text into per-character spans, but exit mode or reload restores the original page content.
+CharaBreakは、WordPressのページを「読む前に遊べる」インタラクティブなステージへ変えるプラグインです。
 
-## Features
+ページ内の文字、画像、ボタン、リンクを足場やゲーム要素として扱い、ユーザーはキャラクターを操作しながらページを進みます。実際のページ内容に触れて遊ぶことで、サイト滞在時間、回遊、コンテンツへの愛着を高めることを目指します。
 
-- Floating game mode button on enabled singular pages/posts.
-- Full-page overlay with a small character and exit control.
-- Safe interactions for headings, paragraphs, images, links, buttons, and layout containers.
-- Pixel-art runner that jumps around the viewport, attacks real per-character page text, and restores it on exit/reload.
-- Combat controls: attack breaks the page in front of you; throw picks up a real character underfoot and throws it at an enemy, with automatic lock-on when needed.
-- Optional in-game BGM toggle with chiptune Web Audio playback.
-- MP3 sound effects for hits, UI, collection, start, exit, jumping, falling, landing, lock-on, throws, and KO moments.
-- Collectible word fragments and a compact inventory panel.
-- Admin settings for global enablement, post types, floating start button visibility, labels, character name, logging, and debug mode.
-- Per-page meta for game mode, important words, stage name, and clear-only rewards/coupons.
-- English-first UI strings with bundled Japanese translation support.
-- REST event endpoint at `/wp-json/gaming-web/v1/event`.
-- Anonymous event table: `wp_gaming_web_events`.
+ゲーム中の変化は基本的にその場限りです。リロードすれば通常のページ表示に戻ります。
 
-## Starting From Page Content
+## CharaBreakを始める手順
 
-Enabled pages can start game mode from natural in-page copy instead of the fixed lower-right button:
+1. WordPress管理画面でプラグインをインストールします。
+   - `gaming-web` フォルダを `wp-content/plugins/` にアップロードします。
+   - またはZIP化したプラグインを、WordPress管理画面の「プラグイン > 新規追加 > プラグインのアップロード」から追加します。
+
+2. WordPress管理画面で `CharaBreak` を有効化します。
+
+3. 管理画面の `CharaBreak > 基本設定` を開きます。
+   - `CharaBreakを有効化` をオンにします。
+   - ゲーム化する投稿タイプを選びます。通常は `固定ページ` をオンにします。
+   - 右下のゲーム開始ボタンを表示したい場合は、`フローティング開始ボタン` をオンにします。
+   - 保存します。
+
+4. 管理画面の `CharaBreak > ステージ管理` を開きます。
+   - ゲーム化したいページの `使用する` をオンにします。
+   - ステージ名、順番、難易度、報酬の予告などを必要に応じて設定します。
+   - 保存します。
+
+5. 対象ページを開きます。
+   - 右下にゲーム開始ボタンが表示されている場合は、それを押すとゲームが始まります。
+   - ページ内に自然な開始リンクを置きたい場合は、下のショートコードを使います。
 
 ```text
-[gaming_web_start label="Play this page"]
+[gaming_web_start label="ゲームを始める"]
 ```
 
-The fixed floating button can be hidden in **Settings > Gaming Web**. Custom markup can also trigger the game by adding `data-gaming-web-start`:
+6. ユーザーが開始ボタンを押すと、ゲームモードが起動します。
+   - 初回は簡単な操作説明が表示されます。
+   - キャラクターがページ上に登場し、文字や画像を足場にして遊べます。
+   - ステージをクリアすると、報酬や次のステージへの導線を表示できます。
+
+## ページ内リンクから開始する
+
+ショートコードを使わず、テーマやElementorなどのボタンから開始したい場合は、リンクやボタンに `data-gaming-web-start` を付けてください。
 
 ```html
-<a href="#gaming-web-start" data-gaming-web-start>Play this page</a>
+<a href="#gaming-web-start" data-gaming-web-start>ゲームを始める</a>
 ```
 
-`wordpress-adapter.js` exposes `window.GamingWeb.start()` for non-WordPress wrappers or custom theme scripts after the adapter has loaded.
+右下のフローティングボタンを非表示にして、ページ内の自然な導線だけでゲームを開始する運用もできます。
 
-## Clear Rewards
+## 主な機能
 
-Each enabled page can define a reward title, message, coupon code, and reward URL in the Gaming Web meta box. Reward details are not printed into the normal page HTML or localized frontend config; they are returned by the REST event response after a successful stage clear.
+- WordPressの固定ページや投稿をゲームステージ化
+- 文字、画像、アイコン、ボタン、リンクをゲーム内の足場や対象として利用
+- キャラクター操作、ジャンプ、攻撃、ため攻撃、防御、投げ、ロックオン
+- 通常敵、中ボス、ミサイル、パリィ、防御
+- 宝箱やアイテムを集めるクリア条件
+- ステージクリア後の報酬表示
+- 複数ページをつなぐワールドマップ
+- ステージごとの難易度、敵キャラ、報酬、BGM設定
+- 匿名イベントログ
 
-This MVP hides rewards from ordinary visitors, but high-value production coupons should use server-issued one-time codes or ecommerce/member integration.
+## 操作方法
 
-## JavaScript Structure
+キーボード:
 
-- `gaming-web-core.js`: lifecycle orchestration.
-- `dom-scanner.js`: visible element discovery.
-- `stage-overlay.js`: overlay UI and visual effects.
-- `interaction-engine.js`: click/tap behavior and inventory.
-- `logger.js`: framework-agnostic event transport.
-- `wordpress-adapter.js`: WordPress bootstrapping and REST wiring.
+- `A / D` または矢印キー: 移動
+- `Space` または `W` または上矢印: ジャンプ
+- `J` または `Z`: 攻撃
+- `K` または `X`: 文字を持つ、投げる
+- `L` または `Shift`: 盾
+- `T` または `Tab`: ロックオン
 
-## Local Demo
+スマホ:
 
-From the workspace root:
+- 画面上の仮想ボタンで移動、ジャンプ、攻撃、防御を操作します。
 
-```powershell
-.\scripts\setup-wordpress.ps1
+ゲームパッド:
+
+- 左スティックまたはD-pad: 移動
+- 下ボタン: ジャンプ
+- 右ボタン: 攻撃
+- 左ボタン: 投げ
+- 上ボタン: ロックオン
+
+ブラウザや端末によっては、ゲームパッドを認識させるために一度ボタンを押す、またはページをクリックする必要があります。
+
+## ワールドマップ
+
+CharaBreakは、複数のページを「ステージ」としてつなぐことができます。
+
+ワールドマップを使うと、ユーザーは次のようなことを直感的に理解できます。
+
+- 今どのステージにいるか
+- 次にどのページへ進めるか
+- どこに報酬があるか
+- 最終ゴールまであと何ステージか
+
+設定は `CharaBreak > 基本設定` と `CharaBreak > ステージ管理` から行います。
+
+## クリア報酬
+
+各ページには、ステージクリア後だけ表示する報酬を設定できます。
+
+- 報酬タイトル
+- 報酬メッセージ
+- クーポンコード
+- 特典URL
+- 報酬の予告文
+
+「最後まで遊んだ人だけにクーポンを見せる」「ステージクリア後に限定ページへ案内する」といった使い方ができます。
+
+## 管理画面
+
+CharaBreakは、WordPress管理画面に専用メニューを追加します。
+
+- `基本設定`: プラグイン全体、開始ボタン、ワールドマップ、ログ、BGMなど
+- `ステージ管理`: ゲーム化するページ、順番、難易度、報酬、敵キャラ、クリア条件
+- `キャラクター・敵キャラ台帳`: 敵キャラ、ボス、案内役、画像、動き、難易度
+
+## 安全性とページへの影響
+
+CharaBreakは、ゲーム中にページをゲームのように見せますが、通常のページ内容を永続的に破壊することを目的としていません。
+
+- リロードすれば通常表示に戻ります。
+- ゲームモードを終了すれば通常操作に戻ります。
+- SEO用の本文そのものを削除する設計ではありません。
+- リンクやフォームは、ゲームモードを終了すれば通常通り利用できます。
+
+## ログ
+
+基本ログをオンにすると、匿名のゲームイベントを記録できます。
+
+記録される主なイベント:
+
+- ゲーム開始
+- ゲーム終了
+- 要素への攻撃
+- アイテム取得
+- ステージクリア
+
+個人情報を集める設計ではありません。ログは改善分析やステージ調整のために使います。
+
+## よくある質問
+
+### ゲーム開始ボタンが表示されません
+
+次を確認してください。
+
+- `CharaBreak > 基本設定` でプラグインが有効になっているか
+- 対象の投稿タイプが有効になっているか
+- `CharaBreak > ステージ管理` で対象ページの `使用する` がオンになっているか
+- 右下ボタンを使わない設定の場合、ショートコードまたは `data-gaming-web-start` がページ内にあるか
+
+### すべてのページをゲーム化できますか
+
+基本的には、公開済みの固定ページや投稿をステージとして選べます。
+
+ただし、ページ構造が非常に特殊な場合や、外部スクリプトで大きく表示を制御している場合は、足場判定や操作感の調整が必要になることがあります。
+
+### Elementorページでも使えますか
+
+はい。通常のページと同じように使えます。
+
+Elementorのボタンからゲームを始めたい場合は、ボタンリンクやHTMLに `data-gaming-web-start` を追加してください。
+
+### ゲーム中にページが壊れたように見えます
+
+それがCharaBreakの体験です。ゲーム中だけ、ページがステージとして変化します。
+
+リロードまたはゲーム終了で通常表示に戻ります。
+
+## 開発者向けメモ
+
+JavaScriptは、WordPressに強く依存しない構成を意識しています。
+
+- `gaming-web-core.js`: ゲーム全体のライフサイクル
+- `dom-scanner.js`: ページ上の対象要素の検出
+- `stage-overlay.js`: ゲームUI、物理、演出
+- `interaction-engine.js`: 要素ごとの反応
+- `logger.js`: イベント送信
+- `wordpress-adapter.js`: WordPress設定、REST、起動処理
+- `world-map.js`: 複数ページをつなぐワールドマップ
+
+RESTエンドポイント:
+
+```text
+/wp-json/gaming-web/v1/event
 ```
 
-Open `http://localhost:8089`, click `Game Mode`, then use page text, images, buttons, and links as playable platforms.
+イベントログ用テーブル:
 
-Audio assets live under `assets/audio`. BGM preference is stored in the browser as `gaming_web_bgm_enabled`.
-
-## Internationalization
-
-The plugin source uses English as the base language. Japanese translations are bundled under `languages/`, and the frontend game UI switches text by WordPress/site locale.
-
-Player controls:
-
-- Keyboard: `A/D` or arrow keys to move, `W` or up arrow to jump, `T`/`Tab` to lock on, `Space`/`Z` to attack, `X` to throw.
-- Touch/mobile: use the on-screen arrow, lock, throw, and attack buttons. A quick double tap on attack also throws.
-- Gamepad: left stick/D-pad moves, bottom button jumps, right button attacks, left face button throws, top button locks on.
-- During game mode, page text is temporarily split into per-character spans so the character can walk on and break real page text. Exit mode or reload restores the original text.
+```text
+wp_gaming_web_events
+```

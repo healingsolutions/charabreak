@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.2.19';
-import { StageOverlay } from './stage-overlay.js?v=0.2.19';
-import { InteractionEngine } from './interaction-engine.js?v=0.2.19';
-import { TextBreaker } from './text-breaker.js?v=0.2.19';
-import { ImageBreaker } from './image-breaker.js?v=0.2.19';
+import { scanGameTargets } from './dom-scanner.js?v=0.2.28';
+import { StageOverlay } from './stage-overlay.js?v=0.2.28';
+import { InteractionEngine } from './interaction-engine.js?v=0.2.28';
+import { TextBreaker } from './text-breaker.js?v=0.2.28';
+import { ImageBreaker } from './image-breaker.js?v=0.2.28';
 
 export class GamingWebCore {
     constructor(config = {}) {
@@ -46,6 +46,8 @@ export class GamingWebCore {
             hasReward: this.config.hasReward === '1' || this.config.hasReward === true,
             visualStyle: this.config.visualStyle || 'auto',
             themeTokens: this.config.themeTokens || {},
+            enemyConfig: this.config.enemyConfig || {},
+            objectiveConfig: this.config.objectiveConfig || {},
             reducedMotion,
             textBreaker: this.textBreaker,
             imageBreaker: this.imageBreaker,

@@ -12,6 +12,7 @@ class GW_Settings
     public const OPTION_BUTTON_LABEL = 'gaming_web_button_label';
     public const OPTION_CHARACTER_NAME = 'gaming_web_character_name';
     public const OPTION_VISUAL_STYLE = 'gaming_web_visual_style';
+    public const OPTION_AUDIO_NORMAL_BGM_ID = 'gaming_web_audio_normal_bgm_id';
     public const OPTION_WORLD_MAP_ENABLED = 'gaming_web_world_map_enabled';
     public const OPTION_WORLD_MAP_TITLE = 'gaming_web_world_map_title';
     public const OPTION_WORLD_MAP_GOAL_LABEL = 'gaming_web_world_map_goal_label';
@@ -28,14 +29,15 @@ class GW_Settings
             self::OPTION_ENABLED => '1',
             self::OPTION_SHOW_FLOATING_BUTTON => '1',
             self::OPTION_POST_TYPES => array('page', 'post'),
-            self::OPTION_BUTTON_LABEL => 'Game Mode',
-            self::OPTION_CHARACTER_NAME => 'Pico',
+            self::OPTION_BUTTON_LABEL => 'ゲームプレイ',
+            self::OPTION_CHARACTER_NAME => 'チャラ',
             self::OPTION_VISUAL_STYLE => 'auto',
+            self::OPTION_AUDIO_NORMAL_BGM_ID => '0',
             self::OPTION_WORLD_MAP_ENABLED => '1',
-            self::OPTION_WORLD_MAP_TITLE => 'CharaBreak World',
-            self::OPTION_WORLD_MAP_GOAL_LABEL => 'Final Gate',
+            self::OPTION_WORLD_MAP_TITLE => 'CharaBreak ワールド',
+            self::OPTION_WORLD_MAP_GOAL_LABEL => '最終ゲート',
             self::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT => '3',
-            self::OPTION_WORLD_MAP_SHOW_ON_START => '1',
+            self::OPTION_WORLD_MAP_SHOW_ON_START => '0',
             self::OPTION_WORLD_MAP_SHOW_IN_HUD => '1',
             self::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR => '1',
             self::OPTION_LOGGING_ENABLED => '1',
@@ -54,20 +56,8 @@ class GW_Settings
 
     public function init(): void
     {
-        add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
-    }
-
-    public function add_admin_menu(): void
-    {
-        add_options_page(
-            __('Gaming Web', 'gaming-web'),
-            __('Gaming Web', 'gaming-web'),
-            'manage_options',
-            'gaming-web',
-            array($this, 'render_admin_page')
-        );
     }
 
     public function register_settings(): void
@@ -93,19 +83,25 @@ class GW_Settings
         register_setting('gaming_web_settings', self::OPTION_BUTTON_LABEL, array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
-            'default' => 'Game Mode',
+            'default' => 'ゲームプレイ',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_CHARACTER_NAME, array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
-            'default' => 'Pico',
+            'default' => 'チャラ',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_VISUAL_STYLE, array(
             'type' => 'string',
             'sanitize_callback' => array($this, 'sanitize_visual_style'),
             'default' => 'auto',
+        ));
+
+        register_setting('gaming_web_settings', self::OPTION_AUDIO_NORMAL_BGM_ID, array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_non_negative_int_string'),
+            'default' => '0',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_ENABLED, array(
@@ -117,13 +113,13 @@ class GW_Settings
         register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_TITLE, array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
-            'default' => 'CharaBreak World',
+            'default' => 'CharaBreak ワールド',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_GOAL_LABEL, array(
             'type' => 'string',
             'sanitize_callback' => 'sanitize_text_field',
-            'default' => 'Final Gate',
+            'default' => '最終ゲート',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_REQUIRED_CLEAR_COUNT, array(
@@ -135,7 +131,7 @@ class GW_Settings
         register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_SHOW_ON_START, array(
             'type' => 'string',
             'sanitize_callback' => array($this, 'sanitize_checkbox'),
-            'default' => '1',
+            'default' => '0',
         ));
 
         register_setting('gaming_web_settings', self::OPTION_WORLD_MAP_SHOW_IN_HUD, array(
@@ -165,7 +161,7 @@ class GW_Settings
 
     public function enqueue_admin_assets(string $hook): void
     {
-        if ($hook !== 'settings_page_gaming-web') {
+        if (strpos($hook, 'gaming-web') === false) {
             return;
         }
 
@@ -214,10 +210,10 @@ class GW_Settings
     public static function visual_style_choices(): array
     {
         return array(
-            'auto' => __('Auto', 'gaming-web'),
-            'soft' => __('Soft', 'gaming-web'),
-            'pastel' => __('Pastel', 'gaming-web'),
-            'neon' => __('Neon', 'gaming-web'),
+            'auto' => __('自動', 'gaming-web'),
+            'soft' => __('ソフト', 'gaming-web'),
+            'pastel' => __('パステル', 'gaming-web'),
+            'neon' => __('ネオン', 'gaming-web'),
         );
     }
 

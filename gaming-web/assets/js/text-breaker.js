@@ -1,4 +1,4 @@
-import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.18';
+import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.28';
 
 const BREAKABLE_TYPES = new Set(['heading', 'paragraph', 'action']);
 const SKIP_SELECTOR = 'script,style,noscript,svg,canvas,input,textarea,select,.gw-stage,.gw-stage *,.gw-break-char,.cb-nav,.cb-nav *';

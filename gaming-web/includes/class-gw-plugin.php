@@ -8,6 +8,7 @@ class GW_Plugin
 {
     private static ?GW_Plugin $instance = null;
     private GW_Settings $settings;
+    private GW_Admin $admin;
     private GW_REST $rest;
     private array $frontend_config_for_footer = array();
 
@@ -29,19 +30,40 @@ class GW_Plugin
     private function __construct()
     {
         $this->settings = new GW_Settings();
+        $this->admin = new GW_Admin($this->settings);
         $this->rest = new GW_REST();
     }
 
     public function init(): void
     {
         $this->settings->init();
+        $this->admin->init();
         $this->rest->init();
 
         add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
+        add_action('template_redirect', array($this, 'redirect_attachment_pages'), 0);
         add_filter('script_loader_tag', array($this, 'mark_adapter_as_module'), 10, 3);
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
         add_action('save_post', array($this, 'save_meta_box'));
         add_shortcode('gaming_web_start', array($this, 'render_start_shortcode'));
+    }
+
+    public function redirect_attachment_pages(): void
+    {
+        if (!is_attachment() || is_admin() || wp_doing_ajax() || wp_is_json_request()) {
+            return;
+        }
+
+        $attachment_id = get_queried_object_id();
+        $parent_id = $attachment_id > 0 ? (int) wp_get_post_parent_id($attachment_id) : 0;
+        $target = $parent_id > 0 ? get_permalink($parent_id) : home_url('/');
+
+        if (!$target) {
+            $target = home_url('/');
+        }
+
+        wp_safe_redirect($target, 301);
+        exit;
     }
 
     public function enqueue_frontend_assets(): void
@@ -140,7 +162,7 @@ class GW_Plugin
         foreach (array('page', 'post') as $post_type) {
             add_meta_box(
                 'gaming-web-meta',
-                __('Gaming Web', 'gaming-web'),
+                __('CharaBreak ページ設定', 'gaming-web'),
                 array($this, 'render_meta_box'),
                 $post_type,
                 'side',
@@ -171,27 +193,30 @@ class GW_Plugin
         $world_map_type = get_post_meta($post->ID, '_gaming_web_world_map_type', true);
         $world_map_type = in_array($world_map_type, array('normal', 'reward', 'boss', 'final'), true) ? $world_map_type : 'normal';
         $world_map_reward_label = get_post_meta($post->ID, '_gaming_web_world_map_reward_label', true);
+        $stage_difficulty = GW_Enemies::difficulty(get_post_meta($post->ID, '_gaming_web_stage_difficulty', true) ?: 3);
+        $stage_clear_effect = get_post_meta($post->ID, '_gaming_web_stage_clear_effect', true);
+        $stage_clear_effect = array_key_exists($stage_clear_effect, GW_Enemies::clear_effect_choices()) ? $stage_clear_effect : 'auto';
         ?>
         <p>
-            <label for="gaming-web-mode"><strong><?php esc_html_e('Page game mode', 'gaming-web'); ?></strong></label>
+            <label for="gaming-web-mode"><strong><?php esc_html_e('このページのゲーム化', 'gaming-web'); ?></strong></label>
             <select name="gaming_web_mode" id="gaming-web-mode" class="widefat">
-                <option value="inherit" <?php selected($mode, 'inherit'); ?>><?php esc_html_e('Inherit global setting', 'gaming-web'); ?></option>
-                <option value="enabled" <?php selected($mode, 'enabled'); ?>><?php esc_html_e('Enable on this page', 'gaming-web'); ?></option>
-                <option value="disabled" <?php selected($mode, 'disabled'); ?>><?php esc_html_e('Disable on this page', 'gaming-web'); ?></option>
+                <option value="inherit" <?php selected($mode, 'inherit'); ?>><?php esc_html_e('全体設定に従う', 'gaming-web'); ?></option>
+                <option value="enabled" <?php selected($mode, 'enabled'); ?>><?php esc_html_e('このページで有効', 'gaming-web'); ?></option>
+                <option value="disabled" <?php selected($mode, 'disabled'); ?>><?php esc_html_e('このページでは無効', 'gaming-web'); ?></option>
             </select>
         </p>
         <p>
-            <label for="gaming-web-important-words"><strong><?php esc_html_e('Important words', 'gaming-web'); ?></strong></label>
-            <textarea name="gaming_web_important_words" id="gaming-web-important-words" class="widefat" rows="3" placeholder="<?php esc_attr_e('light, memory, space', 'gaming-web'); ?>"><?php echo esc_textarea($important_words); ?></textarea>
+            <label for="gaming-web-important-words"><strong><?php esc_html_e('重要な言葉', 'gaming-web'); ?></strong></label>
+            <textarea name="gaming_web_important_words" id="gaming-web-important-words" class="widefat" rows="3" placeholder="<?php esc_attr_e('未来, 体験, ファン', 'gaming-web'); ?>"><?php echo esc_textarea($important_words); ?></textarea>
         </p>
         <p>
-            <label for="gaming-web-stage-name"><strong><?php esc_html_e('Stage name', 'gaming-web'); ?></strong></label>
-            <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="<?php esc_attr_e('Garden of Words', 'gaming-web'); ?>">
+            <label for="gaming-web-stage-name"><strong><?php esc_html_e('ステージ名', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_stage_name" id="gaming-web-stage-name" class="widefat" value="<?php echo esc_attr($stage_name); ?>" placeholder="<?php esc_attr_e('言葉の庭', 'gaming-web'); ?>">
         </p>
         <p>
-            <label for="gaming-web-visual-style"><strong><?php esc_html_e('Visual style', 'gaming-web'); ?></strong></label>
+            <label for="gaming-web-visual-style"><strong><?php esc_html_e('ビジュアルスタイル', 'gaming-web'); ?></strong></label>
             <select name="gaming_web_visual_style" id="gaming-web-visual-style" class="widefat">
-                <option value="inherit" <?php selected($visual_style, 'inherit'); ?>><?php esc_html_e('Inherit global setting', 'gaming-web'); ?></option>
+                <option value="inherit" <?php selected($visual_style, 'inherit'); ?>><?php esc_html_e('全体設定に従う', 'gaming-web'); ?></option>
                 <?php foreach (GW_Settings::visual_style_choices() as $style_value => $style_label) : ?>
                     <option value="<?php echo esc_attr($style_value); ?>" <?php selected($visual_style, $style_value); ?>><?php echo esc_html($style_label); ?></option>
                 <?php endforeach; ?>
@@ -202,23 +227,23 @@ class GW_Plugin
             <label>
                 <input type="hidden" name="gaming_web_reward_enabled" value="0">
                 <input type="checkbox" name="gaming_web_reward_enabled" value="1" <?php checked($reward_enabled, '1'); ?>>
-                <strong><?php esc_html_e('Show a clear reward', 'gaming-web'); ?></strong>
+                <strong><?php esc_html_e('クリア特典を表示する', 'gaming-web'); ?></strong>
             </label>
         </p>
         <p>
-            <label for="gaming-web-reward-title"><strong><?php esc_html_e('Reward title', 'gaming-web'); ?></strong></label>
-            <input type="text" name="gaming_web_reward_title" id="gaming-web-reward-title" class="widefat" value="<?php echo esc_attr($reward_title); ?>" placeholder="<?php esc_attr_e('Clear reward', 'gaming-web'); ?>">
+            <label for="gaming-web-reward-title"><strong><?php esc_html_e('特典タイトル', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_reward_title" id="gaming-web-reward-title" class="widefat" value="<?php echo esc_attr($reward_title); ?>" placeholder="<?php esc_attr_e('クリア特典', 'gaming-web'); ?>">
         </p>
         <p>
-            <label for="gaming-web-reward-message"><strong><?php esc_html_e('Reward message', 'gaming-web'); ?></strong></label>
-            <textarea name="gaming_web_reward_message" id="gaming-web-reward-message" class="widefat" rows="3" placeholder="<?php esc_attr_e('A message only players who reached GOAL can see', 'gaming-web'); ?>"><?php echo esc_textarea($reward_message); ?></textarea>
+            <label for="gaming-web-reward-message"><strong><?php esc_html_e('特典メッセージ', 'gaming-web'); ?></strong></label>
+            <textarea name="gaming_web_reward_message" id="gaming-web-reward-message" class="widefat" rows="3" placeholder="<?php esc_attr_e('GOALに到達した人だけが読めるメッセージ', 'gaming-web'); ?>"><?php echo esc_textarea($reward_message); ?></textarea>
         </p>
         <p>
-            <label for="gaming-web-reward-coupon-code"><strong><?php esc_html_e('Coupon code', 'gaming-web'); ?></strong></label>
+            <label for="gaming-web-reward-coupon-code"><strong><?php esc_html_e('クーポンコード', 'gaming-web'); ?></strong></label>
             <input type="text" name="gaming_web_reward_coupon_code" id="gaming-web-reward-coupon-code" class="widefat" value="<?php echo esc_attr($reward_coupon_code); ?>" placeholder="CLEAR-THANKS">
         </p>
         <p>
-            <label for="gaming-web-reward-url"><strong><?php esc_html_e('Reward URL', 'gaming-web'); ?></strong></label>
+            <label for="gaming-web-reward-url"><strong><?php esc_html_e('特典URL', 'gaming-web'); ?></strong></label>
             <input type="url" name="gaming_web_reward_url" id="gaming-web-reward-url" class="widefat" value="<?php echo esc_url($reward_url); ?>" placeholder="https://example.com/special">
         </p>
         <hr>
@@ -226,29 +251,45 @@ class GW_Plugin
             <label>
                 <input type="hidden" name="gaming_web_world_map_include" value="0">
                 <input type="checkbox" name="gaming_web_world_map_include" value="1" <?php checked($world_map_include, '1'); ?>>
-                <strong><?php esc_html_e('Include in world map', 'gaming-web'); ?></strong>
+                <strong><?php esc_html_e('ワールドマップに表示する', 'gaming-web'); ?></strong>
             </label>
         </p>
         <p>
-            <label for="gaming-web-world-map-label"><strong><?php esc_html_e('Map label', 'gaming-web'); ?></strong></label>
-            <input type="text" name="gaming_web_world_map_label" id="gaming-web-world-map-label" class="widefat" value="<?php echo esc_attr($world_map_label); ?>" placeholder="<?php esc_attr_e('Stage label on the field map', 'gaming-web'); ?>">
+            <label for="gaming-web-world-map-label"><strong><?php esc_html_e('マップ上の表示名', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_world_map_label" id="gaming-web-world-map-label" class="widefat" value="<?php echo esc_attr($world_map_label); ?>" placeholder="<?php esc_attr_e('フィールドマップ上のステージ名', 'gaming-web'); ?>">
         </p>
         <p>
-            <label for="gaming-web-world-map-order"><strong><?php esc_html_e('Map order', 'gaming-web'); ?></strong></label>
+            <label for="gaming-web-world-map-order"><strong><?php esc_html_e('マップ順', 'gaming-web'); ?></strong></label>
             <input type="number" min="0" step="1" name="gaming_web_world_map_order" id="gaming-web-world-map-order" class="widefat" value="<?php echo esc_attr($world_map_order); ?>" placeholder="0">
         </p>
         <p>
-            <label for="gaming-web-world-map-type"><strong><?php esc_html_e('Stage type', 'gaming-web'); ?></strong></label>
+            <label for="gaming-web-world-map-type"><strong><?php esc_html_e('ステージ種別', 'gaming-web'); ?></strong></label>
             <select name="gaming_web_world_map_type" id="gaming-web-world-map-type" class="widefat">
-                <option value="normal" <?php selected($world_map_type, 'normal'); ?>><?php esc_html_e('Normal stage', 'gaming-web'); ?></option>
-                <option value="reward" <?php selected($world_map_type, 'reward'); ?>><?php esc_html_e('Reward stage', 'gaming-web'); ?></option>
-                <option value="boss" <?php selected($world_map_type, 'boss'); ?>><?php esc_html_e('Boss stage', 'gaming-web'); ?></option>
-                <option value="final" <?php selected($world_map_type, 'final'); ?>><?php esc_html_e('Final goal', 'gaming-web'); ?></option>
+                <option value="normal" <?php selected($world_map_type, 'normal'); ?>><?php esc_html_e('通常ステージ', 'gaming-web'); ?></option>
+                <option value="reward" <?php selected($world_map_type, 'reward'); ?>><?php esc_html_e('報酬ステージ', 'gaming-web'); ?></option>
+                <option value="boss" <?php selected($world_map_type, 'boss'); ?>><?php esc_html_e('ボスステージ', 'gaming-web'); ?></option>
+                <option value="final" <?php selected($world_map_type, 'final'); ?>><?php esc_html_e('最終ゴール', 'gaming-web'); ?></option>
             </select>
         </p>
         <p>
-            <label for="gaming-web-world-map-reward-label"><strong><?php esc_html_e('Map reward teaser', 'gaming-web'); ?></strong></label>
-            <input type="text" name="gaming_web_world_map_reward_label" id="gaming-web-world-map-reward-label" class="widefat" value="<?php echo esc_attr($world_map_reward_label); ?>" placeholder="<?php esc_attr_e('Coupon, bonus page, secret message...', 'gaming-web'); ?>">
+            <label for="gaming-web-world-map-reward-label"><strong><?php esc_html_e('マップ上の報酬予告', 'gaming-web'); ?></strong></label>
+            <input type="text" name="gaming_web_world_map_reward_label" id="gaming-web-world-map-reward-label" class="widefat" value="<?php echo esc_attr($world_map_reward_label); ?>" placeholder="<?php esc_attr_e('クーポン、限定ページ、秘密のメッセージなど', 'gaming-web'); ?>">
+        </p>
+        <p>
+            <label for="gaming-web-stage-difficulty"><strong><?php esc_html_e('ステージ難易度', 'gaming-web'); ?></strong></label>
+            <select name="gaming_web_stage_difficulty" id="gaming-web-stage-difficulty" class="widefat">
+                <?php for ($level = 1; $level <= 8; $level++) : ?>
+                    <option value="<?php echo esc_attr((string) $level); ?>" <?php selected($stage_difficulty, $level); ?>>Lv.<?php echo esc_html((string) $level); ?></option>
+                <?php endfor; ?>
+            </select>
+        </p>
+        <p>
+            <label for="gaming-web-stage-clear-effect"><strong><?php esc_html_e('クリア演出', 'gaming-web'); ?></strong></label>
+            <select name="gaming_web_stage_clear_effect" id="gaming-web-stage-clear-effect" class="widefat">
+                <?php foreach (GW_Enemies::clear_effect_choices() as $effect_value => $effect_label) : ?>
+                    <option value="<?php echo esc_attr($effect_value); ?>" <?php selected($stage_clear_effect, $effect_value); ?>><?php echo esc_html($effect_label); ?></option>
+                <?php endforeach; ?>
+            </select>
         </p>
         <?php
     }
@@ -296,6 +337,11 @@ class GW_Plugin
             $world_map_type = 'normal';
         }
         $world_map_reward_label = sanitize_text_field(wp_unslash((string) ($_POST['gaming_web_world_map_reward_label'] ?? '')));
+        $stage_difficulty = (string) GW_Enemies::difficulty($_POST['gaming_web_stage_difficulty'] ?? 3);
+        $stage_clear_effect = sanitize_key((string) ($_POST['gaming_web_stage_clear_effect'] ?? 'auto'));
+        if (!array_key_exists($stage_clear_effect, GW_Enemies::clear_effect_choices())) {
+            $stage_clear_effect = 'auto';
+        }
 
         update_post_meta($post_id, '_gaming_web_mode', $mode);
         update_post_meta($post_id, '_gaming_web_important_words', $important_words);
@@ -311,6 +357,8 @@ class GW_Plugin
         update_post_meta($post_id, '_gaming_web_world_map_order', $world_map_order);
         update_post_meta($post_id, '_gaming_web_world_map_type', $world_map_type);
         update_post_meta($post_id, '_gaming_web_world_map_reward_label', $world_map_reward_label);
+        update_post_meta($post_id, '_gaming_web_stage_difficulty', $stage_difficulty);
+        update_post_meta($post_id, '_gaming_web_stage_clear_effect', $stage_clear_effect);
     }
 
     private function is_enabled_for_current_post(): bool
@@ -354,6 +402,9 @@ class GW_Plugin
             'themeTokens' => array(),
             'importantWords' => $this->parse_important_words($important_words),
             'hasReward' => $this->has_clear_reward($post_id) ? '1' : '0',
+            'enemyConfig' => $this->enemy_config_for_post($post_id),
+            'stageAudio' => $this->stage_audio_for_post($post_id),
+            'objectiveConfig' => $this->objective_config_for_post($post_id),
             'worldMap' => $this->world_map_config($post_id),
             'loggingEnabled' => GW_Settings::is_truthy(GW_Settings::OPTION_LOGGING_ENABLED),
             'debug' => GW_Settings::is_truthy(GW_Settings::OPTION_DEBUG),
@@ -392,11 +443,11 @@ class GW_Plugin
         $value = (string) GW_Settings::get($key);
 
         if ($key === GW_Settings::OPTION_BUTTON_LABEL && $value === 'Game Mode') {
-            return __('Game Mode', 'gaming-web');
+            return __('ゲームプレイ', 'gaming-web');
         }
 
         if ($key === GW_Settings::OPTION_CHARACTER_NAME && $value === 'Pico') {
-            return __('Pico', 'gaming-web');
+            return __('チャラ', 'gaming-web');
         }
 
         return $value;
@@ -569,6 +620,114 @@ class GW_Plugin
             'order' => absint(get_post_meta($post->ID, '_gaming_web_world_map_order', true)),
             'hasReward' => $this->has_clear_reward($post->ID),
             'rewardLabel' => $reward_label,
+            'difficulty' => GW_Enemies::difficulty(get_post_meta($post->ID, '_gaming_web_stage_difficulty', true) ?: 3),
+            'clearEffect' => $this->clear_effect_for_post($post->ID),
+            'objective' => $this->objective_config_for_post($post->ID),
+        );
+    }
+
+    private function enemy_config_for_post(int $post_id): array
+    {
+        if ($post_id <= 0) {
+            return array('enabled' => false);
+        }
+
+        $stage_difficulty = GW_Enemies::difficulty(get_post_meta($post_id, '_gaming_web_stage_difficulty', true) ?: 3);
+        $normal_ids = get_post_meta($post_id, '_gaming_web_stage_enemy_ids', true);
+        $normal_ids = is_array($normal_ids) ? array_map('strval', $normal_ids) : array();
+        $boss_id = (string) get_post_meta($post_id, '_gaming_web_stage_boss_enemy_id', true);
+
+        $normal_enemies = array();
+        foreach ($normal_ids as $enemy_id) {
+            $enemy = GW_Enemies::by_id($enemy_id);
+            if ($enemy !== null) {
+                $normal_enemies[] = GW_Enemies::frontend_enemy($enemy, 'normal');
+            }
+        }
+
+        $boss_enemy = array();
+        if ($boss_id !== '') {
+            $enemy = GW_Enemies::by_id($boss_id);
+            if ($enemy !== null) {
+                $boss_enemy = GW_Enemies::frontend_enemy($enemy, 'boss');
+            }
+        }
+
+        return array(
+            'enabled' => !empty($normal_enemies) || !empty($boss_enemy),
+            'stageDifficulty' => $stage_difficulty,
+            'clearEffect' => $this->clear_effect_for_post($post_id),
+            'normal' => $normal_enemies,
+            'boss' => $boss_enemy,
+        );
+    }
+
+    private function clear_effect_for_post(int $post_id): string
+    {
+        $effect = sanitize_key((string) get_post_meta($post_id, '_gaming_web_stage_clear_effect', true));
+        return array_key_exists($effect, GW_Enemies::clear_effect_choices()) ? $effect : 'auto';
+    }
+
+    private function stage_audio_for_post(int $post_id): array
+    {
+        if ($post_id <= 0) {
+            return array();
+        }
+
+        $normal_bgm_url = $this->attachment_url_meta($post_id, '_gaming_web_stage_normal_bgm_id');
+        if ($normal_bgm_url === '') {
+            $normal_bgm_url = $this->attachment_url_from_id(absint(GW_Settings::get(GW_Settings::OPTION_AUDIO_NORMAL_BGM_ID)));
+        }
+
+        return array(
+            'normalBgmUrl' => $normal_bgm_url,
+            'stageBgmUrl' => $this->attachment_url_meta($post_id, '_gaming_web_stage_bgm_id'),
+            'bossBgmUrl' => $this->attachment_url_meta($post_id, '_gaming_web_stage_boss_bgm_id'),
+            'clearSoundUrl' => $this->attachment_url_meta($post_id, '_gaming_web_stage_clear_sound_id'),
+        );
+    }
+
+    private function attachment_url_meta(int $post_id, string $meta_key): string
+    {
+        $attachment_id = absint(get_post_meta($post_id, $meta_key, true));
+        if ($attachment_id <= 0) {
+            return '';
+        }
+
+        $url = wp_get_attachment_url($attachment_id);
+        return $url ? esc_url_raw($url) : '';
+    }
+
+    private function attachment_url_from_id(int $attachment_id): string
+    {
+        if ($attachment_id <= 0) {
+            return '';
+        }
+
+        $url = wp_get_attachment_url($attachment_id);
+        return $url ? esc_url_raw($url) : '';
+    }
+
+    private function objective_config_for_post(int $post_id): array
+    {
+        $type = sanitize_key((string) get_post_meta($post_id, '_gaming_web_stage_objective_type', true));
+        if (!in_array($type, array('chests', 'products'), true)) {
+            $type = 'chests';
+        }
+
+        $label = trim((string) get_post_meta($post_id, '_gaming_web_stage_objective_label', true));
+        if ($label === '') {
+            $label = $type === 'products'
+                ? __('商品・アイテム', 'gaming-web')
+                : __('宝箱', 'gaming-web');
+        }
+
+        $count = max(1, min(9, absint(get_post_meta($post_id, '_gaming_web_stage_objective_count', true) ?: 3)));
+
+        return array(
+            'type' => $type,
+            'label' => $label,
+            'requiredCount' => $count,
         );
     }
 }

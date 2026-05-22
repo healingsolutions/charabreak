@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Gaming Web
- * Description: Adds a playful temporary game mode to enabled WordPress pages.
- * Version: 0.2.19
- * Author: Gaming Web MVP
+ * Plugin Name: CharaBreak
+ * Description: WordPressページを、文字や画像を足場にして遊べるインタラクティブなステージへ変えるプラグインです。
+ * Version: 0.2.28
+ * Author: CharaBreak
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Text Domain: gaming-web
@@ -14,12 +14,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('GAMING_WEB_VERSION', '0.2.19');
+define('GAMING_WEB_VERSION', '0.2.28');
 define('GAMING_WEB_FILE', __FILE__);
 define('GAMING_WEB_DIR', plugin_dir_path(__FILE__));
 define('GAMING_WEB_URL', plugin_dir_url(__FILE__));
 
 require_once GAMING_WEB_DIR . 'includes/class-gw-settings.php';
+require_once GAMING_WEB_DIR . 'includes/class-gw-enemies.php';
+require_once GAMING_WEB_DIR . 'includes/class-gw-admin.php';
 require_once GAMING_WEB_DIR . 'includes/class-gw-logger.php';
 require_once GAMING_WEB_DIR . 'includes/class-gw-rest.php';
 require_once GAMING_WEB_DIR . 'includes/class-gw-plugin.php';

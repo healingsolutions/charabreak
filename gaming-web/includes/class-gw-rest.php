@@ -36,7 +36,7 @@ class GW_REST
 
         $event_type = sanitize_key($params['event_type'] ?? '');
         if (!in_array($event_type, self::ALLOWED_EVENTS, true)) {
-            return new WP_Error('gaming_web_invalid_event', __('Invalid event type.', 'gaming-web'), array('status' => 400));
+            return new WP_Error('gaming_web_invalid_event', __('イベント種別が正しくありません。', 'gaming-web'), array('status' => 400));
         }
 
         $session_id = preg_replace('/[^A-Za-z0-9_-]/', '', (string) ($params['session_id'] ?? ''));
@@ -153,7 +153,7 @@ class GW_REST
         }
 
         if ($reward['title'] === '') {
-            $reward['title'] = __('Clear reward', 'gaming-web');
+            $reward['title'] = __('クリア特典', 'gaming-web');
         }
 
         return $reward;

@@ -1,36 +1,38 @@
 const DEFAULT_TEXT = {
-    eyebrow: 'WORLD MAP',
-    title: 'CharaBreak World',
-    goal: 'Final Gate',
-    subtitle: 'Each page is a stage. Clear the route and unlock the reward.',
-    current: 'Current',
-    cleared: 'Cleared',
-    available: 'Open',
-    locked: 'Locked',
-    reward: 'Reward',
+    eyebrow: 'ワールドマップ',
+    title: 'CharaBreak ワールド',
+    goal: '最終ゲート',
+    subtitle: 'ページごとに個性があるステージ。ルートをクリアして特典へ進もう。',
+    current: '現在地',
+    cleared: 'クリア',
+    available: '進行可',
+    locked: 'ロック中',
+    reward: '特典',
     unknownReward: '???',
-    progress: 'Route progress',
-    start: 'Start stage',
-    resume: 'Back to stage',
-    enter: 'Enter',
-    close: 'Close',
-    finalLocked: 'Clear more stages to open the final gate.',
-    finalReady: 'The final gate is open.',
-    clearNeed: '{count} clear(s) to final gate',
-    modeStart: 'Choose your path before entering the page.',
-    modeHud: 'Pause, look at the whole field, then jump back in.',
-    modeClear: 'A new route lit up.',
+    progress: 'ルート進行',
+    start: 'このステージへ',
+    resume: 'ステージに戻る',
+    enter: '入る',
+    close: '閉じる',
+    finalLocked: 'もう少しクリアすると最終ゲートが開く。',
+    finalReady: '最終ゲートが開いた。',
+    clearNeed: '最終ゲートまであと{count}ステージ',
+    modeStart: 'ページに入る前に、冒険の全体像を見よう。',
+    modeHud: '一度地図を開いて、今の位置と次のゴールを確認。',
+    modeClear: '新しいルートが光った。',
+    open: '開門',
+    lock: '封鎖',
 };
 
 const JA_TEXT = {
-    eyebrow: 'WORLD MAP',
-    title: 'CharaBreak World',
+    eyebrow: 'ワールドマップ',
+    title: 'CharaBreak ワールド',
     goal: '\u6700\u7d42\u30b2\u30fc\u30c8',
     subtitle: '\u30da\u30fc\u30b8\u3054\u3068\u306b\u500b\u6027\u304c\u3042\u308b\u30b9\u30c6\u30fc\u30b8\u3002\u30eb\u30fc\u30c8\u3092\u30af\u30ea\u30a2\u3057\u3066\u7279\u5178\u3078\u9032\u3082\u3046\u3002',
     current: '\u73fe\u5728\u5730',
     cleared: '\u30af\u30ea\u30a2',
     available: '\u9032\u884c\u53ef',
-    locked: 'LOCKED',
+    locked: 'ロック中',
     reward: '\u7279\u5178',
     unknownReward: '???',
     progress: '\u30eb\u30fc\u30c8\u9032\u884c',
@@ -44,6 +46,8 @@ const JA_TEXT = {
     modeStart: '\u30da\u30fc\u30b8\u306b\u5165\u308b\u524d\u306b\u3001\u5192\u967a\u306e\u5168\u4f53\u50cf\u3092\u898b\u3088\u3046\u3002',
     modeHud: '\u4e00\u5ea6\u5730\u56f3\u3092\u958b\u3044\u3066\u3001\u4eca\u306e\u4f4d\u7f6e\u3068\u6b21\u306e\u30b4\u30fc\u30eb\u3092\u78ba\u8a8d\u3002',
     modeClear: '\u65b0\u3057\u3044\u30eb\u30fc\u30c8\u304c\u5149\u3063\u305f\u3002',
+    open: '\u958b\u9580',
+    lock: '\u5c01\u9396',
 };
 
 export class GamingWebWorldMap {
@@ -111,7 +115,7 @@ export class GamingWebWorldMap {
                         ${layout.map((item) => this.renderStageNode(item)).join('')}
                         <div class="gw-world-map__final ${finalReady ? 'gw-world-map__final--ready' : ''}">
                             <span>${escapeHtml(this.config.goalLabel || this.text.goal)}</span>
-                            <strong>${finalReady ? 'OPEN' : 'LOCK'}</strong>
+                            <strong>${escapeHtml(finalReady ? this.text.open : this.text.lock)}</strong>
                         </div>
                     </div>
                     <aside class="gw-world-map__status">
@@ -214,16 +218,27 @@ export class GamingWebWorldMap {
 
     stageLayout() {
         const count = Math.max(1, this.config.stages.length);
-        const yPattern = [72, 54, 60, 38, 48, 28, 42, 64];
+        const columns = preferredColumnCount(count);
+        const rows = Math.ceil(count / columns);
+        const xStep = columns <= 1 ? 0 : 72 / (columns - 1);
+        const yStep = rows <= 1 ? 0 : Math.min(21, 62 / Math.max(1, rows - 1));
+
         return this.config.stages.map((stage, index) => {
-            const x = count === 1 ? 50 : 9 + (82 * index) / (count - 1);
-            const y = yPattern[index % yPattern.length];
+            const row = Math.floor(index / columns);
+            const col = index % columns;
+            const rowOffset = row % 2 === 1 ? Math.min(5, xStep / 2.4) : 0;
+            const x = count === 1 ? 50 : clamp(12 + col * xStep + rowOffset, 9, 91);
+            const y = count === 1 ? 56 : clamp(20 + row * yStep + (col % 2) * 4, 18, 84);
+
             return {
                 stage,
                 index,
                 status: this.stageStatus(stage, index),
                 x,
                 y,
+                row,
+                col,
+                depth: row * columns + col,
             };
         });
     }
@@ -234,11 +249,17 @@ export class GamingWebWorldMap {
         const rewardLabel = this.rewardLabel(stage);
         const disabled = status === 'locked' ? ' disabled aria-disabled="true"' : '';
         const icon = stageIcon(stage, item.index);
-        const style = `--gw-map-x: ${item.x}%; --gw-map-y: ${item.y}%;`;
+        const zIndex = status === 'current' ? 140 : status === 'available' ? 110 : 20 + item.depth;
+        const style = `--gw-map-x: ${item.x}%; --gw-map-y: ${item.y}%; --gw-map-row: ${item.row}; --gw-map-col: ${item.col}; --gw-map-depth: ${item.depth}; z-index: ${zIndex};`;
+        const title = `${stage.label} / ${this.statusLabel(status)}${rewardLabel ? ` / ${this.text.reward}: ${rewardLabel}` : ''}`;
+
+        const effect = normalizeClearEffect(stage.clearEffect);
 
         return `
-            <button type="button" class="gw-world-map__node gw-world-map__node--${escapeAttribute(status)} gw-world-map__node--${escapeAttribute(stage.type)}" style="${escapeAttribute(style)}" data-gw-world-stage="${escapeAttribute(stage.id)}"${disabled}>
-                <span class="gw-world-map__node-icon">${escapeHtml(icon)}</span>
+            <button type="button" class="gw-world-map__node gw-world-map__node--${escapeAttribute(status)} gw-world-map__node--${escapeAttribute(stage.type)} gw-world-map__node-effect--${escapeAttribute(effect)}" style="${escapeAttribute(style)}" data-gw-world-stage="${escapeAttribute(stage.id)}" title="${escapeAttribute(title)}"${disabled}>
+                <span class="gw-world-map__node-platform" aria-hidden="true">
+                    <span class="gw-world-map__node-icon">${escapeHtml(icon)}</span>
+                </span>
                 <span class="gw-world-map__node-label">${escapeHtml(stage.label)}</span>
                 <small>${escapeHtml(this.statusLabel(status))}</small>
                 ${rewardLabel ? `<em>${escapeHtml(rewardLabel)}</em>` : ''}
@@ -367,7 +388,7 @@ function normalizeConfig(config) {
             .map((stage, index) => ({
                 id: String(stage.id),
                 pageId: Number(stage.pageId || 0),
-                label: String(stage.label || stage.stageName || stage.title || `Stage ${index + 1}`),
+                label: String(stage.label || stage.stageName || stage.title || `ステージ ${index + 1}`),
                 title: String(stage.title || ''),
                 stageName: String(stage.stageName || ''),
                 url: String(stage.url || ''),
@@ -375,20 +396,45 @@ function normalizeConfig(config) {
                 order: Number(stage.order || 0),
                 hasReward: isTruthy(stage.hasReward),
                 rewardLabel: String(stage.rewardLabel || ''),
+                clearEffect: normalizeClearEffect(stage.clearEffect || ''),
                 index,
             })),
     };
 }
 
 function localizedText(locale) {
-    return String(locale).toLowerCase().startsWith('ja')
-        ? { ...DEFAULT_TEXT, ...JA_TEXT }
-        : DEFAULT_TEXT;
+    return { ...DEFAULT_TEXT, ...JA_TEXT };
 }
 
 function normalizeStageType(type) {
     const value = String(type || 'normal');
     return ['normal', 'reward', 'boss', 'final'].includes(value) ? value : 'normal';
+}
+
+function normalizeClearEffect(effect) {
+    const value = String(effect || 'auto');
+    return ['auto', 'spark', 'treasure', 'gate', 'crown'].includes(value) ? value : 'auto';
+}
+
+function preferredColumnCount(count) {
+    if (count <= 1) {
+        return 1;
+    }
+    if (count <= 6) {
+        return count;
+    }
+    if (count <= 12) {
+        return 4;
+    }
+    if (count <= 20) {
+        return 5;
+    }
+
+    return 6;
+}
+
+function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
 }
 
 function normalizeReward(reward) {

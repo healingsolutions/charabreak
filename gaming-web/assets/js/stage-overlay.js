@@ -1,127 +1,9 @@
-import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.18';
+import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.28';
 
-const UI_TEXT_EN = {
-    defaultCharacter: 'Pico',
-    exit: 'END',
-    inventoryPrefix: 'W',
-    inventoryTitle: 'Found Words',
-    emptyInventory: 'Nothing yet',
-    start: 'Want to play with this page for a moment?',
-    hint: 'Hit something and something may pop out',
-    headingFallback: 'Heading',
-    headingShake: 'The letters shook!',
-    imageCrack: 'It cracked with a flash!',
-    imageSpin: 'The image tilted and spun!',
-    imageBreak: 'You opened a hole in the image!',
-    iconSpin: 'The icon bounced away!',
-    iconBreak: 'The icon burst apart!',
-    gateReady: 'The link gate is open!',
-    gateCharge: 'Stay on the gate to travel!',
-    gateBreak: 'The gate collapsed!',
-    gateNeedsTextBreak: 'Break the words inside first!',
-    enemyAppear: 'An enemy is aiming at the page!',
-    enemyHit: 'Nice hit!',
-    enemyAttack: 'The page was attacked!',
-    enemyDefeat: 'Enemy driven away!',
-    bossAppear: 'A mid-boss appeared!',
-    bossDefeat: 'Mid-boss stopped!',
-    criticalGuard: 'Guard letters',
-    criticalLost: 'An important letter was destroyed!',
-    stageFailed: 'OUT! A passphrase letter disappeared!',
-    lifeLabel: 'LIFE',
-    collectedLabel: 'Guarded letters',
-    collectMission: 'Open 3 treasure chests to unlock GOAL / Letters are optional memories',
-    goalNeedsChests: 'Open {count} more treasure chests!',
-    goalReadyWithChests: 'You opened 3 treasure chests! Go to GOAL!',
-    chestProgressLabel: 'Chests',
-    treasureTitle: 'Guarded Letters',
-    treasureEmpty: 'None yet',
-    treasureHint: 'Hold X to raise a favorite letter underfoot',
-    treasureHold: 'Letter raised! Guard it for 3 seconds!',
-    treasurePlaced: 'You placed the letter back down!',
-    treasureStored: 'Carved "{char}" into your guard-letter target!',
-    treasureNoLetter: 'No guardable letter underfoot!',
-    treasureResult: 'You protected "{word}", the letters you chose to guard.',
-    placedLetterBreak: 'You broke a placed letter!',
-    playerDamage: 'Damage! Block with your shield!',
-    gameOverTitle: 'GAME OVER',
-    retry: 'Try Again',
-    gameOverCritical: 'A passphrase letter was lost.',
-    gameOverLife: 'You ran out of life.',
-    gameOverHint: 'You can try again anytime. Guard the letters and go once more!',
-    goalBlocked: 'You lost a guarded letter, so the stage cannot be cleared!',
-    missileParry: 'Missile parried!',
-    bossMissileWarn: 'The mid-boss is preparing a missile!',
-    shieldHint: 'Use Shift to shield against missiles!',
-    returnRoute: 'Return Up',
-    returnRouteHint: 'You returned to an upper platform!',
-    lockOn: 'Lock on!',
-    lockHint: 'Press T / Tab to lock on to an enemy!',
-    lockLost: 'Lock lost!',
-    noEnemy: 'No enemy to target!',
-    noFootWord: 'No throwable letter underfoot!',
-    wordHold: 'You picked up a letter!',
-    wordThrow: 'Word thrown!',
-    actionFallback: 'This moves too',
-    actionHop: 'It dodged a little!',
-    accordionOpen: 'The mechanism opened!',
-    accordionClose: 'The mechanism closed!',
-    brighten: 'The page got a little brighter!',
-    runnerBreak: 'The pixel kid smashed a letter!',
-    playerHint: 'Space/W/↑: Jump, J/Z: Attack, K/X: Throw/Guard, L/Shift: Shield',
-    miss: 'You swung through the air!',
-    chargeReady: 'Power charged!',
-    chargeFull: 'Heavy strike!',
-    missionTitle: 'QUEST BOARD',
-    missionReachGoal: 'Reach the GOAL gate near the bottom',
-    missionProtect: 'Protect letters from enemies',
-    goalReady: 'The GOAL gate opened!',
-    goalGate: 'GOAL',
-    goalNext: 'Next page',
-    goalEnd: 'End roll',
-    stageClear: 'STAGE CLEAR!',
-    stageClearBurst: 'CLEAR! Enemies burst away!',
-    protectedLabel: 'Protected',
-    brokenLabel: 'Broken',
-    lostLabel: 'Lost',
-    defeatedLabel: 'Defeated',
-    progressLabel: 'Progress',
-    summaryTitle: 'Page Summary',
-    endRollTitle: 'Page Memory',
-    endRollClose: 'Back',
-    rewardTitle: 'Clear Reward',
-    rewardLoading: 'Opening your reward...',
-    rewardUnavailable: 'The reward is not available yet.',
-    rewardCoupon: 'Coupon code',
-    rewardLink: 'Reward page',
-    enemyDamage: 'A guarded letter was damaged!',
-    bgmOn: 'BGM',
-    bgmOff: 'BGM',
-    controlsToggle: 'CTRL',
-    mapToggle: 'MAP',
-    controlsClose: 'Close',
-    controlGuideTitle: 'QUICK MENU',
-    controlGuideKeys: 'CTRL: Controls / J Hit / K-X Letters / Space Jump / L Shield',
-    controlGuidePad: 'Gamepad supported',
-    introTitle: 'Use the page as your platform',
-    introLead: 'Land on letters, cross images and buttons, and move downward. Open 3 treasure chests to bring the GOAL closer.',
-    introKeys: 'J: Attack / K-X: Pick up or throw letters / L: Shield / Space: Jump',
-    introPad: 'Gamepads are supported too',
-    introStart: 'START',
-    introDrop: 'Dropping in!',
-    chestAppear: 'A treasure chest shimmered nearby!',
-    chestOpen: 'Treasure opened!',
-    chestReady: 'All 3 treasure chests are open! Head for GOAL!',
-    itemHeal: 'Heart restored!',
-    itemShield: 'Shield boosted for a moment!',
-    itemHammer: 'Hammer power boosted!',
-    itemHint: 'A guard-letter hint glows: "{char}"',
-    itemJewel: 'Score jewel +1!',
-};
-
+const UI_TEXT_EN = {};
 const UI_TEXT_JA = {
     defaultCharacter: '\u30d4\u30b3',
-    exit: 'END',
+    exit: '\u7d42\u4e86',
     inventoryPrefix: 'W',
     inventoryTitle: '\u898b\u3064\u3051\u305f\u8a00\u8449',
     emptyInventory: '\u307e\u3060\u7a7a\u3063\u307d',
@@ -147,7 +29,7 @@ const UI_TEXT_JA = {
     criticalGuard: '\u5b88\u308b\u6587\u5b57',
     criticalLost: '\u91cd\u8981\u306a\u6587\u5b57\u304c\u58ca\u3055\u308c\u305f\uff01',
     stageFailed: '\u30a2\u30a6\u30c8\uff01\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u6d88\u3048\u305f\uff01',
-    lifeLabel: 'LIFE',
+    lifeLabel: '\u30e9\u30a4\u30d5',
     collectedLabel: '\u5b88\u3063\u305f\u6587\u5b57',
     collectMission: '\u5b9d\u7bb1\u30923\u3064\u958b\u3051\u308b\u3068GOAL\u3078 / \u6587\u5b57\u96c6\u3081\u306f\u601d\u3044\u51fa',
     goalNeedsChests: '\u3042\u3068{count}\u500b\u3001\u5b9d\u7bb1\u3092\u958b\u3051\u3088\u3046\uff01',
@@ -163,7 +45,7 @@ const UI_TEXT_JA = {
     treasureResult: '\u3042\u306a\u305f\u304c\u5b88\u308a\u305f\u304b\u3063\u305f\u300c{word}\u300d\u3092\u3001\u5b88\u308a\u307e\u3057\u305f\u3002',
     placedLetterBreak: '\u7f6e\u3044\u305f\u6587\u5b57\u3092\u5d29\u3057\u305f\uff01',
     playerDamage: '\u30c0\u30e1\u30fc\u30b8\uff01\u76fe\u3067\u9632\u3054\u3046\uff01',
-    gameOverTitle: 'GAME OVER',
+    gameOverTitle: '\u30b2\u30fc\u30e0\u30aa\u30fc\u30d0\u30fc',
     retry: '\u3082\u3046\u4e00\u56de',
     gameOverCritical: '\u5408\u8a00\u8449\u306e\u6587\u5b57\u304c\u5931\u308f\u308c\u305f\u3002',
     gameOverLife: '\u30e9\u30a4\u30d5\u304c\u306a\u304f\u306a\u3063\u305f\u3002',
@@ -191,12 +73,12 @@ const UI_TEXT_JA = {
     miss: '\u7a7a\u3092\u305f\u305f\u3044\u305f\uff01',
     chargeReady: '\u529b\u304c\u305f\u307e\u3063\u305f\uff01',
     chargeFull: '\u5927\u632f\u308a\u306e\u4e00\u6483\uff01',
-    missionTitle: 'QUEST BOARD',
+    missionTitle: 'クエスト',
     missionReachGoal: '\u30da\u30fc\u30b8\u4e0b\u90e8\u306eGOAL\u30b2\u30fc\u30c8\u3078',
     missionProtect: '\u6575\u304b\u3089\u6587\u5b57\u3092\u5b88\u308b',
     goalReady: '\u30b4\u30fc\u30eb\u30b2\u30fc\u30c8\u304c\u958b\u3044\u305f\uff01',
-    goalGate: 'GOAL',
-    goalNext: '\u6b21\u306e\u30da\u30fc\u30b8\u3078',
+    goalGate: 'ゴール',
+    goalNext: '\u6b21\u306e\u30b9\u30c6\u30fc\u30b8\u3078',
     goalEnd: '\u30a8\u30f3\u30c9\u30ed\u30fc\u30eb',
     stageClear: '\u30b9\u30c6\u30fc\u30b8\u30af\u30ea\u30a2\uff01',
     stageClearBurst: '\u30af\u30ea\u30a2\uff01\u6575\u304c\u3071\u3063\u3068\u5f3e\u3051\u305f\uff01',
@@ -207,7 +89,8 @@ const UI_TEXT_JA = {
     progressLabel: '\u9032\u884c',
     summaryTitle: '\u30da\u30fc\u30b8\u306e\u8981\u7d04',
     endRollTitle: '\u30da\u30fc\u30b8\u306e\u8a18\u61b6',
-    endRollClose: '\u623b\u308b',
+    endRollClose: '\u30b2\u30fc\u30e0\u7d42\u4e86',
+    endRollExit: '\u30b2\u30fc\u30e0\u7d42\u4e86',
     rewardTitle: '\u30af\u30ea\u30a2\u7279\u5178',
     rewardLoading: '\u7279\u5178\u3092\u958b\u3044\u3066\u3044\u307e\u3059...',
     rewardUnavailable: '\u7279\u5178\u306f\u307e\u3060\u958b\u3051\u307e\u305b\u3093\u3002',
@@ -216,17 +99,20 @@ const UI_TEXT_JA = {
     enemyDamage: '\u5b88\u308b\u6587\u5b57\u304c\u524a\u3089\u308c\u305f\uff01',
     bgmOn: 'BGM',
     bgmOff: 'BGM',
-    controlsToggle: 'CTRL',
-    mapToggle: 'MAP',
+    controlsToggle: '操作',
+    mapToggle: '地図',
     controlsClose: '\u9589\u3058\u308b',
-    controlGuideTitle: 'QUICK MENU',
-    controlGuideKeys: 'CTRL\u3067\u64cd\u4f5c\u8868\u793a / J\u653b\u6483 K\u30fbX\u6587\u5b57 Space\u30b8\u30e3\u30f3\u30d7 L\u76fe',
+    controlGuideTitle: '\u64cd\u4f5c\u30e1\u30cb\u30e5\u30fc',
+    controlGuideKeys: '\u64cd\u4f5c\u30dc\u30bf\u30f3\u3067\u30ad\u30fc\u8868\u793a / J\u653b\u6483 K\u30fbX\u6587\u5b57 Space\u30b8\u30e3\u30f3\u30d7 L\u76fe',
     controlGuidePad: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3082OK',
+    gamepadConnected: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3092\u63a5\u7d9a\uff01',
+    gamepadDisconnected: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u304c\u5916\u308c\u305f',
     introTitle: '\u30da\u30fc\u30b8\u3092\u8db3\u5834\u306b\u3057\u3066\u9032\u3082\u3046',
     introLead: '\u6587\u5b57\u306b\u7740\u5730\u3057\u3066\u3001\u753b\u50cf\u3084\u30dc\u30bf\u30f3\u3092\u6e21\u308a\u306a\u304c\u3089\u4e0b\u3078\u3002\u5b9d\u7bb1\u30923\u3064\u958b\u3051\u308b\u3068GOAL\u304c\u8fd1\u3065\u304d\u307e\u3059\u3002',
     introKeys: 'J: \u653b\u6483 / K\u30fbX: \u6587\u5b57\u3092\u6301\u3064\u30fb\u6295\u3052\u308b / L: \u76fe / Space: \u30b8\u30e3\u30f3\u30d7',
     introPad: '\u30b2\u30fc\u30e0\u30d1\u30c3\u30c9\u3082\u4f7f\u3048\u307e\u3059',
-    introStart: 'START',
+    introBadge: '\u30df\u30c3\u30b7\u30e7\u30f3\u958b\u59cb',
+    introStart: '\u958b\u59cb',
     introDrop: '\u4e0a\u304b\u3089\u3044\u304f\u3088\uff01',
     chestAppear: '\u5b9d\u7bb1\u304c\u304d\u3089\u3063\u3068\u73fe\u308c\u305f\uff01',
     chestOpen: '\u5b9d\u7bb1\u304c\u958b\u3044\u305f\uff01',
@@ -283,7 +169,7 @@ const CHEST_HEIGHT = 38;
 const CHEST_REVEAL_PROGRESS = 0.18;
 const CHEST_MIN_INTERVAL = 8500;
 const CHEST_MAX_INTERVAL = 14500;
-const CHEST_ITEM_TYPES = ['heal', 'shield', 'hammer', 'hint', 'jewel'];
+const CHEST_ITEM_TYPES = ['jewel'];
 const ITEM_EFFECT_DURATION_MS = 12000;
 const HUD_GATE_SAFE_MARGIN = 12;
 const ENEMY_MISSILE_SPEED = 270;
@@ -317,6 +203,8 @@ export class StageOverlay {
         this.hasReward = Boolean(options.hasReward);
         this.visualStyle = normalizeVisualStyle(options.visualStyle || 'auto');
         this.themeTokens = normalizeThemeTokens(options.themeTokens || {});
+        this.enemyConfig = normalizeEnemyConfig(options.enemyConfig || {});
+        this.objectiveConfig = normalizeObjectiveConfig(options.objectiveConfig || {});
         this.reducedMotion = Boolean(options.reducedMotion);
         this.onExit = options.onExit || (() => {});
         this.onRetry = options.onRetry || (() => {});
@@ -360,6 +248,8 @@ export class StageOverlay {
         this.runnerControlsToggle = null;
         this.controlGuide = null;
         this.introModal = null;
+        this.introGamepadFrame = 0;
+        this.introGamepadStartHeld = false;
         this.runnerInputBound = false;
         this.controlsVisible = false;
         this.runnerOnImageHit = null;
@@ -368,6 +258,9 @@ export class StageOverlay {
         this.runnerKeys = new Set();
         this.runnerGamepadKeys = new Set();
         this.runnerGamepadButtons = new Set();
+        this.activeGamepadIndex = null;
+        this.gamepadWasAvailable = false;
+        this.gamepadWarmupBound = false;
         this.runnerLastTime = 0;
         this.runnerScrollFollowUntil = 0;
         this.cameraScrollVelocity = 0;
@@ -401,10 +294,12 @@ export class StageOverlay {
         this.enemyLayer = null;
         this.enemies = [];
         this.enemySequence = 0;
+        this.enemySpawnCursor = 0;
         this.enemyMissiles = [];
         this.enemyMissileSequence = 0;
         this.enemyWaveStarted = false;
         this.bossSpawned = false;
+        this.customEnemyMode = Boolean(this.enemyConfig.enabled);
         this.lastEnemySpawnAt = 0;
         this.projectileLayer = null;
         this.projectiles = [];
@@ -430,6 +325,9 @@ export class StageOverlay {
         this.handleGameTouchMove = this.handleGameTouchMove.bind(this);
         this.handleRunnerKeyDown = this.handleRunnerKeyDown.bind(this);
         this.handleRunnerKeyUp = this.handleRunnerKeyUp.bind(this);
+        this.handleGamepadConnected = this.handleGamepadConnected.bind(this);
+        this.handleGamepadDisconnected = this.handleGamepadDisconnected.bind(this);
+        this.handleGamepadWarmup = this.handleGamepadWarmup.bind(this);
         this.timers = new Set();
     }
 
@@ -437,6 +335,7 @@ export class StageOverlay {
         this.root = document.createElement('div');
         this.root.className = `gw-stage${this.reducedMotion ? ' gw-stage--reduced' : ''}`;
         this.root.setAttribute('data-gaming-web-stage', 'active');
+        this.root.tabIndex = -1;
         this.root.dataset.gwVisualStyle = this.visualStyle;
         applyThemeTokens(this.root, this.themeTokens);
 
@@ -514,6 +413,9 @@ export class StageOverlay {
 
         this.root.append(this.effectLayer, controls, this.speech);
         document.body.appendChild(this.root);
+        window.addEventListener('gamepadconnected', this.handleGamepadConnected);
+        window.addEventListener('gamepaddisconnected', this.handleGamepadDisconnected);
+        this.bindGamepadWarmup();
 
         this.mountMissionHud();
         this.setInventory([]);
@@ -544,6 +446,9 @@ export class StageOverlay {
         this.goalGate = null;
         this.gameOverPanel = null;
         this.endRoll = null;
+        window.removeEventListener('gamepadconnected', this.handleGamepadConnected);
+        window.removeEventListener('gamepaddisconnected', this.handleGamepadDisconnected);
+        this.unbindGamepadWarmup();
         document.body.classList.remove('gw-screen-shake', 'gw-screen-shake--soft', 'gw-screen-shake--medium', 'gw-screen-shake--hard');
     }
 
@@ -656,8 +561,8 @@ export class StageOverlay {
                     : '';
                 const opened = this.openedChestCount();
                 const collection = this.hasGoalChests()
-                    ? UI_TEXT.goalReadyWithChests
-                    : `${UI_TEXT.collectMission} (${Math.min(opened, GOAL_REQUIRED_CHESTS)}/${GOAL_REQUIRED_CHESTS})`;
+                    ? this.objectiveReadyText()
+                    : this.objectiveProgressText(opened);
                 this.missionGoal.textContent = this.goalRevealed
                     ? `${collection}${critical}`
                     : `${collection} / ${UI_TEXT.missionProtect}${critical}`;
@@ -703,9 +608,55 @@ export class StageOverlay {
     }
 
     hasGoalChests() {
-        return this.openedChestCount() >= GOAL_REQUIRED_CHESTS;
+        return this.openedChestCount() >= this.goalRequiredItems();
     }
 
+    goalRequiredItems() {
+        return this.objectiveConfig.requiredCount || GOAL_REQUIRED_CHESTS;
+    }
+
+    objectiveLabel() {
+        return this.objectiveConfig.label || UI_TEXT.chestProgressLabel;
+    }
+
+    objectiveProgressText(opened = this.openedChestCount()) {
+        const required = this.goalRequiredItems();
+        const current = Math.min(opened, required);
+
+        if (this.objectiveConfig.type === 'products') {
+            return `${this.objectiveLabel()} ${current}/${required}`;
+        }
+
+        if (required === GOAL_REQUIRED_CHESTS) {
+            return `${UI_TEXT.collectMission} (${current}/${required})`;
+        }
+
+        return `${this.objectiveLabel()} ${current}/${required}`;
+    }
+
+    objectiveReadyText() {
+        if (this.objectiveConfig.type === 'products') {
+            return `${this.objectiveLabel()} ready! Head for GOAL!`;
+        }
+
+        if (this.goalRequiredItems() === GOAL_REQUIRED_CHESTS) {
+            return UI_TEXT.goalReadyWithChests;
+        }
+
+        return `${this.objectiveLabel()} ready! Head for GOAL!`;
+    }
+
+    objectiveNeedText(remaining) {
+        if (this.objectiveConfig.type === 'products') {
+            return `${remaining} more ${this.objectiveLabel()} needed.`;
+        }
+
+        if (this.goalRequiredItems() === GOAL_REQUIRED_CHESTS) {
+            return UI_TEXT.goalNeedsChests.replace('{count}', String(remaining));
+        }
+
+        return `${remaining} more ${this.objectiveLabel()} needed.`;
+    }
     treasureWord() {
         return this.normalizedTreasureLetters().join('');
     }
@@ -757,12 +708,16 @@ export class StageOverlay {
         this.root?.classList.remove('gw-stage--shield-boost', 'gw-stage--hammer-boost');
         this.endRollItems = this.buildEndRollItems(targets);
         this.endRollSummary = this.buildPageSummary(targets);
-        const critical = this.textBreaker?.markImportantChars?.([this.buildCriticalWord(targets)]);
-        this.criticalWord = critical?.count > 0 ? critical.word : '';
+        // The former passphrase-protection rule is disabled: removing letters
+        // should no longer cause game over.
+        this.textBreaker?.markImportantChars?.([]);
+        this.criticalWord = '';
         this.criticalWordLost = false;
         this.nextGoalHref = '';
         this.stageCleared = false;
         this.stageFailed = false;
+        this.enemySpawnCursor = 0;
+        this.customEnemyMode = Boolean(this.enemyConfig.enabled);
         this.playerLife = PLAYER_MAX_LIFE;
         this.goalRevealed = false;
         this.updateMissionHud(true);
@@ -950,11 +905,14 @@ export class StageOverlay {
         this.introModal.setAttribute('role', 'dialog');
         this.introModal.setAttribute('aria-modal', 'true');
         this.introModal.setAttribute('aria-labelledby', 'gw-intro-title');
+        const introLead = this.objectiveConfig.type === 'products'
+            ? `文字に着地して、画像やボタンを渡りながら${this.goalRequiredItems()}個の${this.objectiveLabel()}を集めるとGOALが近づきます。`
+            : UI_TEXT.introLead;
         this.introModal.innerHTML = `
             <div class="gw-intro-modal__panel">
-                <span class="gw-intro-modal__badge">MISSION START</span>
+                <span class="gw-intro-modal__badge">${UI_TEXT.introBadge}</span>
                 <h2 id="gw-intro-title">${UI_TEXT.introTitle}</h2>
-                <p>${UI_TEXT.introLead}</p>
+                <p>${escapeHtml(introLead)}</p>
                 <div class="gw-intro-modal__keys">${UI_TEXT.introKeys}</div>
                 <small>${UI_TEXT.introPad}</small>
                 <button type="button" class="gw-intro-modal__start" data-gw-intro-start>${UI_TEXT.introStart}</button>
@@ -972,6 +930,7 @@ export class StageOverlay {
             if (startButton) {
                 startButton.disabled = true;
             }
+            this.stopIntroGamepadPolling();
             this.introModal.classList.add('gw-intro-modal--leaving');
             this.onRunnerSound('uiMove', { volume: 0.11, rate: 1.04 });
             const timer = window.setTimeout(() => {
@@ -990,6 +949,41 @@ export class StageOverlay {
             this.timers.delete(focusTimer);
         }, 40);
         this.timers.add(focusTimer);
+        this.startIntroGamepadPolling(start);
+    }
+
+    startIntroGamepadPolling(onStart) {
+        this.stopIntroGamepadPolling();
+        this.introGamepadStartHeld = false;
+
+        const tick = () => {
+            if (!this.introModal) {
+                this.stopIntroGamepadPolling();
+                return;
+            }
+
+            const pad = this.readActiveGamepad();
+            const pressed = Boolean(pad?.buttons?.[0]?.pressed || pad?.buttons?.[3]?.pressed || pad?.buttons?.[9]?.pressed);
+            if (pressed && !this.introGamepadStartHeld) {
+                this.introGamepadStartHeld = true;
+                onStart?.();
+                return;
+            }
+
+            this.introGamepadStartHeld = pressed;
+            this.introGamepadFrame = requestFrame(tick);
+        };
+
+        this.introGamepadFrame = requestFrame(tick);
+    }
+
+    stopIntroGamepadPolling() {
+        if (this.introGamepadFrame) {
+            cancelFrame(this.introGamepadFrame);
+        }
+
+        this.introGamepadFrame = 0;
+        this.introGamepadStartHeld = false;
     }
 
     beginRunnerPlay(options = {}) {
@@ -997,6 +991,7 @@ export class StageOverlay {
             return;
         }
 
+        this.primeGamepadControls();
         this.runner.classList.remove('gw-pixel-runner--intro-wait');
         this.runner.classList.add('gw-pixel-runner--intro-drop');
         const dropTimer = window.setTimeout(() => {
@@ -1123,6 +1118,7 @@ export class StageOverlay {
         this.runnerInputBound = false;
         this.introModal?.remove();
         this.introModal = null;
+        this.stopIntroGamepadPolling();
         this.runnerKeys.clear();
         this.runnerGamepadKeys.clear();
         this.runnerGamepadButtons.clear();
@@ -1278,6 +1274,13 @@ export class StageOverlay {
         this.runnerLastTime = time;
 
         try {
+            if (document.body.classList.contains('gw-world-map-open')) {
+                this.renderRunner(time);
+                this.updateMissionHud();
+                this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
+                return;
+            }
+
             if (this.roomTransition) {
                 this.updateRoomDropTransition(time);
                 this.renderRunner(time);
@@ -1748,17 +1751,9 @@ export class StageOverlay {
 
     pickChestItem() {
         const weighted = CHEST_ITEM_TYPES.slice();
+        weighted.push('jewel', 'jewel', 'jewel');
         if (this.playerLife < PLAYER_MAX_LIFE) {
-            weighted.push('heal', 'heal');
-        }
-        if (!this.shieldBoostActive()) {
-            weighted.push('shield');
-        }
-        if (!this.hammerBoostActive()) {
-            weighted.push('hammer');
-        }
-        if (this.collectedLetterCount() < GOAL_REQUIRED_LETTERS) {
-            weighted.push('hint', 'hint');
+            weighted.push('heal', 'heal', 'heal');
         }
 
         return weighted[Math.floor(Math.random() * weighted.length)] || 'jewel';
@@ -1821,9 +1816,9 @@ export class StageOverlay {
         this.spawnItemBurst(options.rect || chest.element.getBoundingClientRect(), chest.itemType);
         this.grantChestItem(chest.itemType);
         this.updateGoalGate(true);
-        if (this.openedChestCount() === GOAL_REQUIRED_CHESTS) {
+        if (this.openedChestCount() === this.goalRequiredItems()) {
             const timer = window.setTimeout(() => {
-                this.showMessage(UI_TEXT.chestReady, 1800);
+                this.showMessage(this.objectiveReadyText(), 1800);
                 this.onRunnerSound('cheer', { volume: 0.11, rate: 1.06 });
                 this.timers.delete(timer);
             }, 520);
@@ -1838,8 +1833,14 @@ export class StageOverlay {
         const now = currentTime();
 
         if (itemType === 'heal') {
-            this.playerLife = Math.min(PLAYER_MAX_LIFE, this.playerLife + 1);
-            this.showMessage(UI_TEXT.itemHeal, 1400);
+            if (this.playerLife < PLAYER_MAX_LIFE) {
+                this.playerLife = Math.min(PLAYER_MAX_LIFE, this.playerLife + 1);
+                this.showMessage(UI_TEXT.itemHeal, 1400);
+            } else {
+                this.scoreJewels += 1;
+                this.bumpStageStat('scoreJewels', 1);
+                this.showMessage(UI_TEXT.itemJewel, 1400);
+            }
             this.updateMissionHud(true);
             return;
         }
@@ -2002,33 +2003,60 @@ export class StageOverlay {
 
         const progress = pageScrollProgress();
         const activeEnemies = this.enemies.filter((enemy) => !enemy.defeated);
+        const normalEnemies = this.customEnemyMode ? this.enemyConfig.normal : null;
+        const bossEnemy = this.customEnemyMode ? this.enemyConfig.boss : null;
 
-        if (progress > 0.28 && !this.enemyWaveStarted) {
+        if (progress > 0.28 && !this.enemyWaveStarted && (!this.customEnemyMode || normalEnemies.length > 0)) {
             this.enemyWaveStarted = true;
-            this.spawnEnemy('minion');
+            this.spawnEnemy('minion', this.nextEnemyDefinition('normal'));
             this.showMessage(UI_TEXT.enemyAppear, 2400);
         }
 
-        if (progress > 0.44 && activeEnemies.filter((enemy) => enemy.type === 'minion').length < 2 && time - this.lastEnemySpawnAt > 7200) {
-            this.spawnEnemy('minion');
+        if (progress > 0.44
+            && (!this.customEnemyMode || normalEnemies.length > 0)
+            && activeEnemies.filter((enemy) => enemy.type === 'minion').length < 2
+            && time - this.lastEnemySpawnAt > 7200) {
+            this.spawnEnemy('minion', this.nextEnemyDefinition('normal'));
             this.lastEnemySpawnAt = time;
         }
 
-        if (progress > 0.66 && !this.bossSpawned) {
+        if (progress > 0.66 && !this.bossSpawned && (!this.customEnemyMode || bossEnemy)) {
             this.bossSpawned = true;
-            this.spawnEnemy('boss');
+            this.spawnEnemy('boss', bossEnemy);
+            this.onRunnerSound('bossBgm', { volume: 0.05 });
             this.showMessage(UI_TEXT.bossAppear, 3200);
             this.shakeScreen('medium');
         }
     }
 
-    spawnEnemy(type = 'minion') {
+    nextEnemyDefinition(role = 'normal') {
+        if (!this.customEnemyMode) {
+            return null;
+        }
+
+        if (role === 'boss') {
+            return this.enemyConfig.boss;
+        }
+
+        const enemies = this.enemyConfig.normal;
+        if (!enemies.length) {
+            return null;
+        }
+
+        const enemy = enemies[this.enemySpawnCursor % enemies.length];
+        this.enemySpawnCursor += 1;
+        return enemy;
+    }
+
+    spawnEnemy(type = 'minion', definition = null) {
         const boss = type === 'boss';
+        const enemyDefinition = definition || this.nextEnemyDefinition(boss ? 'boss' : 'normal');
         const variant = boss ? 'guardian' : `bug-${Math.floor(Math.random() * 3) + 1}`;
         const element = document.createElement('div');
-        element.className = `gw-enemy gw-enemy--${type} gw-enemy--${variant}`;
+        element.className = `gw-enemy gw-enemy--${type} gw-enemy--${variant}${enemyDefinition?.imageUrl ? ' gw-enemy--custom' : ''}`;
         element.innerHTML = `
             <span class="gw-enemy__shadow"></span>
+            ${enemyDefinition?.imageUrl ? `<span class="gw-enemy__image" style="background-image:url('${cssUrl(enemyDefinition.imageUrl)}')"></span>` : ''}
             <span class="gw-enemy__body"></span>
             <span class="gw-enemy__eye gw-enemy__eye--left"></span>
             <span class="gw-enemy__eye gw-enemy__eye--right"></span>
@@ -2040,6 +2068,11 @@ export class StageOverlay {
 
         const width = boss ? BOSS_WIDTH : ENEMY_WIDTH;
         const height = boss ? BOSS_HEIGHT : ENEMY_HEIGHT;
+        const stats = enemyDefinition?.stats || {};
+        const speed = Number(stats.speed) || (boss ? 62 : 86);
+        const attackInterval = Number(stats.attackInterval) || (boss ? 1450 : 1850);
+        const missileMin = Number(stats.missileMinInterval) || BOSS_MISSILE_MIN_INTERVAL;
+        const missileMax = Number(stats.missileMaxInterval) || BOSS_MISSILE_MAX_INTERVAL;
         const fromRight = Math.random() > 0.5;
         const y = clamp(randomBetween(118, window.innerHeight - height - 124), 74, window.innerHeight - height - 84);
         const enemy = {
@@ -2050,15 +2083,21 @@ export class StageOverlay {
             height,
             x: fromRight ? window.innerWidth - width - 30 : 30,
             y,
-            vx: fromRight ? -38 : 38,
+            vx: fromRight ? -speed * 0.45 : speed * 0.45,
             vy: 0,
-            hp: boss ? 8 : 3,
-            maxHp: boss ? 8 : 3,
+            hp: Number(stats.hp) || (boss ? 8 : 3),
+            maxHp: Number(stats.hp) || (boss ? 8 : 3),
+            speed,
+            attackInterval,
+            destroyLimit: Number(stats.destroyLimit) || (boss ? 2 : 1),
+            missileMinInterval: missileMin,
+            missileMaxInterval: missileMax,
+            definition: enemyDefinition || null,
             defeated: false,
             countedDefeat: false,
             hitUntil: 0,
             nextAttackAt: currentTime() + (boss ? 1050 : 1250),
-            nextMissileAt: boss ? currentTime() + randomBetween(BOSS_MISSILE_MIN_INTERVAL, BOSS_MISSILE_MAX_INTERVAL) : Infinity,
+            nextMissileAt: boss ? currentTime() + randomBetween(missileMin, missileMax) : Infinity,
             nextTargetPickAt: 0,
             targetRect: null,
             roamUntil: 0,
@@ -2085,7 +2124,7 @@ export class StageOverlay {
             const enemyCenterY = enemy.y + enemy.height / 2;
             const targetCenterX = target.left + target.width / 2;
             const targetCenterY = target.top + Math.min(target.height / 2, 80);
-            const speed = enemy.type === 'boss' ? 62 : 86;
+            const speed = enemy.speed || (enemy.type === 'boss' ? 62 : 86);
             const dx = targetCenterX - enemyCenterX;
             const dy = targetCenterY - enemyCenterY;
             const distance = Math.max(1, Math.hypot(dx, dy));
@@ -2097,7 +2136,7 @@ export class StageOverlay {
 
             if (distance < (enemy.type === 'boss' ? 96 : 72) && time > enemy.nextAttackAt) {
                 this.enemyAttackPage(enemy);
-                enemy.nextAttackAt = time + (enemy.type === 'boss' ? 1450 : 1850);
+                enemy.nextAttackAt = time + (enemy.attackInterval || (enemy.type === 'boss' ? 1450 : 1850));
                 enemy.targetRect = this.enemyRoamTarget(enemy);
                 enemy.nextTargetPickAt = time + randomBetween(900, 1600);
                 enemy.roamUntil = time + randomBetween(900, 1500);
@@ -2105,7 +2144,7 @@ export class StageOverlay {
 
             if (enemy.type === 'boss' && !this.stageCleared && !this.stageFailed && time > enemy.nextMissileAt) {
                 this.warnAndFireBossMissile(enemy);
-                enemy.nextMissileAt = time + randomBetween(BOSS_MISSILE_MIN_INTERVAL, BOSS_MISSILE_MAX_INTERVAL);
+                enemy.nextMissileAt = time + randomBetween(enemy.missileMinInterval || BOSS_MISSILE_MIN_INTERVAL, enemy.missileMaxInterval || BOSS_MISSILE_MAX_INTERVAL);
             }
 
             this.renderEnemy(enemy);
@@ -2456,6 +2495,50 @@ export class StageOverlay {
             target: null,
             rect: unionRects(destroyed.map((item) => item.rect)) || rect,
         };
+    }
+
+    destroyPlacedLettersAtRects(rects = [], options = {}) {
+        const results = [];
+        let remaining = options.limit || rects.length || 1;
+        const rectLimits = Array.isArray(options.rectLimits) ? options.rectLimits : [];
+
+        for (let index = 0; index < rects.length && remaining > 0; index += 1) {
+            const rectLimit = Math.max(1, rectLimits[index] || options.perRectLimit || 1);
+            const result = this.destroyPlacedLettersAtRect(rects[index], {
+                ...options,
+                limit: Math.min(rectLimit, remaining),
+            });
+            if (result?.count > 0) {
+                results.push(result);
+                remaining -= result.count;
+            }
+        }
+
+        return combineBreakResults(results, unionRects(rects) || rects[0] || null);
+    }
+
+    destroyTextAtRects(rects = [], options = {}) {
+        if (!this.textBreaker?.destroyAtRect) {
+            return null;
+        }
+
+        const results = [];
+        let remaining = options.limit || rects.length || 1;
+        const rectLimits = Array.isArray(options.rectLimits) ? options.rectLimits : [];
+
+        for (let index = 0; index < rects.length && remaining > 0; index += 1) {
+            const rectLimit = Math.max(1, rectLimits[index] || options.perRectLimit || 1);
+            const result = this.textBreaker.destroyAtRect(rects[index], {
+                ...options,
+                limit: Math.min(rectLimit, remaining),
+            });
+            if (result?.count > 0) {
+                results.push(result);
+                remaining -= result.count;
+            }
+        }
+
+        return combineBreakResults(results, unionRects(rects) || rects[0] || null);
     }
 
     scheduleTreasureStore(heldId = '') {
@@ -3176,6 +3259,17 @@ export class StageOverlay {
         }
 
         enemy.nextTargetPickAt = time + randomBetween(760, 1500);
+        const behavior = enemy.definition?.behavior || '';
+        if (behavior === 'chaser' && this.runnerState) {
+            enemy.targetRect = this.runnerPhysicsRect();
+            return;
+        }
+
+        if (behavior === 'walker' && Math.random() < 0.45) {
+            enemy.targetRect = this.enemyRoamTarget(enemy);
+            return;
+        }
+
         const candidates = this.runnerTargets
             .filter((target) => target.type !== 'action')
             .map((target) => liveRectForTarget(target))
@@ -3236,7 +3330,7 @@ export class StageOverlay {
             return;
         }
 
-        const textHit = this.textBreaker?.destroyAtRect(attackRect, { limit: enemy.type === 'boss' ? 2 : 1, source: 'enemy' });
+        const textHit = this.textBreaker?.destroyAtRect(attackRect, { limit: enemy.destroyLimit || (enemy.type === 'boss' ? 2 : 1), source: 'enemy' });
         if (textHit?.count > 0) {
             this.rebuildRoomCollisionCache();
             this.bumpStageStat('enemyBroken', textHit.count);
@@ -3359,6 +3453,9 @@ export class StageOverlay {
             }
             this.removeLater(enemy.element, 720);
             this.showMessage(enemy.type === 'boss' ? UI_TEXT.bossDefeat : UI_TEXT.enemyDefeat, 2100);
+            if (enemy.type === 'boss' && this.activeEnemies().every((activeEnemy) => activeEnemy.type !== 'boss')) {
+                this.onRunnerSound('normalBgm', { volume: 0.04 });
+            }
         } else {
             this.showMessage(UI_TEXT.enemyHit, 900);
         }
@@ -3477,20 +3574,8 @@ export class StageOverlay {
         };
     }
 
-    criticalDestroyed(textHit) {
-        if (!textHit) {
-            return false;
-        }
-
-        const destroyedCritical = Boolean(textHit.critical)
-            || Boolean(textHit.items?.some((item) => item.critical))
-            || Boolean(textHit.criticalWord);
-        if (!destroyedCritical) {
-            return false;
-        }
-
-        this.criticalWordLost = true;
-        return true;
+    criticalDestroyed(_textHit) {
+        return false;
     }
 
     checkGateEntry() {
@@ -3667,10 +3752,11 @@ export class StageOverlay {
         this.goalRevealed = true;
         this.nextGoalHref = this.currentGoalHref();
         const hasChests = this.hasGoalChests();
-        const opened = Math.min(this.openedChestCount(), GOAL_REQUIRED_CHESTS);
+        const required = this.goalRequiredItems();
+        const opened = Math.min(this.openedChestCount(), required);
         const label = hasChests
             ? (this.nextGoalHref ? UI_TEXT.goalNext : UI_TEXT.goalEnd)
-            : `${UI_TEXT.chestProgressLabel} ${opened}/${GOAL_REQUIRED_CHESTS}`;
+            : `${this.objectiveLabel()} ${opened}/${required}`;
         this.goalGate.innerHTML = `<span>${UI_TEXT.goalGate}</span><small>${label}</small>`;
 
         const bounds = this.currentPlayBounds();
@@ -3681,7 +3767,7 @@ export class StageOverlay {
         this.goalGate.style.width = `${width}px`;
 
         if ((wasHidden || force) && wasHidden) {
-            this.showMessage(hasChests ? UI_TEXT.goalReady : UI_TEXT.collectMission, 2200);
+            this.showMessage(hasChests ? UI_TEXT.goalReady : this.objectiveProgressText(), 2200);
             this.onRunnerSound('cheer', { volume: 0.12, rate: 1.04 });
         }
 
@@ -3713,9 +3799,10 @@ export class StageOverlay {
         }
 
         if (!this.hasGoalChests()) {
-            const remaining = GOAL_REQUIRED_CHESTS - Math.min(this.openedChestCount(), GOAL_REQUIRED_CHESTS);
+            const required = this.goalRequiredItems();
+            const remaining = required - Math.min(this.openedChestCount(), required);
             this.gateCooldownUntil = currentTime() + 1000;
-            this.showMessage(UI_TEXT.goalNeedsChests.replace('{count}', String(remaining)), 1300);
+            this.showMessage(this.objectiveNeedText(remaining), 1300);
             this.onRunnerSound('uiCancel', { volume: 0.08, rate: 1.05 });
             return;
         }
@@ -3759,15 +3846,18 @@ export class StageOverlay {
         this.showMessage(UI_TEXT.playerDamage, 1300);
     }
 
-    failStage(reason = 'critical_lost') {
+    failStage(reason = 'life_zero') {
         if (this.stageCleared || this.stageFailed) {
             return;
         }
 
         const reasonText = String(reason || '');
-        const criticalLost = reasonText.includes('critical');
+        if (reasonText.includes('critical')) {
+            return;
+        }
+
         this.stageFailed = true;
-        this.criticalWordLost = criticalLost;
+        this.criticalWordLost = false;
         this.gateCooldownUntil = currentTime() + 3000;
         this.goalGate?.classList.add('gw-goal-gate--failed');
         this.missionHud?.classList.add('gw-mission-hud--danger');
@@ -3778,7 +3868,7 @@ export class StageOverlay {
             this.removeLater(missile.element, 160);
         }
         this.enemyMissiles = [];
-        this.showMessage(criticalLost ? UI_TEXT.stageFailed : UI_TEXT.gameOverLife, 2800);
+        this.showMessage(UI_TEXT.gameOverLife, 2800);
         this.shakeScreen('hard');
         this.onRunnerSound('enemyExplode', { volume: 0.16, rate: 0.92 });
         this.clearRewardPromise = null;
@@ -3795,8 +3885,7 @@ export class StageOverlay {
         this.gameOverPanel.setAttribute('aria-modal', 'true');
         this.gameOverPanel.setAttribute('aria-label', UI_TEXT.gameOverTitle);
 
-        const reasonText = String(reason || '');
-        const message = reasonText.includes('life') ? UI_TEXT.gameOverLife : UI_TEXT.gameOverCritical;
+        const message = UI_TEXT.gameOverLife;
         this.gameOverPanel.innerHTML = `
             <div class="gw-game-over__panel">
                 <h2>${UI_TEXT.gameOverTitle}</h2>
@@ -3952,7 +4041,10 @@ export class StageOverlay {
             enemy_defeated_count: this.stageStats.enemiesDefeated,
             gates_broken: this.stageStats.gatesBroken,
             images_damaged: this.stageStats.imagesDamaged,
-            goal_condition: 'chests_opened',
+            goal_condition: this.objectiveConfig.type === 'products' ? 'products_collected' : 'chests_opened',
+            objective_type: this.objectiveConfig.type,
+            objective_label: this.objectiveLabel(),
+            objective_required: this.goalRequiredItems(),
             letters_collected: this.collectedLetterCount(),
             letters_required: GOAL_REQUIRED_LETTERS,
             treasure_letters: this.treasureLetters.slice(),
@@ -3960,7 +4052,7 @@ export class StageOverlay {
             critical_word: this.criticalWord || '',
             critical_lost: Boolean(this.criticalWordLost),
             chests_opened: this.stageStats.chestsOpened,
-            chests_required: GOAL_REQUIRED_CHESTS,
+            chests_required: this.goalRequiredItems(),
             score_jewels: this.scoreJewels,
             player_life: this.playerLife,
             failed: Boolean(this.stageFailed),
@@ -3998,36 +4090,39 @@ export class StageOverlay {
 
         this.endRoll.innerHTML = `
             <div class="gw-end-roll__panel">
-                <h2>${UI_TEXT.stageClear}</h2>
-                <dl class="gw-end-roll__stats">
-                    <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${stats.protected_count}</dd></div>
-                    <div><dt>${UI_TEXT.chestProgressLabel}</dt><dd>${Math.min(stats.chests_opened, stats.chests_required)}/${stats.chests_required}</dd></div>
-                    <div><dt>${UI_TEXT.collectedLabel}</dt><dd>${escapeHtml(treasureWord || UI_TEXT.treasureEmpty)}</dd></div>
-                    <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${stats.player_broken_count}</dd></div>
-                    <div><dt>${UI_TEXT.lostLabel}</dt><dd>${stats.enemy_broken_count}</dd></div>
-                    <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${stats.enemy_defeated_count}</dd></div>
-                </dl>
-                ${treasureResult ? `<p class="gw-end-roll__treasure">${treasureResult}</p>` : ''}
-                ${this.hasReward ? `
-                    <section class="gw-end-roll__reward" data-gw-clear-reward>
-                        <h3>${UI_TEXT.rewardTitle}</h3>
-                        <p>${UI_TEXT.rewardLoading}</p>
+                <div class="gw-end-roll__header">
+                    <h2>${UI_TEXT.stageClear}</h2>
+                    <dl class="gw-end-roll__stats">
+                        <div><dt>${UI_TEXT.protectedLabel}</dt><dd>${stats.protected_count}</dd></div>
+                        <div><dt>${escapeHtml(stats.objective_label || UI_TEXT.chestProgressLabel)}</dt><dd>${Math.min(stats.chests_opened, stats.chests_required)}/${stats.chests_required}</dd></div>
+                        <div><dt>${UI_TEXT.brokenLabel}</dt><dd>${stats.player_broken_count}</dd></div>
+                        <div><dt>${UI_TEXT.defeatedLabel}</dt><dd>${stats.enemy_defeated_count}</dd></div>
+                    </dl>
+                </div>
+                <div class="gw-end-roll__body">
+                    ${treasureResult ? `<p class="gw-end-roll__treasure">${treasureResult}</p>` : ''}
+                    ${treasureWord ? `<p class="gw-end-roll__letters"><span>${UI_TEXT.collectedLabel}</span><strong>${escapeHtml(treasureWord)}</strong></p>` : ''}
+                    ${this.hasReward ? `
+                        <section class="gw-end-roll__reward" data-gw-clear-reward>
+                            <h3>${UI_TEXT.rewardTitle}</h3>
+                            <p>${UI_TEXT.rewardLoading}</p>
+                        </section>
+                    ` : ''}
+                    <section class="gw-end-roll__summary">
+                        <h3>${UI_TEXT.summaryTitle}</h3>
+                        ${summaryItems}
                     </section>
-                ` : ''}
-                <section class="gw-end-roll__summary">
-                    <h3>${UI_TEXT.summaryTitle}</h3>
-                    ${summaryItems}
-                </section>
-                <div class="gw-end-roll__viewport">
-                    <div class="gw-end-roll__content">
-                        <h3>${UI_TEXT.endRollTitle}</h3>
-                        ${memoryItems}
+                    <div class="gw-end-roll__viewport">
+                        <div class="gw-end-roll__content">
+                            <h3>${UI_TEXT.endRollTitle}</h3>
+                            ${memoryItems}
+                        </div>
                     </div>
                 </div>
                 <div class="gw-end-roll__actions">
-                    ${mapButton}
                     ${nextButton}
-                    <button type="button" class="gw-end-roll__close">${UI_TEXT.endRollClose}</button>
+                    ${mapButton}
+                    <button type="button" class="gw-end-roll__close">${UI_TEXT.endRollExit || UI_TEXT.endRollClose}</button>
                 </div>
             </div>
         `;
@@ -4036,9 +4131,7 @@ export class StageOverlay {
         this.resolveClearReward();
         this.endRoll.querySelector('.gw-end-roll__close')?.addEventListener('click', (event) => {
             event.preventDefault();
-            this.endRoll?.remove();
-            this.endRoll = null;
-            this.goalGate?.classList.add('gw-goal-gate--clear');
+            this.onExit();
         });
         this.endRoll.querySelector('.gw-end-roll__next')?.addEventListener('click', (event) => {
             event.preventDefault();
@@ -4577,12 +4670,7 @@ export class StageOverlay {
     }
 
     updateGamepadControls() {
-        if (!navigator.getGamepads) {
-            return;
-        }
-
-        const pads = Array.from(navigator.getGamepads()).filter(Boolean);
-        const pad = pads.find((gamepad) => gamepad.connected !== false);
+        const pad = this.readActiveGamepad();
 
         if (!pad) {
             if (this.throwHold?.source === 'gamepad') {
@@ -4593,14 +4681,136 @@ export class StageOverlay {
             return;
         }
 
-        const axisX = Number(pad.axes?.[0] || 0);
-        this.setGamepadHeld('left', axisX < -0.35 || Boolean(pad.buttons?.[14]?.pressed));
-        this.setGamepadHeld('right', axisX > 0.35 || Boolean(pad.buttons?.[15]?.pressed));
-        this.setGamepadHeld('jump', Boolean(pad.buttons?.[0]?.pressed || pad.buttons?.[12]?.pressed));
-        this.setGamepadHeld('shield', Boolean(pad.buttons?.[6]?.pressed || pad.buttons?.[7]?.pressed));
-        this.handleGamepadChargeButton('attack', Boolean(pad.buttons?.[1]?.pressed));
-        this.handleGamepadThrowButton(Boolean(pad.buttons?.[2]?.pressed || pad.buttons?.[5]?.pressed));
-        this.handleGamepadButton('lock', Boolean(pad.buttons?.[3]?.pressed || pad.buttons?.[4]?.pressed), () => this.cycleLockOn());
+        const direction = gamepadDirection(pad);
+        this.setGamepadHeld('left', direction.left);
+        this.setGamepadHeld('right', direction.right);
+        this.setGamepadHeld('jump', direction.up || gamepadButtonPressed(pad, 0));
+        this.setGamepadHeld('shield', gamepadButtonPressed(pad, 6) || gamepadButtonPressed(pad, 7));
+        this.handleGamepadChargeButton('attack', gamepadButtonPressed(pad, 1));
+        this.handleGamepadThrowButton(gamepadButtonPressed(pad, 2) || gamepadButtonPressed(pad, 5));
+        this.handleGamepadButton('lock', gamepadButtonPressed(pad, 3) || gamepadButtonPressed(pad, 4), () => this.cycleLockOn());
+        this.handleGamepadButton('map', gamepadButtonPressed(pad, 8) || gamepadButtonPressed(pad, 9), () => {
+            if (this.worldMapEnabled) {
+                this.onWorldMapOpen();
+            }
+        });
+    }
+
+    bindGamepadWarmup() {
+        if (this.gamepadWarmupBound) {
+            return;
+        }
+
+        window.addEventListener('pointerdown', this.handleGamepadWarmup, { passive: true });
+        window.addEventListener('touchstart', this.handleGamepadWarmup, { passive: true });
+        window.addEventListener('keydown', this.handleGamepadWarmup, true);
+        this.gamepadWarmupBound = true;
+    }
+
+    unbindGamepadWarmup() {
+        if (!this.gamepadWarmupBound) {
+            return;
+        }
+
+        window.removeEventListener('pointerdown', this.handleGamepadWarmup, { passive: true });
+        window.removeEventListener('touchstart', this.handleGamepadWarmup, { passive: true });
+        window.removeEventListener('keydown', this.handleGamepadWarmup, true);
+        this.gamepadWarmupBound = false;
+    }
+
+    handleGamepadWarmup() {
+        this.primeGamepadControls();
+    }
+
+    primeGamepadControls() {
+        this.root?.focus?.({ preventScroll: true });
+        const pad = this.readActiveGamepad({ allowIdle: true });
+        if (!pad) {
+            return null;
+        }
+
+        this.activeGamepadIndex = pad.index;
+        this.gamepadWasAvailable = true;
+        return pad;
+    }
+
+    handleGamepadConnected(event) {
+        const gamepad = event?.gamepad;
+        if (!gamepad) {
+            return;
+        }
+
+        this.activeGamepadIndex = gamepad.index;
+        this.gamepadWasAvailable = true;
+        this.runnerGamepadButtons.clear();
+        this.showMessage(UI_TEXT.gamepadConnected, 1100);
+    }
+
+    handleGamepadDisconnected(event) {
+        const gamepad = event?.gamepad;
+        if (gamepad && this.activeGamepadIndex === gamepad.index) {
+            this.activeGamepadIndex = null;
+        }
+
+        this.runnerGamepadKeys.clear();
+        this.runnerGamepadButtons.clear();
+        this.showMessage(UI_TEXT.gamepadDisconnected, 1100);
+    }
+
+    readActiveGamepad(options = {}) {
+        const navigatorRef = window.navigator || (typeof navigator !== 'undefined' ? navigator : null);
+        if (!navigatorRef || typeof navigatorRef.getGamepads !== 'function') {
+            return null;
+        }
+
+        try {
+            const pads = Array.from(navigatorRef.getGamepads()).filter((gamepad) => (
+                gamepad && gamepad.connected !== false
+            ));
+            if (pads.length === 0) {
+                return null;
+            }
+
+            const activePad = pads.find((gamepad) => this.isGamepadActive(gamepad));
+            if (activePad) {
+                if (this.activeGamepadIndex !== activePad.index) {
+                    this.runnerGamepadButtons.clear();
+                }
+                this.activeGamepadIndex = activePad.index;
+                this.gamepadWasAvailable = true;
+                return activePad;
+            }
+
+            const rememberedPad = pads.find((gamepad) => gamepad.index === this.activeGamepadIndex);
+            if (rememberedPad) {
+                return rememberedPad;
+            }
+
+            return options.allowIdle === false ? null : (pads[0] || null);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    isGamepadActive(gamepad) {
+        const hasPressedButton = Array.from(gamepad.buttons || []).some((button) => gamepadButtonActive(button));
+        if (hasPressedButton) {
+            return true;
+        }
+
+        const direction = gamepadDirection(gamepad);
+        if (direction.left || direction.right || direction.up || direction.down) {
+            return true;
+        }
+
+        return Array.from(gamepad.axes || []).some((axis, index) => {
+            if (index === 9) {
+                return false;
+            }
+
+            const value = Number(axis || 0);
+            return Number.isFinite(value) && Math.abs(value) > 0.35 && Math.abs(value) <= 1.05;
+        });
     }
 
     setGamepadHeld(control, pressed) {
@@ -5109,7 +5319,10 @@ export class StageOverlay {
         this.runnerState.attackLockedUntil = now + (full ? 540 : 430);
         this.playRunnerStrike({ charged: true });
 
-        const chargedRect = this.runnerChargedAttackRect(full);
+        const chargedRects = this.runnerChargedAttackRects(full);
+        const chargedRect = unionRects(chargedRects) || this.runnerChargedAttackRect(full);
+        const breakRectLimits = full ? [2, 1, 1] : [1, 1, 1];
+        const breakLimit = full ? 4 : 3;
         const enemyHit = this.hitEnemyAtRect(chargedRect, {
             minOverlap: 10,
             damage,
@@ -5126,7 +5339,10 @@ export class StageOverlay {
             return;
         }
 
-        const placedBreak = this.destroyPlacedLettersAtRect(chargedRect, { limit: full ? 4 : 2 });
+        const placedBreak = this.destroyPlacedLettersAtRects(chargedRects, {
+            limit: breakLimit,
+            rectLimits: breakRectLimits,
+        });
         if (placedBreak?.count > 0) {
             this.bumpStageStat('playerBroken', placedBreak.count);
             this.impactBurstAt(placedBreak.rect, intensity);
@@ -5136,7 +5352,11 @@ export class StageOverlay {
             return;
         }
 
-        const charBreak = this.textBreaker?.destroyAtRect(chargedRect, { limit: full ? 4 : 2, source: 'player' });
+        const charBreak = this.destroyTextAtRects(chargedRects, {
+            limit: breakLimit,
+            rectLimits: breakRectLimits,
+            source: 'player',
+        });
         if (charBreak?.count > 0) {
             this.rebuildRoomCollisionCache();
             this.bumpStageStat('playerBroken', charBreak.count);
@@ -5280,6 +5500,36 @@ export class StageOverlay {
             right: left + width,
             bottom: top + height,
         };
+    }
+
+    runnerChargedAttackRects(full = false) {
+        const main = this.runnerChargedAttackRect(full);
+        const columnWidth = full ? 72 : 58;
+        const columnCenter = this.runnerState.direction > 0
+            ? this.runnerState.x + RUNNER_WIDTH + (full ? 22 : 16)
+            : this.runnerState.x - (full ? 22 : 16);
+        const columnLeft = columnCenter - columnWidth / 2;
+        const upperHeight = full ? 82 : 62;
+        const lowerHeight = full ? 76 : 58;
+        const upper = {
+            left: columnLeft,
+            top: this.runnerState.y - upperHeight + 8,
+            width: columnWidth,
+            height: upperHeight,
+            right: columnLeft + columnWidth,
+            bottom: this.runnerState.y + 8,
+        };
+        const lowerTop = this.runnerState.y + RUNNER_HEIGHT - 6;
+        const lower = {
+            left: columnLeft,
+            top: lowerTop,
+            width: columnWidth,
+            height: lowerHeight,
+            right: columnLeft + columnWidth,
+            bottom: lowerTop + lowerHeight,
+        };
+
+        return [main, upper, lower];
     }
 
     runnerHandRect() {
@@ -5499,6 +5749,10 @@ export class StageOverlay {
             return;
         }
 
+        if (document.body.classList.contains('gw-world-map-open')) {
+            return;
+        }
+
         if (isBlockedDownKey(event.key)) {
             event.preventDefault();
             event.stopPropagation();
@@ -5537,6 +5791,10 @@ export class StageOverlay {
     }
 
     handleRunnerKeyUp(event) {
+        if (document.body.classList.contains('gw-world-map-open')) {
+            return;
+        }
+
         if (isBlockedDownKey(event.key)) {
             event.preventDefault();
             event.stopPropagation();
@@ -5795,7 +6053,7 @@ export class StageOverlay {
         const opened = !wasOpen;
         const label = document.createElement('div');
         label.className = 'gw-action-echo gw-accordion-echo';
-        label.textContent = opened ? 'OPEN' : 'CLOSE';
+        label.textContent = opened ? '\u958b\u304f' : '\u9589\u3058\u308b';
         label.style.left = `${rect.left + rect.width / 2}px`;
         label.style.top = `${rect.top + rect.height / 2}px`;
         this.addTemporaryEffect(label, 680);
@@ -5914,6 +6172,23 @@ function unionRects(rects = []) {
         bottom,
         width: right - left,
         height: bottom - top,
+    };
+}
+
+function combineBreakResults(results = [], fallbackRect = null) {
+    const hits = results.filter((result) => result?.count > 0);
+    if (hits.length === 0) {
+        return null;
+    }
+
+    return {
+        count: hits.reduce((total, result) => total + result.count, 0),
+        chars: hits.flatMap((result) => result.chars || []),
+        items: hits.flatMap((result) => result.items || []),
+        critical: hits.some((result) => result.critical),
+        criticalWord: hits.find((result) => result.criticalWord)?.criticalWord || '',
+        target: hits.find((result) => result.target)?.target || null,
+        rect: unionRects(hits.map((result) => result.rect)) || fallbackRect,
     };
 }
 
@@ -6114,7 +6389,7 @@ function setLocalStorageFlag(key) {
 function localizedUiText(defaults, dictionaries = {}) {
     const locale = frontendLocale().toLowerCase().replace('_', '-');
     const language = locale.split('-')[0];
-    const dictionary = dictionaries[locale] || dictionaries[language] || {};
+    const dictionary = dictionaries[locale] || dictionaries[language] || dictionaries.ja || {};
 
     return {
         ...defaults,
@@ -6417,6 +6692,66 @@ function firstLandingY(...values) {
     return Math.min(...usable);
 }
 
+function gamepadButtonActive(button, threshold = 0.35) {
+    return Boolean(button?.pressed) || Number(button?.value || 0) > threshold;
+}
+
+function gamepadButtonPressed(gamepad, index, threshold = 0.35) {
+    return gamepadButtonActive(gamepad?.buttons?.[index], threshold);
+}
+
+function gamepadAxis(gamepad, index) {
+    const value = Number(gamepad?.axes?.[index] || 0);
+    return Number.isFinite(value) ? value : 0;
+}
+
+function gamepadDirection(gamepad) {
+    const leftStickX = gamepadAxis(gamepad, 0);
+    const leftStickY = gamepadAxis(gamepad, 1);
+    const dpadX = gamepadAxis(gamepad, 6);
+    const dpadY = gamepadAxis(gamepad, 7);
+    const hat = gamepadHatDirection(gamepadAxis(gamepad, 9));
+
+    return {
+        left: leftStickX < -0.35 || dpadX < -0.35 || gamepadButtonPressed(gamepad, 14) || hat.left,
+        right: leftStickX > 0.35 || dpadX > 0.35 || gamepadButtonPressed(gamepad, 15) || hat.right,
+        up: leftStickY < -0.6 || dpadY < -0.6 || gamepadButtonPressed(gamepad, 12) || hat.up,
+        down: leftStickY > 0.6 || dpadY > 0.6 || gamepadButtonPressed(gamepad, 13) || hat.down,
+    };
+}
+
+function gamepadHatDirection(value) {
+    if (!Number.isFinite(value) || Math.abs(value) > 1.05) {
+        return { left: false, right: false, up: false, down: false };
+    }
+
+    const states = [
+        { value: -1, up: true },
+        { value: -0.714, up: true, right: true },
+        { value: -0.428, right: true },
+        { value: -0.142, right: true, down: true },
+        { value: 0.142, down: true },
+        { value: 0.428, left: true, down: true },
+        { value: 0.714, left: true },
+        { value: 1, left: true, up: true },
+    ];
+    const nearest = states.reduce((best, state) => {
+        const distance = Math.abs(value - state.value);
+        return distance < best.distance ? { state, distance } : best;
+    }, { state: null, distance: Infinity });
+
+    if (!nearest.state || nearest.distance > 0.09) {
+        return { left: false, right: false, up: false, down: false };
+    }
+
+    return {
+        left: Boolean(nearest.state.left),
+        right: Boolean(nearest.state.right),
+        up: Boolean(nearest.state.up),
+        down: Boolean(nearest.state.down),
+    };
+}
+
 function keyToRunnerControl(key) {
     const normalized = String(key || '').toLowerCase();
 
@@ -6494,6 +6829,75 @@ function enemyAimScore(enemy, x, y, facing = 1) {
     const bossBonus = enemy.type === 'boss' ? -80 : 0;
 
     return Math.hypot(centerX - x, centerY - y) + behindPenalty + bossBonus;
+}
+
+function normalizeEnemyConfig(config = {}) {
+    const normal = Array.isArray(config.normal)
+        ? config.normal.map((enemy) => normalizeEnemyDefinition(enemy, 'normal')).filter(Boolean)
+        : [];
+    const boss = config.boss && typeof config.boss === 'object'
+        ? normalizeEnemyDefinition(config.boss, 'boss')
+        : null;
+
+    return {
+        enabled: Boolean(config.enabled && (normal.length > 0 || boss)),
+        stageDifficulty: clampNumber(Number(config.stageDifficulty) || 3, 1, 8),
+        clearEffect: String(config.clearEffect || 'auto'),
+        normal,
+        boss,
+    };
+}
+
+function normalizeObjectiveConfig(config = {}) {
+    const type = config?.type === 'products' ? 'products' : 'chests';
+    const fallbackLabel = type === 'products' ? '商品・アイテム' : UI_TEXT.chestProgressLabel;
+    const requiredCount = clampNumber(Number(config?.requiredCount) || GOAL_REQUIRED_CHESTS, 1, 9);
+    const label = String(config?.label || fallbackLabel).trim() || fallbackLabel;
+
+    return {
+        type,
+        label,
+        requiredCount,
+    };
+}
+
+function normalizeEnemyDefinition(enemy, fallbackRole = 'normal') {
+    if (!enemy || typeof enemy !== 'object') {
+        return null;
+    }
+
+    const role = ['normal', 'boss'].includes(enemy.role) ? enemy.role : fallbackRole;
+    const stats = enemy.stats && typeof enemy.stats === 'object' ? enemy.stats : {};
+
+    return {
+        enemyId: String(enemy.enemyId || ''),
+        name: String(enemy.name || ''),
+        imageUrl: String(enemy.imageUrl || ''),
+        role,
+        behavior: String(enemy.behavior || (role === 'boss' ? 'boss_guardian' : 'walker')),
+        difficulty: clampNumber(Number(enemy.difficulty) || 3, 1, 8),
+        stats: {
+            hp: positiveNumber(stats.hp),
+            speed: positiveNumber(stats.speed),
+            attackInterval: positiveNumber(stats.attackInterval),
+            destroyLimit: positiveNumber(stats.destroyLimit),
+            missileMinInterval: positiveNumber(stats.missileMinInterval),
+            missileMaxInterval: positiveNumber(stats.missileMaxInterval),
+        },
+    };
+}
+
+function positiveNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) && number > 0 ? number : 0;
+}
+
+function clampNumber(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+}
+
+function cssUrl(value) {
+    return String(value).replace(/['"\\\n\r]/g, '');
 }
 
 function wordPowerForHeldLetter(held) {

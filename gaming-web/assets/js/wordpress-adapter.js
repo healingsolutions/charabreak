@@ -1,8 +1,8 @@
-import { GamingWebCore } from './gaming-web-core.js?v=0.2.19';
-import { GamingWebLogger } from './logger.js?v=0.2.19';
-import { AudioManager } from './audio-manager.js?v=0.2.19';
-import { resolveVisualTheme } from './visual-theme.js?v=0.2.19';
-import { GamingWebWorldMap } from './world-map.js?v=0.2.19';
+import { GamingWebCore } from './gaming-web-core.js?v=0.2.28';
+import { GamingWebLogger } from './logger.js?v=0.2.28';
+import { AudioManager } from './audio-manager.js?v=0.2.28';
+import { resolveVisualTheme } from './visual-theme.js?v=0.2.28';
+import { GamingWebWorldMap } from './world-map.js?v=0.2.28';
 
 const RESUME_KEY = 'gaming_web_resume_mode';
 
@@ -25,7 +25,9 @@ ready(() => {
     const audio = new AudioManager({
         baseUrl: config.audioBase,
         debug: config.debug,
+        stageAudio: config.stageAudio || {},
     });
+    audio.bindUnlockEvents();
     const worldMap = new GamingWebWorldMap(config, {
         isGameActive: () => core?.isActive?.() || false,
         onStart: () => beginGame(lastStartTrigger),
