@@ -1,52 +1,407 @@
-# Gaming Web Local MVP
+# CharaBreak
 
-This workspace contains a Docker-based WordPress demo and the `gaming-web` plugin.
+CharaBreakは、WordPressのページを「読む前に遊べる」インタラクティブなステージへ変えるプラグインです。
 
-## Quick Start
+Webページの文字、画像、ボタン、リンクを、キャラクターが歩ける足場や攻撃できるゲーム要素として扱います。ユーザーはページを読み始める前に、まずページの上で遊び、壊し、守り、集め、ゴールを目指します。
+
+キャッチコピーは、**読む前に、壊せ。**
+
+CharaBreakは、文章を読まない時代に向けた「インタラクティブWeb」「ゲーミフィケーションWeb」の実験的なWordPressプラグインです。サイト滞在時間、回遊率、ファン化、コンテンツへの愛着を高めるための新しい表現を目指しています。
+
+## できること
+
+- WordPressの固定ページや投稿をゲームステージに変える
+- ページ内の文字、画像、アイコン、ボタン、リンクを足場や攻撃対象にする
+- キャラクターを操作してページ上を移動、ジャンプ、攻撃、防御、投げ、ロックオンできる
+- 敵キャラ、中ボス、ミサイル、パリィ、盾防御を使ったバトルを入れられる
+- 宝箱やアイテムを集めるステージクリア条件を作れる
+- ステージクリア後だけに特典、クーポン、限定URLを見せられる
+- 複数ページをワールドマップでつなぎ、サイト全体を冒険フィールドにできる
+- ステージごとに難易度、敵キャラ、ボス、報酬、BGMを設定できる
+- 匿名ログでゲーム開始、終了、攻撃、取得、クリアなどを記録できる
+
+## まず最初に知ってほしいこと
+
+CharaBreakのゲーム演出は、通常のページ内容を永続的に破壊するものではありません。
+
+- ゲーム中だけ、ページがゲームステージとして変化します。
+- リロードすれば通常表示に戻ります。
+- ゲームモードを終了すれば、リンクやフォームは通常操作に戻ります。
+- SEO用の本文そのものを削除する設計ではありません。
+
+ただし、ゲーム中はページ上の文字や画像を一時的に細かく扱うため、ページ構造が特殊なサイトでは調整が必要になる場合があります。
+
+## インストール方法
+
+### 方法1: 配布ZIPからインストールする
+
+1. CharaBreakの配布ZIPをダウンロードします。
+2. WordPress管理画面を開きます。
+3. `プラグイン > 新規追加 > プラグインのアップロード` を開きます。
+4. ZIPファイルを選択してインストールします。
+5. `CharaBreak` を有効化します。
+
+### 方法2: GitHubのソースからインストールする
+
+GitHubのリポジトリ全体をそのままWordPressにアップロードしても、プラグインとしては認識されません。
+
+WordPressへ入れる対象は、リポジトリ内の `gaming-web` フォルダです。
+
+1. このリポジトリをダウンロード、またはcloneします。
+2. `gaming-web` フォルダを取り出します。
+3. `gaming-web` フォルダをWordPressの `wp-content/plugins/` にアップロードします。
+4. WordPress管理画面の `プラグイン` から `CharaBreak` を有効化します。
+
+```text
+wp-content/
+└─ plugins/
+   └─ gaming-web/
+      ├─ gaming-web.php
+      ├─ includes/
+      ├─ admin/
+      └─ assets/
+```
+
+## CharaBreakをスタートする手順
+
+1. WordPress管理画面で `CharaBreak` を有効化します。
+
+2. `CharaBreak > 基本設定` を開きます。
+
+3. 次の項目を確認します。
+   - `CharaBreakを有効化` をオンにする
+   - ゲーム化したい投稿タイプを選ぶ
+   - 右下の開始ボタンを使う場合は `フローティング開始ボタン` をオンにする
+   - 必要に応じてBGM、ワールドマップ、ログを設定する
+
+4. `CharaBreak > ステージ管理` を開きます。
+
+5. ゲーム化したいページの `使用する` をオンにします。
+
+6. 必要に応じて次を設定します。
+   - ステージ名
+   - ワールドマップの順番
+   - ステージ種別
+   - 難易度
+   - 通常敵
+   - ボス敵
+   - 報酬の予告
+   - クリア演出
+   - ステージBGM
+   - ボスBGM
+   - クリア音
+
+7. 対象ページを開き、ゲーム開始ボタンを押します。
+
+これで、ページ上にキャラクターが登場し、CharaBreakのゲームモードが始まります。
+
+## ページ内にゲーム開始ボタンを置く
+
+右下の固定ボタンだけでなく、ページ本文の中に自然なゲーム開始リンクを置くこともできます。
+
+ショートコード:
+
+```text
+[gaming_web_start label="ゲームを始める"]
+```
+
+HTMLで直接置く場合:
+
+```html
+<a href="#gaming-web-start" data-gaming-web-start>ゲームを始める</a>
+```
+
+Elementorなどのページビルダーを使う場合も、ボタンやリンクに `data-gaming-web-start` を付けることで開始できます。
+
+## 管理画面の構成
+
+CharaBreakを有効化すると、WordPress管理画面に `CharaBreak` メニューが追加されます。
+
+### 基本設定
+
+プラグイン全体の設定を行います。
+
+- CharaBreakの有効化
+- フローティング開始ボタンの表示
+- 対象投稿タイプ
+- 開始ボタンのラベル
+- 主人公キャラクター名
+- ビジュアルスタイル
+- 標準BGM
+- ワールドマップ
+- ログ
+- デバッグモード
+
+### ステージ管理
+
+どのページをゲーム化するかを管理します。
+
+- 使用するページの選択
+- ステージ名
+- 表示順
+- ステージ種別
+- 難易度
+- 通常敵
+- ボス敵
+- 報酬の予告
+- クリア演出
+- Pro向けBGMやクリア条件
+
+### キャラクター・敵キャラ台帳
+
+登場キャラクターや敵キャラを管理します。
+
+- キャラクター名
+- 画像
+- 役割
+- 動作プリセット
+- 難易度1から8
+- 自動計算ステータス
+
+難易度を上げると、敵のHP、速度、攻撃頻度、破壊速度、ボスのミサイル頻度などが強くなります。
+
+## プレイヤー操作
+
+### キーボード
+
+| 操作 | キー |
+| --- | --- |
+| 移動 | `A / D` または矢印キー |
+| ジャンプ | `Space`、`W`、上矢印 |
+| 攻撃 | `J` または `Z` |
+| 文字を持つ、投げる | `K` または `X` |
+| 盾 | `L` または `Shift` |
+| ロックオン | `T` または `Tab` |
+
+### スマホ
+
+スマホでは画面上の仮想ボタンで操作します。
+
+- 移動
+- ジャンプ
+- 攻撃
+- 投げ
+- 盾
+
+### ゲームパッド
+
+ブラウザがGamepad APIを認識している場合、ゲームパッドでも操作できます。
+
+- 左スティックまたはD-pad: 移動
+- 下ボタン: ジャンプ
+- 右ボタン: 攻撃
+- 左ボタン: 投げ
+- 上ボタン: ロックオン
+
+ブラウザやOSによっては、ページをクリックした後、またはゲームパッドのボタンを一度押した後に認識されます。
+
+## ワールドマップ
+
+CharaBreakは、複数のページを「ステージ」としてつなげられます。
+
+ワールドマップを使うと、ユーザーは次を理解できます。
+
+- 今どのステージにいるか
+- 次にどのページへ進めるか
+- 報酬がどこにあるか
+- 最終ゲートまであと何ステージか
+
+サイト全体を、スーパーマリオのフィールドマップのような「冒険フィールド」として見せることができます。
+
+## クリア報酬
+
+ステージをクリアした人だけに、特典を表示できます。
+
+設定できるもの:
+
+- 報酬タイトル
+- 報酬メッセージ
+- クーポンコード
+- 特典URL
+- 報酬の予告文
+
+例:
+
+- 最後まで遊んだ人だけにクーポンを表示する
+- クリアした人だけを限定ページへ案内する
+- 商品ページへの特別な導線を出す
+- キャンペーンコードを見せる
+
+## 想定している使い方
+
+- LPやサービス紹介ページの滞在時間を伸ばす
+- 文章を読む前の「遊び」を入口にする
+- 複数ページの回遊率を高める
+- 商品やブランドへの愛着を作る
+- 採用サイトや教育コンテンツをゲーム化する
+- キャンペーンページにクリア特典を置く
+- イベントサイトに隠し要素や宝箱を置く
+
+## 無料版とPro版の構想
+
+現在のリポジトリは開発中のMVPです。
+
+今後の配布では、次のような構成を想定しています。
+
+### 無料版
+
+- 1ページをゲーム化
+- 基本キャラクター
+- 基本ステージ
+- 基本ログ
+- シンプルなクリア演出
+
+### Pro版
+
+- 複数ページのゲーム化
+- ワールドマップ
+- ステージごとのBGM
+- ボス登場BGM
+- クリア音
+- 敵キャラ台帳
+- キャラクター画像アップロード
+- ステージごとの敵設定
+- クーポン、特典URL、限定メッセージ
+- 高度なクリア条件
+
+Pro版の販売方法は、FreemiusなどのWordPress向けライセンス配布を想定しています。
+
+## イベントログとプライバシー
+
+基本ログをオンにすると、匿名のイベントログを保存できます。
+
+記録する主なイベント:
+
+- `game_start`
+- `game_exit`
+- `element_hit`
+- `word_collect`
+- `inventory_open`
+- `stage_soft_clear`
+
+記録内容:
+
+- 匿名セッションID
+- ページID
+- ページURL
+- イベント種別
+- 要素種別
+- 画面サイズ
+- スクロール位置
+- 作成日時
+
+MVPでは個人情報を収集する設計にはしていません。
+
+## よくある質問
+
+### ゲーム開始ボタンが表示されません
+
+次を確認してください。
+
+- `CharaBreak > 基本設定` でCharaBreakが有効になっているか
+- 対象の投稿タイプが有効になっているか
+- `CharaBreak > ステージ管理` で対象ページの `使用する` がオンになっているか
+- フローティング開始ボタンを非表示にしていないか
+- ページ内開始リンクを使う場合、ショートコードまたは `data-gaming-web-start` が入っているか
+
+### どんなWordPressサイトでも使えますか
+
+多くの通常ページで使えます。
+
+ただし、ページ構造が特殊なテーマ、重いアニメーションを多用するページ、外部スクリプトで大きくDOMを書き換えるページでは、足場判定や操作感に調整が必要な場合があります。
+
+### Elementorでも使えますか
+
+はい。通常の固定ページと同じように使えます。
+
+Elementorのボタンからゲームを始めたい場合は、ボタンやリンクに `data-gaming-web-start` を追加してください。
+
+### ゲーム中にページが壊れたように見えます
+
+それがCharaBreakの体験です。
+
+ゲーム中だけ、ページがステージとして変化します。リロードまたはゲーム終了で通常表示に戻ります。
+
+### ゲームパッドが動きません
+
+ブラウザのGamepad APIに依存します。
+
+次を試してください。
+
+- ページを一度クリックする
+- ゲームパッドのボタンを一度押す
+- ChromeやEdgeなどGamepad API対応ブラウザで試す
+- OS側でゲームパッドが認識されているか確認する
+
+## 開発者向けメモ
+
+CharaBreakのJavaScriptは、将来的にWordPress以外でも動かせるよう、できるだけWordPress依存を分離しています。
+
+主なファイル:
+
+- `gaming-web/gaming-web.php`: プラグインの入口
+- `gaming-web/includes/class-gw-plugin.php`: フロント読み込み、メタ設定、ショートコード
+- `gaming-web/includes/class-gw-settings.php`: 基本設定
+- `gaming-web/includes/class-gw-admin.php`: 管理メニュー
+- `gaming-web/includes/class-gw-enemies.php`: 敵キャラ台帳
+- `gaming-web/includes/class-gw-rest.php`: REST API
+- `gaming-web/includes/class-gw-logger.php`: イベントログ
+- `gaming-web/assets/js/gaming-web-core.js`: ゲーム全体のライフサイクル
+- `gaming-web/assets/js/dom-scanner.js`: ページ内要素スキャン
+- `gaming-web/assets/js/stage-overlay.js`: ゲームUI、物理、演出
+- `gaming-web/assets/js/world-map.js`: ワールドマップ
+- `gaming-web/assets/js/audio-manager.js`: BGM、効果音、フォールバック音
+- `gaming-web/assets/css/gaming-web.css`: フロント表示
+
+RESTエンドポイント:
+
+```text
+/wp-json/gaming-web/v1/event
+```
+
+ログ保存テーブル:
+
+```text
+wp_gaming_web_events
+```
+
+## ローカル開発
+
+このリポジトリには、ローカルWordPress検証用のDocker構成が含まれています。
+
+```powershell
+docker compose up -d
+```
+
+初期セットアップ用スクリプト:
 
 ```powershell
 .\scripts\setup-wordpress.ps1
 ```
 
-Then open:
+ローカルURL:
 
-- Site: `http://localhost:8089`
-- Admin: `http://localhost:8089/wp-admin`
-- Login: `admin / password`
-
-The setup script starts Docker, installs WordPress if needed, activates the plugin, enables Gaming Web settings, and seeds 10 pages plus 30 posts of Japanese demo content.
-
-## Apollo Elementor Demo
-
-The local demo can also use the Apollo business consulting Elementor template kit as a polished business-site surface for Gaming Web.
-
-Required local plugins:
-
-```powershell
-docker compose run --rm wpcli theme install hello-elementor --activate
-docker compose run --rm wpcli plugin install elementor elementskit-lite romethemeform --activate
+```text
+http://localhost:8089
 ```
 
-Place/extract the Apollo kit into `gaming-web/_tmp_apollo`, then import the selected Elementor pages:
+開発用コマンド例:
 
 ```powershell
-docker compose run --rm wpcli eval-file /var/www/html/wp-content/plugins/gaming-web/scripts/import-apollo-kit.php
-```
-
-The importer creates seven Elementor pages, enables Gaming Web on them, inserts a visible `ゲームを始める` bar into the Elementor data, adds clear rewards, sets each page to Elementor Canvas, and sets `Apollo Business Gaming Demo` as the front page. It does not import site-wide template settings.
-
-## Manual Commands
-
-```powershell
-docker compose up -d
-docker compose run --rm wpcli core install --url="http://localhost:8089" --title="Gaming Web Demo" --admin_user="admin" --admin_password="password" --admin_email="admin@example.test" --skip-email
 docker compose run --rm wpcli plugin activate gaming-web
 docker compose run --rm wpcli eval-file /var/www/html/wp-content/plugins/gaming-web/scripts/seed-demo.php
 ```
 
-## Notes
+ローカル開発用の説明は、公開配布用の操作説明とは分けて扱ってください。
 
-- Plugin assets load only on enabled singular pages/posts.
-- The game layer uses overlay DOM only and removes itself on exit.
-- Anonymous events are stored in `wp_gaming_web_events`.
-- The JavaScript core is split into framework-agnostic ES Modules under `gaming-web/assets/js`.
+## 現在のステータス
+
+CharaBreakはMVP開発中です。
+
+ゲーム体験、ワールドマップ、敵キャラ台帳、ステージ管理、報酬表示などの土台は実装されていますが、配布形態、Proライセンス、翻訳ファイル、公式サポート導線は今後整備予定です。
+
+## ライセンス
+
+ライセンスは配布前に確定してください。
+
+公開配布する場合は、WordPressプラグインとしての互換性を考え、GPL互換ライセンスを検討してください。
