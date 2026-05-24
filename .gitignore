@@ -4,9 +4,10 @@ Thumbs.db
 .env.local
 wp-content/
 node_modules/
-vendor/
+/vendor/
 *.log
-gaming-web/_tmp_apollo/
+**/_tmp/
+**/_tmp_apollo/
 exports/
 **/_notes/
 *.wpress
