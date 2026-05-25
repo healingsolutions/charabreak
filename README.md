@@ -1,307 +1,276 @@
 # CharaBreak
 
-CharaBreakは、WordPressのページを「読む前に遊べる」インタラクティブなステージへ変えるプラグインです。
+**Turn your WordPress pages into playable stages.**
 
-Webページの文字、画像、ボタン、リンクを、キャラクターが歩ける足場や攻撃できるゲーム要素として扱います。ユーザーはページを読み始める前に、まずページの上で遊び、壊し、守り、集め、ゴールを目指します。
+CharaBreak is a WordPress plugin that adds a playful game layer on top of your existing pages. Visitors can walk across text, jump between images and buttons, attack page elements, defend content from enemies, collect rewards, and move through multiple pages as if your website were an adventure field.
 
-キャッチコピーは、**読む前に、壊せ。**
+The core idea is simple:
 
-CharaBreakは、文章を読まない時代に向けた「インタラクティブWeb」「ゲーミフィケーションWeb」の実験的なWordPressプラグインです。サイト滞在時間、回遊率、ファン化、コンテンツへの愛着を高めるための新しい表現を目指しています。
+> People do not always read first.
+> Let them play first, then make the content memorable.
 
-## できること
+For the Japanese launch, the product message is:
 
-- WordPressの固定ページや投稿をゲームステージに変える
-- ページ内の文字、画像、アイコン、ボタン、リンクを足場や攻撃対象にする
-- キャラクターを操作してページ上を移動、ジャンプ、攻撃、防御、投げ、ロックオンできる
-- 文字を壊すだけでなく、魔法のステッキで花に変える演出も選べる
-- 敵キャラ、中ボス、ミサイル、パリィ、盾防御を使ったバトルを入れられる
-- 宝箱やアイテムを集めるステージクリア条件を作れる
-- ステージクリア後だけに特典、クーポン、限定URLを見せられる
-- 複数ページをワールドマップでつなぎ、サイト全体を冒険フィールドにできる
-- ステージごとに難易度、敵キャラ、ボス、報酬、BGM、プレイスタイルを設定できる
-- 匿名ログでゲーム開始、終了、攻撃、取得、クリアなどを記録できる
+> **読む前に、壊せ。**
+> Before reading, break it.
 
-## 3つのプレイスタイル
+CharaBreak is designed for interactive websites, campaign pages, product storytelling, fan engagement, educational content, and playful landing pages.
 
-CharaBreakは、ページを「壊す」体験だけに固定しません。
-サイトの世界観やクライアントの好みに合わせて、ページごとにプレイスタイルを変えられます。
+## What CharaBreak Does
 
-### Break: 読む前に、壊せ。
+- Turns WordPress pages and posts into game stages.
+- Treats text, images, icons, buttons, and links as playable terrain.
+- Adds a pixel-style character that can move, jump, attack, defend, parry, hold objects, and clear stages.
+- Supports three play styles: **Break**, **Bloom**, and **Hybrid**.
+- Adds enemies, bosses, missiles, parries, shields, treasure chests, rewards, and clear animations.
+- Connects multiple pages through a world map, turning the entire site into an adventure route.
+- Lets site owners configure stages, enemies, difficulty, rewards, BGM, and gameplay style.
+- Can show coupons, bonus URLs, and special messages only after a visitor clears a stage.
+- Stores lightweight anonymous event logs when logging is enabled.
 
-文字や画像、ボタン、アイコンを攻撃し、ページそのものを足場として攻略するモードです。
-ハンマーで文字を1文字ずつ崩し、穴から下へ落ち、敵や中ボスからページを守りながら進みます。
+## Gameplay Styles
 
-強いフォントや大きな文字は、攻撃した時の手応えも大きくなります。
-「しっかりしたWebサイトなのに、ゲームのように崩せる」というCharaBreakらしい爽快感を作るための中心モードです。
+CharaBreak is not limited to destructive effects. Different sites need different emotional tones, so stages can be designed around breaking, blooming, or both.
 
-### Bloom: 壊さず、咲かせる。
+### Break
 
-壊される表現が合わないサイトでは、文字を花に変えるBloomモードを使えます。
-魔法のステッキで文字に触れると、文字が色とりどりの花や光に変わり、ひらひらと消えていきます。
+**Before reading, break it.**
 
-消えた花はステージの邪魔にならない場所へ散り、ページ全体に小さなお花畑のような余韻を残します。
-「ページを壊す」のではなく、「ページを自分の手で素敵に変えていく」体験を作れます。
+In Break mode, text, images, buttons, and icons become objects that can be attacked. Visitors can smash letters one by one, create holes, drop to lower content, fight enemies, parry missiles, and protect the page.
 
-### Hybrid: 壊す気持ちよさと、咲かせる満足感を両方。
+This is the signature CharaBreak feeling: a polished website suddenly becomes a physical, playable world.
 
-Hybridモードでは、攻撃の爽快感と花に変える満足感を同じステージに入れられます。
-サイト全体はBreak、特定ステージだけBloom、あるいはブランドページはBloomでキャンペーンページはBreak、というような使い分けができます。
+### Bloom
 
-花に変えた文字や花のエネルギーは、敵へ放つエネルギー矢の演出にも使われます。
-CharaBreakは「破壊」だけでなく、ページがプレイヤーの手で変化していく楽しさを表現するためのゲーム化レイヤーです。
+**Do not break it. Make it bloom.**
 
-## まず最初に知ってほしいこと
+Bloom mode is for sites where destruction feels too aggressive. Instead of smashing letters, the player uses a magic wand to transform words into colorful flowers and light particles.
 
-CharaBreakのゲーム演出は、通常のページ内容を永続的に破壊するものではありません。
+Flowers flutter away, disappear gracefully, and leave soft traces in the world. The result is still interactive and satisfying, but the tone is positive, gentle, and brand-friendly.
 
-- ゲーム中だけ、ページがゲームステージとして変化します。
-- リロードすれば通常表示に戻ります。
-- ゲームモードを終了すれば、リンクやフォームは通常操作に戻ります。
-- SEO用の本文そのものを削除する設計ではありません。
+Bloom energy can also become a visual attack, such as energy arrows, without making the page feel hostile.
 
-ただし、ゲーム中はページ上の文字や画像を一時的に細かく扱うため、ページ構造が特殊なサイトでは調整が必要になる場合があります。
+### Hybrid
 
-## インストール方法
+Hybrid mode combines the impact of Break with the satisfaction of Bloom. A site can use Break on campaign pages, Bloom on brand pages, and a mixed style for special stages.
 
-### 方法1: 配布ZIPからインストールする
+This gives creators room to build interactive content that matches the personality of each page.
 
-1. CharaBreakの配布ZIP `charabreak.zip` をダウンロードします。
-2. WordPress管理画面を開きます。
-3. `プラグイン > 新規追加 > プラグインのアップロード` を開きます。
-4. ZIPファイルを選択してインストールします。
-5. `CharaBreak` を有効化します。
+## Free And Pro Strategy
 
-### 方法2: GitHubのソースからインストールする
+CharaBreak is planned as a free-to-start WordPress plugin with Pro upgrades handled through Freemius.
 
-GitHubのリポジトリ全体をそのままWordPressにアップロードしても、プラグインとしては認識されません。
+### Free Version
 
-WordPressへ入れる対象は、リポジトリ内の `charabreak` フォルダです。
+The free version is intended to help users experience CharaBreak quickly:
 
-1. このリポジトリをダウンロード、またはcloneします。
-2. `charabreak` フォルダを取り出します。
-3. `charabreak` フォルダをWordPressの `wp-content/plugins/` にアップロードします。
-4. WordPress管理画面の `プラグイン` から `CharaBreak` を有効化します。
+- Game-enable one page.
+- Use the basic character and default enemy behavior.
+- Try the core Break / Bloom / Hybrid experience.
+- Show a simple game start button.
+- Use basic clear effects and lightweight logs.
 
-```text
-wp-content/
-└─ plugins/
-   └─ charabreak/
-      ├─ charabreak.php
-      ├─ includes/
-      ├─ admin/
-      └─ assets/
-```
+### Pro Version
 
-## CharaBreakをスタートする手順
+The Pro version is for full website adventures and commercial campaigns:
 
-1. WordPress管理画面で `CharaBreak` を有効化します。
+- Unlimited game-enabled pages.
+- World map across multiple pages.
+- Stage-by-stage configuration.
+- Custom enemies and boss characters.
+- Enemy difficulty presets.
+- Stage BGM, boss BGM, final-stage BGM, and clear sounds.
+- Treasure chests, rewards, coupons, bonus URLs, and gated offers.
+- Advanced stage goals and campaign-style progression.
+- More control over Break / Bloom / Hybrid per stage.
 
-2. `CharaBreak > 基本設定` を開きます。
+Freemius is used for license activation, paid upgrades, and Pro distribution.
 
-3. 次の項目を確認します。
-   - `CharaBreakを有効化` をオンにする
-   - ゲーム化したい投稿タイプを選ぶ
-   - 右下の開始ボタンを使う場合は `フローティング開始ボタン` をオンにする
-   - 必要に応じてBGM、ワールドマップ、ログを設定する
+## Installation
 
-4. `CharaBreak > ステージ管理` を開きます。
+### Recommended: Install From A Release ZIP
 
-5. ゲーム化したいページの `使用する` をオンにします。
+1. Download `charabreak.zip` from the official distribution page or GitHub Releases.
+2. Open your WordPress admin.
+3. Go to `Plugins > Add New > Upload Plugin`.
+4. Upload `charabreak.zip`.
+5. Activate **CharaBreak**.
 
-6. 必要に応じて次を設定します。
-   - ステージ名
-   - ワールドマップの順番
-   - ステージ種別
-   - 難易度
-   - 通常敵
-   - ボス敵
-   - 報酬の予告
-   - クリア演出
-   - ステージBGM
-   - ボスBGM
-   - クリア音
-   - プレイスタイル
-
-7. 対象ページを開き、ゲーム開始ボタンを押します。
-
-これで、ページ上にキャラクターが登場し、CharaBreakのゲームモードが始まります。
-
-## ページ内にゲーム開始ボタンを置く
-
-右下の固定ボタンだけでなく、ページ本文の中に自然なゲーム開始リンクを置くこともできます。
-
-ショートコード:
+The ZIP should contain:
 
 ```text
-[gaming_web_start label="ゲームを始める"]
+charabreak/
+├─ charabreak.php
+├─ includes/
+├─ admin/
+└─ assets/
 ```
 
-HTMLで直接置く場合:
+### Installing From GitHub Source
+
+Do not upload the GitHub repository ZIP directly unless it contains only the plugin folder.
+
+If you clone or download this repository, upload only the `charabreak` folder to:
+
+```text
+wp-content/plugins/charabreak/
+```
+
+Then activate **CharaBreak** from the WordPress plugin screen.
+
+## How To Start CharaBreak
+
+After activation:
+
+1. Open `CharaBreak > Settings`.
+2. Enable CharaBreak globally.
+3. Choose the post types you want to support, such as pages or posts.
+4. Decide whether to show the floating game start button.
+5. Open `CharaBreak > Stage Manager`.
+6. Enable the page you want to turn into a stage.
+7. Configure the stage label, order, type, difficulty, enemies, reward teaser, BGM, and play style.
+8. Open the page on the front end.
+9. Click the CharaBreak start button or a custom start link.
+
+The character will appear and the page becomes playable.
+
+## Starting From A Page Button
+
+You can start CharaBreak from a natural button or link inside the page, instead of using only the floating button.
+
+Shortcode:
+
+```text
+[gaming_web_start label="Start Game"]
+```
+
+HTML:
 
 ```html
-<a href="#gaming-web-start" data-gaming-web-start>ゲームを始める</a>
+<a href="#gaming-web-start" data-gaming-web-start>Start Game</a>
 ```
 
-Elementorなどのページビルダーを使う場合も、ボタンやリンクに `data-gaming-web-start` を付けることで開始できます。
+This also works with page builders such as Elementor when the link or button can include the `data-gaming-web-start` attribute.
 
-## 管理画面の構成
+## Admin Screens
 
-CharaBreakを有効化すると、WordPress管理画面に `CharaBreak` メニューが追加されます。
+CharaBreak adds a top-level `CharaBreak` menu in the WordPress admin.
 
-### 基本設定
+### Settings
 
-プラグイン全体の設定を行います。
+Global plugin settings:
 
-- CharaBreakの有効化
-- フローティング開始ボタンの表示
-- 対象投稿タイプ
-- 開始ボタンのラベル
-- 主人公キャラクター名
-- ビジュアルスタイル
-- 標準BGM
-- ワールドマップ
-- ログ
-- デバッグモード
+- Enable or disable CharaBreak.
+- Choose supported post types.
+- Show or hide the floating start button.
+- Set the game button label.
+- Set the main character name.
+- Configure visual style.
+- Configure BGM and sound behavior.
+- Enable world map options.
+- Enable lightweight logging.
+- Enable debug mode.
 
-### ステージ管理
+### Stage Manager
 
-どのページをゲーム化するかを管理します。
+Choose which pages become stages:
 
-- 使用するページの選択
-- ステージ名
-- 表示順
-- ステージ種別
-- 難易度
-- 通常敵
-- ボス敵
-- 報酬の予告
-- クリア演出
-- Pro向けBGMやクリア条件
+- Enable or disable each page.
+- Set stage label and map order.
+- Choose stage type: normal, reward, boss, or final.
+- Set stage difficulty.
+- Assign normal enemies and boss enemies.
+- Add reward teaser text.
+- Select clear effect.
+- Configure stage audio and objective options.
+- Choose Break, Bloom, or Hybrid play style.
 
-### キャラクター・敵キャラ台帳
+### Character And Enemy Registry
 
-登場キャラクターや敵キャラを管理します。
+Manage playable world characters and enemies:
 
-- キャラクター名
-- 画像
-- 役割
-- 動作プリセット
-- 難易度1から8
-- 自動計算ステータス
+- Enemy name.
+- Image upload.
+- Role: normal, boss, or both.
+- Behavior preset.
+- Difficulty level from 1 to 8.
+- Automatically calculated HP, speed, attack frequency, destruction speed, and boss missile timing.
 
-難易度を上げると、敵のHP、速度、攻撃頻度、破壊速度、ボスのミサイル頻度などが強くなります。
+Site owners do not need to tune deep numbers. The 1-8 difficulty scale is intended to be understandable for clients and non-technical teams.
 
-## プレイヤー操作
+## Player Controls
 
-### キーボード
+### Keyboard
 
-| 操作 | キー |
+| Action | Key |
 | --- | --- |
-| 移動 | `A / D` または矢印キー |
-| ジャンプ | `Space`、`W`、上矢印 |
-| 攻撃 | `J` または `Z` |
-| 文字を持つ、投げる | `K` または `X` |
-| 盾 | `L` または `Shift` |
-| ロックオン | `T` または `Tab` |
+| Move | `A / D` or arrow keys |
+| Jump | `Space`, `W`, or up arrow |
+| Attack | `J` or `Z` |
+| Hold / throw | `K` or `X` |
+| Shield | `L` or `Shift` |
+| Lock on | `T` or `Tab` |
 
-### スマホ
+### Mobile
 
-スマホでは画面上の仮想ボタンで操作します。
+Mobile controls are designed around touch gestures and compact UI:
 
-- 移動
-- ジャンプ
-- 攻撃
-- 投げ
-- 盾
+- Tap to attack.
+- Long press to hold a letter or object.
+- Double tap to throw or release energy.
+- Swipe up to jump.
+- Slow horizontal swipe to move.
+- Fast horizontal swipe to parry.
+- Down swipe and release for charged attack.
 
-### ゲームパッド
+Mobile mode may scale the game layer down to keep the stage readable and reduce clutter.
 
-ブラウザがGamepad APIを認識している場合、ゲームパッドでも操作できます。
+### Gamepad
 
-- 左スティックまたはD-pad: 移動
-- 下ボタン: ジャンプ
-- 右ボタン: 攻撃
-- 左ボタン: 投げ
-- 上ボタン: ロックオン
+CharaBreak uses the browser Gamepad API when available.
 
-ブラウザやOSによっては、ページをクリックした後、またはゲームパッドのボタンを一度押した後に認識されます。
+- Left stick or D-pad: move.
+- Bottom button: jump.
+- Right button: attack.
+- Left button: hold or throw.
+- Top button: lock on.
 
-## ワールドマップ
+Browser support depends on the OS, browser, and controller. Some browsers detect a gamepad only after the page is clicked or a gamepad button is pressed.
 
-CharaBreakは、複数のページを「ステージ」としてつなげられます。
+## World Map
 
-ワールドマップを使うと、ユーザーは次を理解できます。
+CharaBreak can connect multiple pages into a world map.
 
-- 今どのステージにいるか
-- 次にどのページへ進めるか
-- 報酬がどこにあるか
-- 最終ゲートまであと何ステージか
+The world map helps visitors understand:
 
-サイト全体を、スーパーマリオのフィールドマップのような「冒険フィールド」として見せることができます。
+- Where they are now.
+- Which page is the next stage.
+- Which stages have rewards.
+- Which gate or final reward they are trying to unlock.
+- How many stages remain before the final goal.
 
-## クリア報酬
+This turns a normal website structure into a visible adventure field, improving site exploration and giving visitors a reason to move through multiple pages.
 
-ステージをクリアした人だけに、特典を表示できます。
+## Rewards And Campaign Use
 
-設定できるもの:
+Stage clear rewards can be shown only after the visitor clears the game.
 
-- 報酬タイトル
-- 報酬メッセージ
-- クーポンコード
-- 特典URL
-- 報酬の予告文
+Examples:
 
-例:
+- Coupon code.
+- Bonus page URL.
+- Special campaign message.
+- Product offer.
+- Hidden download.
+- Event reward.
 
-- 最後まで遊んだ人だけにクーポンを表示する
-- クリアした人だけを限定ページへ案内する
-- 商品ページへの特別な導線を出す
-- キャンペーンコードを見せる
+This makes CharaBreak useful for campaigns where the visitor should interact with the page before receiving the offer.
 
-## 想定している使い方
+## Privacy
 
-- LPやサービス紹介ページの滞在時間を伸ばす
-- 文章を読む前の「遊び」を入口にする
-- 複数ページの回遊率を高める
-- 商品やブランドへの愛着を作る
-- 採用サイトや教育コンテンツをゲーム化する
-- キャンペーンページにクリア特典を置く
-- イベントサイトに隠し要素や宝箱を置く
+CharaBreak is designed to avoid personal data collection in the MVP.
 
-## 無料版とPro版の構想
-
-現在のリポジトリは開発中のMVPです。
-
-今後の配布では、次のような構成を想定しています。
-
-### 無料版
-
-- 1ページをゲーム化
-- 基本キャラクター
-- 基本ステージ
-- 基本ログ
-- シンプルなクリア演出
-
-### Pro版
-
-- 複数ページのゲーム化
-- ワールドマップ
-- ステージごとのBGM
-- ボス登場BGM
-- クリア音
-- 敵キャラ台帳
-- キャラクター画像アップロード
-- ステージごとの敵設定
-- クーポン、特典URL、限定メッセージ
-- 高度なクリア条件
-
-Pro版の販売方法は、FreemiusなどのWordPress向けライセンス配布を想定しています。
-
-## イベントログとプライバシー
-
-基本ログをオンにすると、匿名のイベントログを保存できます。
-
-記録する主なイベント:
+When basic logging is enabled, it can store anonymous events such as:
 
 - `game_start`
 - `game_exit`
@@ -310,137 +279,143 @@ Pro版の販売方法は、FreemiusなどのWordPress向けライセンス配布
 - `inventory_open`
 - `stage_soft_clear`
 
-記録内容:
+Stored data may include:
 
-- 匿名セッションID
-- ページID
-- ページURL
-- イベント種別
-- 要素種別
-- 画面サイズ
-- スクロール位置
-- 作成日時
+- Anonymous session ID.
+- Page ID.
+- Page URL.
+- Event type.
+- Element type.
+- Viewport size.
+- Scroll position.
+- Timestamp.
 
-MVPでは個人情報を収集する設計にはしていません。
+The plugin does not need to collect names, email addresses, or other personal information for the core game experience.
 
-## よくある質問
+## FAQ
 
-### ゲーム開始ボタンが表示されません
+### Does CharaBreak permanently destroy my page?
 
-次を確認してください。
+No. The effects are visual and game-state based. Reloading the page or exiting game mode restores the normal page.
 
-- `CharaBreak > 基本設定` でCharaBreakが有効になっているか
-- 対象の投稿タイプが有効になっているか
-- `CharaBreak > ステージ管理` で対象ページの `使用する` がオンになっているか
-- フローティング開始ボタンを非表示にしていないか
-- ページ内開始リンクを使う場合、ショートコードまたは `data-gaming-web-start` が入っているか
+### Can I use it with Elementor?
 
-### どんなWordPressサイトでも使えますか
+Yes. CharaBreak can run on Elementor-built pages. Some complex layouts may need tuning for the best platforming feel.
 
-多くの通常ページで使えます。
+### Can I choose which pages become stages?
 
-ただし、ページ構造が特殊なテーマ、重いアニメーションを多用するページ、外部スクリプトで大きくDOMを書き換えるページでは、足場判定や操作感に調整が必要な場合があります。
+Yes. Use `CharaBreak > Stage Manager` to enable only the pages you want to use as stages.
 
-### Elementorでも使えますか
+### Can each page have different enemies or BGM?
 
-はい。通常の固定ページと同じように使えます。
+Yes. Stage settings are designed so each page can have its own difficulty, enemies, boss, reward, BGM, and play style.
 
-Elementorのボタンからゲームを始めたい場合は、ボタンやリンクに `data-gaming-web-start` を追加してください。
+### Can I sell products or coupons after a clear?
 
-### ゲーム中にページが壊れたように見えます
+Yes. CharaBreak can show rewards, coupon codes, bonus links, and clear-only messages after a stage is completed.
 
-それがCharaBreakの体験です。
+### Why does the gamepad not work in my browser?
 
-ゲーム中だけ、ページがステージとして変化します。リロードまたはゲーム終了で通常表示に戻ります。
+Gamepad support depends on the browser's Gamepad API. Try clicking the page once, pressing a controller button, and using Chrome or Edge. If the OS does not expose the controller to the browser, CharaBreak cannot read it.
 
-### ゲームパッドが動きません
+## Developer Notes
 
-ブラウザのGamepad APIに依存します。
+The JavaScript core is kept as framework-agnostic as possible so it can later be adapted outside WordPress.
 
-次を試してください。
+Main files:
 
-- ページを一度クリックする
-- ゲームパッドのボタンを一度押す
-- ChromeやEdgeなどGamepad API対応ブラウザで試す
-- OS側でゲームパッドが認識されているか確認する
+- `charabreak/charabreak.php`: plugin entry point.
+- `charabreak/includes/class-gw-plugin.php`: frontend bootstrapping, meta settings, shortcode.
+- `charabreak/includes/class-gw-settings.php`: global settings.
+- `charabreak/includes/class-gw-admin.php`: admin menu.
+- `charabreak/includes/class-gw-enemies.php`: enemy registry.
+- `charabreak/includes/class-gw-rest.php`: REST API.
+- `charabreak/includes/class-gw-logger.php`: event logging.
+- `charabreak/assets/js/gaming-web-core.js`: game lifecycle.
+- `charabreak/assets/js/dom-scanner.js`: DOM scanning.
+- `charabreak/assets/js/stage-overlay.js`: runner, physics, effects, enemies, game UI.
+- `charabreak/assets/js/world-map.js`: world map UI.
+- `charabreak/assets/js/audio-manager.js`: BGM, sound effects, fallback audio.
+- `charabreak/assets/css/gaming-web.css`: frontend styling.
 
-## 開発者向けメモ
-
-CharaBreakのJavaScriptは、将来的にWordPress以外でも動かせるよう、できるだけWordPress依存を分離しています。
-
-主なファイル:
-
-- `charabreak/charabreak.php`: プラグインの入口
-- `charabreak/includes/class-gw-plugin.php`: フロント読み込み、メタ設定、ショートコード
-- `charabreak/includes/class-gw-settings.php`: 基本設定
-- `charabreak/includes/class-gw-admin.php`: 管理メニュー
-- `charabreak/includes/class-gw-enemies.php`: 敵キャラ台帳
-- `charabreak/includes/class-gw-rest.php`: REST API
-- `charabreak/includes/class-gw-logger.php`: イベントログ
-- `charabreak/assets/js/gaming-web-core.js`: ゲーム全体のライフサイクル
-- `charabreak/assets/js/dom-scanner.js`: ページ内要素スキャン
-- `charabreak/assets/js/stage-overlay.js`: ゲームUI、物理、演出
-- `charabreak/assets/js/world-map.js`: ワールドマップ
-- `charabreak/assets/js/audio-manager.js`: BGM、効果音、フォールバック音
-- `charabreak/assets/css/gaming-web.css`: フロント表示
-
-RESTエンドポイント:
+REST endpoint:
 
 ```text
 /wp-json/gaming-web/v1/event
 ```
 
-ログ保存テーブル:
+Event table:
 
 ```text
 wp_gaming_web_events
 ```
 
-## ローカル開発
+Internal option keys, table names, and REST namespaces still use the original `gaming_web_*` naming for compatibility.
 
-このリポジトリには、ローカルWordPress検証用のDocker構成が含まれています。
+## Local Development
+
+This repository includes a local WordPress Docker environment.
+
+Start WordPress:
 
 ```powershell
 docker compose up -d
 ```
 
-初期セットアップ用スクリプト:
+Setup script:
 
 ```powershell
 .\scripts\setup-wordpress.ps1
 ```
 
-ローカルURL:
+Local URL:
 
 ```text
 http://localhost:8089
 ```
 
-開発用コマンド例:
-
-```powershell
-docker compose run --rm wpcli plugin activate charabreak
-docker compose run --rm wpcli eval-file /var/www/html/wp-content/plugins/charabreak/scripts/seed-demo.php
-```
-
-配布ZIP作成:
+Build the distribution ZIP:
 
 ```powershell
 .\scripts\build-charabreak-zip.ps1
 ```
 
-生成されるファイルは `exports/charabreak.zip` です。GitHub Releasesには、このZIPを添付してください。
+The generated file is:
 
-ローカル開発用の説明は、公開配布用の操作説明とは分けて扱ってください。
+```text
+exports/charabreak.zip
+```
 
-## 現在のステータス
+For GitHub Releases and Freemius distribution, use the packaged `charabreak.zip`, not the raw repository ZIP.
 
-CharaBreakはMVP開発中です。
+## Japanese / 日本語補足
 
-ゲーム体験、ワールドマップ、敵キャラ台帳、ステージ管理、報酬表示などの土台は実装されていますが、配布形態、Proライセンス、翻訳ファイル、公式サポート導線は今後整備予定です。
+CharaBreakは、WordPressの固定ページや投稿を「読む前に遊べる」ステージへ変えるプラグインです。
 
-## ライセンス
+日本でのプロモーションでは、次のメッセージを中心にしています。
 
-ライセンスは配布前に確定してください。
+> **読む前に、壊せ。**
 
-公開配布する場合は、WordPressプラグインとしての互換性を考え、GPL互換ライセンスを検討してください。
+今は文章を最初から読んでもらうことが難しい時代です。CharaBreakは、ページをゲーム化することで、訪問者がまずページに触れ、遊び、壊し、守り、咲かせ、結果的にコンテンツへ愛着を持つきっかけを作ります。
+
+### 日本語での使い方
+
+1. `charabreak.zip` をWordPressにアップロードします。
+2. プラグインを有効化します。
+3. `CharaBreak > Settings` で全体設定を行います。
+4. `CharaBreak > Stage Manager` でゲーム化したいページを選びます。
+5. ページを開き、ゲーム開始ボタンを押します。
+
+### 無料版とPro版
+
+無料版は、まず1ページをゲーム化してCharaBreakの体験を試してもらう入口です。
+
+Pro版では、複数ページのワールドマップ化、ステージごとのBGM、敵キャラ台帳、ボス、報酬、クーポン、限定URL、Break / Bloom / Hybridのステージ別設定などを開放する方針です。
+
+海外展開を主戦場にしつつ、日本向けには公式サイトや記事で日本語の導入説明、事例、プロモーションを行う想定です。
+
+## License
+
+License details will be finalized before broad public distribution.
+
+Because CharaBreak is a WordPress plugin, a GPL-compatible license is expected for the free distribution package.
