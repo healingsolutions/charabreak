@@ -26,6 +26,7 @@ CharaBreak is designed for interactive websites, campaign pages, product storyte
 - Connects multiple pages through a world map, turning the entire site into an adventure route.
 - Lets site owners configure stages, enemies, difficulty, rewards, BGM, and gameplay style.
 - Can show coupons, bonus URLs, and special messages only after a visitor clears a stage.
+- Includes branded social share assets and page metadata guidance for `og:image`, X/Twitter cards, and Japanese launch copy.
 - Stores lightweight anonymous event logs when logging is enabled.
 
 ## Gameplay Styles
@@ -85,6 +86,34 @@ The Pro version is for full website adventures and commercial campaigns:
 - More control over Break / Bloom / Hybrid per stage.
 
 Freemius is used for license activation, paid upgrades, and Pro distribution.
+
+## Branding And Social Sharing
+
+The distribution includes a CharaBreak social share image at:
+
+```text
+charabreak/assets/brand/charabreak-og-image.png
+```
+
+The current product site generator applies this artwork as the featured image and stores common SEO plugin metadata for Open Graph and X/Twitter previews. CharaBreak also prints fallback Open Graph / X metadata for the public site when page-specific metadata is not set.
+
+Recommended public share copy:
+
+- Title: `CharaBreak｜読む前に、壊せ。`
+- Description: `WordPressページをゲームステージに変えるプラグイン。文字を壊すBreak、花に変えるBloom、複数ページのワールドマップで、サイト滞在と回遊を遊びに変えます。`
+
+If Facebook or another crawler cannot generate a preview, first check that the public URL and the `og:image` URL return `200` for Meta crawler user agents:
+
+```bash
+curl -I -A "facebookexternalhit/1.1" https://example.com/
+curl -I -A "facebookexternalhit/1.1" https://example.com/wp-content/plugins/charabreak/assets/brand/charabreak-og-image.png
+```
+
+If either request returns `403`, review the host firewall, WAF, bot protection, country/IP restrictions, hotlink protection, Basic authentication, and `robots.txt`. Meta crawler user agents such as `facebookexternalhit`, `Facebot`, `meta-externalagent`, and `meta-externalfetcher` must be able to access the HTML and image over HTTPS.
+
+After changing URLs or Elementor assets, regenerate Elementor CSS, clear caches, and re-scrape the URL in Meta Sharing Debugger.
+
+For international pages, keep the GitHub README and plugin docs English-first, then add short Japanese notes for the launch market.
 
 ## Installation
 
@@ -223,7 +252,17 @@ Mobile controls are designed around touch gestures and compact UI:
 - Fast horizontal swipe to parry.
 - Down swipe and release for charged attack.
 
-Mobile mode may scale the game layer down to keep the stage readable and reduce clutter.
+Mobile mode may scale the game layer down to keep the stage readable and reduce clutter. Charged attacks intentionally use a wider practical break area on phones, so saving up an attack feels rewarding even with the low-power effect profile enabled.
+
+On phones, CharaBreak automatically switches to a low-power effect profile:
+
+- Fewer particles, petals, chips, smoke, and floating fragments.
+- Shorter visual effect lifetimes.
+- Less screen shake and fewer heavy shadows.
+- Lower text wrapping and scan limits to reduce memory pressure.
+- Throttled enemy, HUD, dust, fall trail, and chest updates.
+
+日本語補足: スマホでは演出量を自動で大きく減らし、固まりにくさと操作性を優先します。PCでは迫力のある演出を維持します。ため攻撃はスマホでも広めに効くようにし、ためた手応えが出るようにしています。
 
 ### Gamepad
 
@@ -250,6 +289,26 @@ The world map helps visitors understand:
 - How many stages remain before the final goal.
 
 This turns a normal website structure into a visible adventure field, improving site exploration and giving visitors a reason to move through multiple pages.
+
+## Replayability And Local Scores
+
+CharaBreak includes a local high-score MVP to make stages worth replaying.
+
+After clearing a stage, the clear screen can show:
+
+- Total score.
+- `S / A / B / C` rank.
+- Best score update.
+- Clear time.
+- Parry combo.
+- Retry count.
+- Buttons for replaying, moving to the next stage, or ending the game.
+
+The score is calculated from stage actions such as clear success, defeated enemies, parry combo, treasure chests, Bloom transformations, broken elements, damage taken, enemy damage to the page, and clear time.
+
+Best scores, best ranks, attempt counts, and last-played timestamps are stored only in the visitor's browser `localStorage`. No personal information is sent for this MVP.
+
+The world map can also show each stage's best rank and best score, so visitors can see which stages are cleared and which ones are worth replaying.
 
 ## Rewards And Campaign Use
 

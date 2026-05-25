@@ -1,6 +1,6 @@
 [
     {
-        "id": "0ffa347b",
+        "id": "09519200",
         "settings": {
             "html_tag": "header",
             "content_width": "full",
@@ -30,7 +30,7 @@
         },
         "elements": [
             {
-                "id": "b183c753",
+                "id": "613c532d",
                 "settings": {
                     "content_width": "full",
                     "width": {
@@ -56,7 +56,7 @@
                 },
                 "elements": [
                     {
-                        "id": "12002f05",
+                        "id": "ad0dd5a4",
                         "settings": {
                             "image": {
                                 "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-logo-transparent-hd.png",
@@ -84,7 +84,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "f9f0f3d7",
+                        "id": "934a8a63",
                         "settings": {
                             "title": "CharaBreak",
                             "header_size": "h3",
@@ -114,7 +114,7 @@
                 "elType": "container"
             },
             {
-                "id": "8c92bff6",
+                "id": "5ddae534",
                 "settings": {
                     "html_tag": "nav",
                     "content_width": "full",
@@ -132,7 +132,7 @@
                 },
                 "elements": [
                     {
-                        "id": "11417bc6",
+                        "id": "5e97a6fb",
                         "settings": {
                             "text": "Home",
                             "link": {
@@ -188,7 +188,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "81bf1877",
+                        "id": "ca17a863",
                         "settings": {
                             "text": "Features",
                             "link": {
@@ -244,7 +244,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "c4bf754a",
+                        "id": "4aa5bc88",
                         "settings": {
                             "text": "Pricing",
                             "link": {
@@ -300,7 +300,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "e2b55be5",
+                        "id": "cf566bc4",
                         "settings": {
                             "text": "Demo",
                             "link": {
@@ -356,7 +356,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "83f6f54f",
+                        "id": "49dbc109",
                         "settings": {
                             "text": "FAQ",
                             "link": {
@@ -412,7 +412,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "ac2ddfb4",
+                        "id": "04873af3",
                         "settings": {
                             "text": "Play",
                             "link": {
@@ -477,7 +477,7 @@
         "elType": "container"
     },
     {
-        "id": "fd076c87",
+        "id": "b3c159fd",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -495,7 +495,7 @@
         },
         "elements": [
             {
-                "id": "1e69ff03",
+                "id": "56455292",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -515,7 +515,7 @@
                 },
                 "elements": [
                     {
-                        "id": "75f27205",
+                        "id": "51056cdf",
                         "settings": {
                             "title": "FAQ",
                             "header_size": "h6",
@@ -547,7 +547,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "d378728d",
+                        "id": "faa058c2",
                         "settings": {
                             "title": "配布、販売、ビジネス活用のよくある質問。",
                             "header_size": "h2",
@@ -573,7 +573,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "1dc35eb8",
+                        "id": "ce648526",
                         "settings": {
                             "editor": "<p>無料配布からFreemius販売、インタラクティブWeb施策としての使い方まで、CharaBreakを世界に出すために必要な情報をまとめます。</p>",
                             "text_color": "#607080",
@@ -601,7 +601,7 @@
                 "elType": "container"
             },
             {
-                "id": "53620b64",
+                "id": "9c09432e",
                 "settings": {
                     "image": {
                         "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-boss-gate.png",
@@ -641,7 +641,7 @@
                 "elType": "widget"
             },
             {
-                "id": "8ddc0cce",
+                "id": "b760886b",
                 "settings": {
                     "tabs": [
                         {
@@ -655,24 +655,29 @@
                             "_id": "2906bd0"
                         },
                         {
+                            "tab_title": "壊される表現が合わないサイトでも使えますか？",
+                            "tab_content": "<p>はい。Bloomでは、文字を壊す代わりに魔法のステッキで花や光へ変えます。花はひらひら消え、世界の邪魔にならない場所に花畑のような満足感を残します。医療、教育、ブランドサイトなど、やさしい体験にしたいページにも合わせやすい設計です。</p>",
+                            "_id": "6385775"
+                        },
+                        {
                             "tab_title": "無料版では何ができますか？",
                             "tab_content": "<p>1ページだけゲーム化できます。基本操作、文字攻撃、守る文字、GOAL、簡単なログを試せます。</p>",
-                            "_id": "6385775"
+                            "_id": "e1298f6"
                         },
                         {
                             "tab_title": "Pro版は何が違いますか？",
                             "tab_content": "<p>ページ数制限を外し、複数ページをリンクゲートでつなぐ冒険、特典やクーポン、ステージ設定の拡張を想定しています。</p>",
-                            "_id": "e1298f6"
+                            "_id": "a932bcb"
                         },
                         {
                             "tab_title": "Freemiusで販売する理由は？",
                             "tab_content": "<p>海外販売、ライセンス、自動アップデート、決済、購入者管理を早く整え、開発リソースをゲーム体験に集中するためです。</p>",
-                            "_id": "a932bcb"
+                            "_id": "8481853"
                         },
                         {
                             "tab_title": "ページの本物のDOMは壊れますか？",
                             "tab_content": "<p>ゲーム中の破壊は視覚・状態として扱います。リロードや終了で通常ページへ戻り、SEOやフォームを壊さない設計です。</p>",
-                            "_id": "8481853"
+                            "_id": "3169d19"
                         }
                     ],
                     "title_html_tag": "h3",
@@ -705,7 +710,7 @@
         "elType": "container"
     },
     {
-        "id": "42359f22",
+        "id": "ad1c5aec",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -725,7 +730,7 @@
         },
         "elements": [
             {
-                "id": "4bcf6d05",
+                "id": "853bc60c",
                 "settings": {
                     "title": "まずは1ページ、遊べるWebに変えてみる。",
                     "header_size": "h2",
@@ -752,7 +757,7 @@
                 "elType": "widget"
             },
             {
-                "id": "89836eae",
+                "id": "8f27ac5f",
                 "settings": {
                     "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
                     "text_color": "rgba(251,250,244,0.78)",
@@ -777,7 +782,7 @@
                 "elType": "widget"
             },
             {
-                "id": "40af40af",
+                "id": "1127197a",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -794,7 +799,7 @@
                 },
                 "elements": [
                     {
-                        "id": "cde90fec",
+                        "id": "c5e686db",
                         "settings": {
                             "text": "Free Download",
                             "link": {
@@ -850,7 +855,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "40b37da4",
+                        "id": "02db6b8c",
                         "settings": {
                             "text": "Play Demo",
                             "link": {

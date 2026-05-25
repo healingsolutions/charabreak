@@ -1,4 +1,4 @@
-import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.38';
+import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.41';
 
 const IMAGE_TYPES = new Set(['image', 'icon', 'platform', 'action']);
 const IMAGE_BREAK_STAGE = 5;

@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.2.38';
-import { StageOverlay } from './stage-overlay.js?v=0.2.38';
-import { InteractionEngine } from './interaction-engine.js?v=0.2.38';
-import { TextBreaker } from './text-breaker.js?v=0.2.38';
-import { ImageBreaker } from './image-breaker.js?v=0.2.38';
+import { scanGameTargets } from './dom-scanner.js?v=0.2.41';
+import { StageOverlay } from './stage-overlay.js?v=0.2.41';
+import { InteractionEngine } from './interaction-engine.js?v=0.2.41';
+import { TextBreaker } from './text-breaker.js?v=0.2.41';
+import { ImageBreaker } from './image-breaker.js?v=0.2.41';
 
 const MOBILE_GAME_SCALE = 0.75;
 
@@ -31,15 +31,16 @@ export class GamingWebCore {
         this.active = true;
         document.body.classList.add('gw-game-active');
         const mobileGameScale = resolveMobileGameScale();
+        const mobileGameMode = mobileGameScale < 1;
         document.body.classList.toggle('gw-game-mobile-scale', mobileGameScale < 1);
+        document.body.classList.toggle('gw-game-mobile-low-power', mobileGameMode);
         document.body.style.setProperty('--gw-mobile-stage-scale', String(mobileGameScale));
         this.audio?.resume();
         this.audio?.play('start', { volume: 0.24 });
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const mobileGameMode = mobileGameScale < 1;
-        const targets = scanGameTargets(document, { limit: mobileGameMode ? 220 : 320 });
-        this.textBreaker = new TextBreaker({ maxChars: mobileGameMode ? 3200 : 7200 });
+        const targets = scanGameTargets(document, { limit: mobileGameMode ? 130 : 320 });
+        this.textBreaker = new TextBreaker({ maxChars: mobileGameMode ? 1500 : 7200 });
         this.textBreaker.prepare(targets);
         this.imageBreaker = new ImageBreaker();
         this.imageBreaker.prepare(targets);
@@ -103,7 +104,7 @@ export class GamingWebCore {
                     inventory_count: this.engine?.inventory.length || 0,
                     ...detail,
                 };
-                const request = this.logger?.log('stage_soft_clear', payload) || Promise.resolve({ skipped: true });
+                const request = this.logger?.log('stage_soft_clear', stageLogPayload(payload)) || Promise.resolve({ skipped: true });
 
                 return Promise.resolve(request).then((response) => {
                     if (typeof this.config.onStageClear === 'function') {
@@ -196,13 +197,14 @@ export class GamingWebCore {
         this.active = false;
         document.body.classList.remove('gw-game-active');
         document.body.classList.remove('gw-game-mobile-scale');
+        document.body.classList.remove('gw-game-mobile-low-power');
         document.body.style.removeProperty('--gw-mobile-stage-scale');
 
-        this.logger?.log('game_exit', {
+        this.logger?.log('game_exit', stageLogPayload({
             stage_name: this.config.stageName,
             inventory_count: inventoryCount,
             ...stageResult,
-        });
+        }));
 
         if (!options.restarting) {
             this.onExit();
@@ -218,6 +220,29 @@ function resolveMobileGameScale() {
     return window.matchMedia('(max-width: 700px), (pointer: coarse)').matches
         ? MOBILE_GAME_SCALE
         : 1;
+}
+
+function stageLogPayload(payload) {
+    const result = { ...(payload || {}) };
+
+    delete result.score;
+    Object.keys(result).forEach((key) => {
+        if (
+            key === 'score_total'
+            || key === 'score_rank'
+            || key === 'score_best'
+            || key === 'score_new_best'
+            || key === 'score_attempts'
+            || key === 'clear_time_ms'
+            || key === 'clear_time_label'
+            || key === 'max_parry_combo'
+            || key === 'damage_taken'
+        ) {
+            delete result[key];
+        }
+    });
+
+    return result;
 }
 
 

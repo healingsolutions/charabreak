@@ -62,6 +62,7 @@ export class GamingWebWorldMap {
         this.onSound = options.onSound || (() => {});
         this.root = null;
         this.progress = readProgress(this.config.progressKey);
+        this.scores = readScoreProgress(this.config.scoreKey);
     }
 
     isEnabled() {
@@ -77,6 +78,8 @@ export class GamingWebWorldMap {
         }
 
         this.close();
+        this.progress = readProgress(this.config.progressKey);
+        this.scores = readScoreProgress(this.config.scoreKey);
         const mode = options.mode || 'browse';
         const active = this.isGameActive();
         const currentStage = this.currentStage();
@@ -160,11 +163,15 @@ export class GamingWebWorldMap {
         }
 
         const reward = response?.reward_unlocked ? normalizeReward(response.reward) : null;
+        this.scores = readScoreProgress(this.config.scoreKey);
+        const best = this.stageBest(stageId);
         this.progress.cleared[stageId] = {
             at: Date.now(),
             treasure: String(detail.treasure_word || ''),
             broken: Number(detail.player_broken_count || 0),
             defeated: Number(detail.enemy_defeated_count || 0),
+            score: Number(detail.score_total || best?.score || 0),
+            rank: String(detail.score_rank || best?.rank || ''),
         };
         if (reward) {
             this.progress.rewards[stageId] = reward;
@@ -183,6 +190,25 @@ export class GamingWebWorldMap {
 
     clearedCount() {
         return this.config.stages.filter((stage) => Boolean(this.progress.cleared[stage.id])).length;
+    }
+
+    stageBest(stageId) {
+        const score = this.scores?.[stageId];
+        if (!score || typeof score !== 'object') {
+            return null;
+        }
+
+        const bestScore = Math.max(0, Number(score.bestScore || 0));
+        if (bestScore <= 0) {
+            return null;
+        }
+
+        return {
+            score: bestScore,
+            rank: String(score.bestRank || score.lastRank || 'C'),
+            attempts: Math.max(0, Number(score.attempts || 0)),
+            clears: Math.max(0, Number(score.clears || 0)),
+        };
     }
 
     requiredClearCount() {
@@ -251,7 +277,8 @@ export class GamingWebWorldMap {
         const icon = stageIcon(stage, item.index);
         const zIndex = status === 'current' ? 140 : status === 'available' ? 110 : 20 + item.depth;
         const style = `--gw-map-x: ${item.x}%; --gw-map-y: ${item.y}%; --gw-map-row: ${item.row}; --gw-map-col: ${item.col}; --gw-map-depth: ${item.depth}; z-index: ${zIndex};`;
-        const title = `${stage.label} / ${this.statusLabel(status)}${rewardLabel ? ` / ${this.text.reward}: ${rewardLabel}` : ''}`;
+        const best = this.stageBest(stage.id);
+        const title = `${stage.label} / ${this.statusLabel(status)}${rewardLabel ? ` / ${this.text.reward}: ${rewardLabel}` : ''}${best ? ` / BEST: ${formatScore(best.score)} RANK ${best.rank}` : ''}`;
 
         const effect = normalizeClearEffect(stage.clearEffect);
 
@@ -260,6 +287,7 @@ export class GamingWebWorldMap {
                 <span class="gw-world-map__node-platform" aria-hidden="true">
                     <span class="gw-world-map__node-icon">${escapeHtml(icon)}</span>
                 </span>
+                ${best ? `<span class="gw-world-map__node-rank gw-world-map__node-rank--${escapeAttribute(String(best.rank).toLowerCase())}"><span>RANK</span><strong>${escapeHtml(best.rank)}</strong></span>` : ''}
                 <span class="gw-world-map__node-label">${escapeHtml(stage.label)}</span>
                 <small>${escapeHtml(this.statusLabel(status))}</small>
                 ${rewardLabel ? `<em>${escapeHtml(rewardLabel)}</em>` : ''}
@@ -269,11 +297,13 @@ export class GamingWebWorldMap {
 
     renderCurrentCard(stage) {
         const rewardLabel = this.rewardLabel(stage) || this.text.unknownReward;
+        const best = this.stageBest(stage.id);
         return `
             <div class="gw-world-map__current">
                 <span>${escapeHtml(this.text.current)}</span>
                 <strong>${escapeHtml(stage.label)}</strong>
                 <p>${escapeHtml(this.text.reward)}: ${escapeHtml(rewardLabel)}</p>
+                ${best ? `<p class="gw-world-map__current-score">BEST ${formatScore(best.score)} / RANK ${escapeHtml(best.rank)} / TRY ${Number(best.attempts || 0)}</p>` : ''}
             </div>
         `;
     }
@@ -378,6 +408,7 @@ function normalizeConfig(config) {
         goalLabel: String(world.goalLabel || ''),
         currentStageId: String(world.currentStageId || ''),
         progressKey: String(world.progressKey || 'gaming_web_world_progress_v1'),
+        scoreKey: String(world.scoreKey || `${world.progressKey || 'gaming_web_world_progress_v1'}_scores`),
         requiredClearCount: Number(world.requiredClearCount || 0),
         showOnStart: isTruthy(world.showOnStart),
         showInHud: isTruthy(world.showInHud),
@@ -467,6 +498,24 @@ function writeProgress(key, progress) {
         window.localStorage.setItem(key, JSON.stringify(progress));
     } catch (error) {
         // Progress is cosmetic for this MVP; gameplay must continue without storage.
+    }
+}
+
+function readScoreProgress(key) {
+    try {
+        const parsed = JSON.parse(window.localStorage.getItem(key) || '{}');
+        return parsed && typeof parsed.stages === 'object' ? parsed.stages : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+function formatScore(value) {
+    const number = Math.max(0, Number(value || 0));
+    try {
+        return number.toLocaleString();
+    } catch (error) {
+        return String(number);
     }
 }
 

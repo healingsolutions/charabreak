@@ -11,8 +11,13 @@
     "small teams who want memorable interactive landing pages"
   ],
   "tone": "Stylish business website with playful, breakable game-layer contrast",
-  "visualDirection": "Use the supplied dark voxel/pixel-fantasy CharaBreak artwork as the brand world: neon cyan for the free/play side, gold for reward/progression, compact pixel character/logo marks, and dramatic breakable web panels.",
-  "businessMessage": "Modern visitors often do not read first. CharaBreak turns the pre-reading moment into interactive play, increasing content contact, dwell time, page memory, and multi-page engagement.",
+  "visualDirection": "Use the supplied dark voxel/pixel-fantasy CharaBreak artwork as the brand world: neon cyan for the free/play side, gold for reward/progression, colorful Bloom accents for gentle stages, compact pixel character/logo marks, and dramatic breakable or blossoming web panels.",
+  "businessMessage": "Modern visitors often do not read first. CharaBreak turns the pre-reading moment into interactive play, increasing content contact, dwell time, page memory, and multi-page engagement. The site should explain Break, Bloom, and Hybrid as brand-selectable play styles.",
+  "socialShare": {
+    "ogImage": "charabreak/assets/brand/charabreak-og-image.png",
+    "defaultTitle": "CharaBreak｜読む前に、壊せ。",
+    "defaultDescription": "WordPressページをゲームステージに変えるプラグイン。文字を壊すBreak、花に変えるBloom、複数ページのワールドマップで、サイト滞在と回遊を遊びに変えます。"
+  },
   "pages": [
     {
       "slug": "charabreak",

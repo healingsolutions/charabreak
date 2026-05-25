@@ -611,7 +611,7 @@
                     {
                         "id": "5bb1d612",
                         "settings": {
-                            "editor": "<p>ユーザーは、最初から長い文章を読んでくれません。だからCharaBreakは、読む前の数秒をゲームに変えます。文字を攻撃し、画像を揺らし、ページの上を走り回るうちに、訪問者はいつの間にか本文・見出し・ボタンに触れています。壊すことをコンテンツ化し、サイト滞在時間と記憶に残る体験をつくる、WordPress向けインタラクティブWebプラグインです。</p>",
+                            "editor": "<p>ユーザーは、最初から長い文章を読んでくれません。だからCharaBreakは、読む前の数秒をゲームに変えます。文字を攻撃するBreak、魔法のステッキで文字を花に変えるBloom、両方を混ぜるHybrid。ページの上を走り回るうちに、訪問者はいつの間にか本文・見出し・ボタンに触れています。サイト滞在時間と記憶に残る体験をつくる、WordPress向けインタラクティブWebプラグインです。</p>",
                             "text_color": "rgba(251,250,244,0.84)",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
@@ -1002,7 +1002,7 @@
                     {
                         "id": "8dfe8ee8",
                         "settings": {
-                            "editor": "<p>広告もLPも、最初の壁は「読まれない」ことです。CharaBreakは文章をいきなり読ませるのではなく、ページそのものを遊べる対象に変えます。触る、攻撃する、守る、進む。その行為の中で、訪問者は自然に言葉へ接触していきます。</p>",
+                            "editor": "<p>広告もLPも、最初の壁は「読まれない」ことです。CharaBreakは文章をいきなり読ませるのではなく、ページそのものを遊べる対象に変えます。触る、攻撃する、花に変える、守る、進む。その行為の中で、訪問者は自然に言葉へ接触していきます。</p>",
                             "text_color": "#607080",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
@@ -1211,18 +1211,18 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード2・読む前の抵抗を下げる"
+                            "_title": "container:: カード2・壊すだけでなく、咲かせる"
                         },
                         "elements": [
                             {
                                 "id": "8a3c9e25",
                                 "settings": {
                                     "selected_icon": {
-                                        "value": "fas fa-hand-sparkles",
+                                        "value": "fas fa-magic",
                                         "library": "fa-solid"
                                     },
-                                    "title_text": "読む前の抵抗を下げる",
-                                    "description_text": "「理解してください」ではなく「触ってみてください」から始めることで、難しい説明や長い文章への心理的な距離を縮めます。",
+                                    "title_text": "壊すだけでなく、咲かせる",
+                                    "description_text": "破壊表現が合わないブランドでは、文字を花や光へ変えるBloomを使えます。ページが自分の手で明るく変わる満足感を作ります。",
                                     "position": "top",
                                     "title_size": "h3",
                                     "primary_color": "#f5d565",
@@ -1250,7 +1250,7 @@
                                         "size": 15,
                                         "sizes": []
                                     },
-                                    "_title": "icon-box:: 読む前の抵抗を下げる"
+                                    "_title": "icon-box:: 壊すだけでなく、咲かせる"
                                 },
                                 "elements": [],
                                 "isInner": false,
@@ -1447,7 +1447,7 @@
                     {
                         "id": "8a00f4ba",
                         "settings": {
-                            "title": "壊すことを、マーケティング施策にする。",
+                            "title": "ページを変える行為を、マーケティング施策にする。",
                             "header_size": "h2",
                             "title_color": "#fbfaf4",
                             "typography_font_family": "Inter",
@@ -1458,7 +1458,7 @@
                                 "size": 1.08,
                                 "sizes": []
                             },
-                            "_title": "title:: 壊すことを、マーケティング施策にする。",
+                            "_title": "title:: ページを変える行為を、マーケティング施策にする。",
                             "typography_font_size": {
                                 "unit": "px",
                                 "size": 42,
@@ -1473,7 +1473,7 @@
                     {
                         "id": "c9b302dd",
                         "settings": {
-                            "editor": "<p>CharaBreakは単なるミニゲームではありません。Webサイトの上に、滞在・回遊・読了・特典導線を生むインタラクティブレイヤーを追加します。ビジネスサイトの信頼感はそのままに、遊べる驚きでファンをつかみます。</p>",
+                            "editor": "<p>CharaBreakは単なるミニゲームではありません。Webサイトの上に、滞在・回遊・読了・特典導線を生むインタラクティブレイヤーを追加します。壊す爽快感も、花に変える満足感も、ブランドの温度に合わせて選べます。</p>",
                             "text_color": "rgba(251,250,244,0.82)",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
@@ -1846,7 +1846,7 @@
         "elType": "container"
     },
     {
-        "id": "c4a6f9d5",
+        "id": "28ea0e31",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1918,7 +1918,7 @@
                     {
                         "id": "1aa6402e",
                         "settings": {
-                            "title": "走る、攻撃する、守る、そして読む。",
+                            "title": "走る、攻撃する、咲かせる、そして読む。",
                             "header_size": "h2",
                             "title_color": "#08141f",
                             "typography_font_family": "Inter",
@@ -1929,7 +1929,7 @@
                                 "size": 1.08,
                                 "sizes": []
                             },
-                            "_title": "title:: 走る、攻撃する、守る、そして読む。",
+                            "_title": "title:: 走る、攻撃する、咲かせる、そして読む。",
                             "typography_font_size": {
                                 "unit": "px",
                                 "size": 42,
@@ -1944,7 +1944,7 @@
                     {
                         "id": "3b56ff96",
                         "settings": {
-                            "editor": "<p>プレイヤーはページの上に落ちてきて、文字や画像を足場に進みます。壊した文字、守った文字、敵から守ったページの記憶が、最後に本文の要約と重なります。遊びのあとに、読まれる構造です。</p>",
+                            "editor": "<p>プレイヤーはページの上に落ちてきて、文字や画像を足場に進みます。壊した文字、花に変えた文字、敵から守ったページの記憶が、最後に本文の要約と重なります。遊びのあとに、読まれる構造です。</p>",
                             "text_color": "#607080",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
@@ -1970,7 +1970,7 @@
                 "elType": "container"
             },
             {
-                "id": "65444e36",
+                "id": "45df758b",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -2258,21 +2258,21 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード3・Guard"
+                            "_title": "container:: カード3・Bloom"
                         },
                         "elements": [
                             {
                                 "id": "71b9aa91",
                                 "settings": {
                                     "selected_icon": {
-                                        "value": "fas fa-shield-alt",
+                                        "value": "fas fa-magic",
                                         "library": "fa-solid"
                                     },
-                                    "title_text": "Guard",
-                                    "description_text": "守りたい文字を3文字以上集め、敵からページを守ります。",
+                                    "title_text": "Bloom",
+                                    "description_text": "魔法のステッキで文字を花へ変え、花のエネルギーを矢にして放ちます。",
                                     "position": "top",
                                     "title_size": "h3",
-                                    "primary_color": "#a6e35d",
+                                    "primary_color": "#ff7a66",
                                     "title_color": "#08141f",
                                     "description_color": "#607080",
                                     "icon_space": {
@@ -2297,7 +2297,7 @@
                                         "size": 15,
                                         "sizes": []
                                     },
-                                    "_title": "icon-box:: Guard"
+                                    "_title": "icon-box:: Bloom"
                                 },
                                 "elements": [],
                                 "isInner": false,
@@ -2363,11 +2363,116 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード4・Goal"
+                            "_title": "container:: カード4・Guard"
                         },
                         "elements": [
                             {
                                 "id": "f8462400",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-shield-alt",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Guard",
+                                    "description_text": "守りたい文字を3文字以上集め、敵からページを守ります。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#a6e35d",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Guard"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "30b8c1e1",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード5・Goal"
+                        },
+                        "elements": [
+                            {
+                                "id": "a9032b59",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-flag-checkered",
@@ -2422,7 +2527,7 @@
         "elType": "container"
     },
     {
-        "id": "bb7e6e74",
+        "id": "c1d4c884",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "row",
@@ -2448,7 +2553,7 @@
         },
         "elements": [
             {
-                "id": "13df9a57",
+                "id": "f9115a88",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -2468,7 +2573,7 @@
                 },
                 "elements": [
                     {
-                        "id": "e94c9858",
+                        "id": "8286a418",
                         "settings": {
                             "title": "Plans",
                             "header_size": "h6",
@@ -2500,7 +2605,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "19676137",
+                        "id": "6b00149a",
                         "settings": {
                             "title": "無料で試して、1サイト買い切りで広げる。",
                             "header_size": "h2",
@@ -2526,7 +2631,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "f8f6f57b",
+                        "id": "a5690d38",
                         "settings": {
                             "editor": "<p>無料版は1ページだけゲーム化できる入口。Proではページ数制限を外し、リンクゲートで複数ページを冒険化します。個人制作から企業サイトまで、導入しやすい1サイト単位の販売を想定しています。</p>",
                             "text_color": "rgba(251,250,244,0.82)",
@@ -2554,7 +2659,7 @@
                 "elType": "container"
             },
             {
-                "id": "269012ea",
+                "id": "0a33101e",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -2578,7 +2683,7 @@
                 },
                 "elements": [
                     {
-                        "id": "29f158bb",
+                        "id": "b8043004",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2636,7 +2741,7 @@
                         },
                         "elements": [
                             {
-                                "id": "2c8f8aee",
+                                "id": "b683ecb7",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-seedling",
@@ -2683,7 +2788,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "7e80c072",
+                        "id": "00d53411",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2741,7 +2846,7 @@
                         },
                         "elements": [
                             {
-                                "id": "fa20dc08",
+                                "id": "5bff3b59",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-crown",
@@ -2788,7 +2893,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "974afd26",
+                        "id": "60d22850",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -2846,7 +2951,7 @@
                         },
                         "elements": [
                             {
-                                "id": "6bc1de24",
+                                "id": "c6eac8a8",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-globe",
@@ -2901,7 +3006,7 @@
         "elType": "container"
     },
     {
-        "id": "df9430c2",
+        "id": "b76f2033",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -2921,7 +3026,7 @@
         },
         "elements": [
             {
-                "id": "3312a95b",
+                "id": "3194e27d",
                 "settings": {
                     "title": "まずは1ページ、遊べるWebに変えてみる。",
                     "header_size": "h2",
@@ -2948,7 +3053,7 @@
                 "elType": "widget"
             },
             {
-                "id": "df20b5ac",
+                "id": "77daf791",
                 "settings": {
                     "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
                     "text_color": "rgba(251,250,244,0.78)",
@@ -2973,7 +3078,7 @@
                 "elType": "widget"
             },
             {
-                "id": "f4b9a4ea",
+                "id": "87090f83",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -2990,7 +3095,7 @@
                 },
                 "elements": [
                     {
-                        "id": "0e295878",
+                        "id": "f9548e45",
                         "settings": {
                             "text": "Free Download",
                             "link": {
@@ -3046,7 +3151,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "714cd408",
+                        "id": "082b7356",
                         "settings": {
                             "text": "Play Demo",
                             "link": {

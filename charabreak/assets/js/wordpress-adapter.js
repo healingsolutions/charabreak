@@ -1,8 +1,8 @@
-import { GamingWebCore } from './gaming-web-core.js?v=0.2.38';
-import { GamingWebLogger } from './logger.js?v=0.2.38';
-import { AudioManager } from './audio-manager.js?v=0.2.38';
-import { resolveVisualTheme } from './visual-theme.js?v=0.2.38';
-import { GamingWebWorldMap } from './world-map.js?v=0.2.38';
+import { GamingWebCore } from './gaming-web-core.js?v=0.2.41';
+import { GamingWebLogger } from './logger.js?v=0.2.41';
+import { AudioManager } from './audio-manager.js?v=0.2.41';
+import { resolveVisualTheme } from './visual-theme.js?v=0.2.41';
+import { GamingWebWorldMap } from './world-map.js?v=0.2.41';
 
 const RESUME_KEY = 'gaming_web_resume_mode';
 

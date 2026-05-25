@@ -1,4 +1,4 @@
-import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.38';
+import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.41';
 
 const UI_TEXT_EN = {};
 const UI_TEXT_JA = {
@@ -175,6 +175,13 @@ const CAMERA_FOLLOW_TARGET_RATIO = 0.7;
 const CAMERA_FOLLOW_MAX_SPEED = 1180;
 const CAMERA_FOLLOW_SPRING = 3.1;
 const CAMERA_FOLLOW_EASE = 8.2;
+const MOBILE_CAMERA_FOLLOW_START_RATIO = 0.58;
+const MOBILE_CAMERA_FOLLOW_TARGET_RATIO = 0.52;
+const MOBILE_CAMERA_FOLLOW_MAX_SPEED = 2600;
+const MOBILE_CAMERA_FOLLOW_SPRING = 7.4;
+const MOBILE_CAMERA_FOLLOW_EASE = 15;
+const MOBILE_CAMERA_BOTTOM_GUARD = 108;
+const MOBILE_CAMERA_UI_UPDATE_MS = 120;
 const LINK_GATE_DWELL_MS = 980;
 const LINK_GATE_STILL_SPEED = 54;
 const LINK_GATE_MAX_VERTICAL_SPEED = 90;
@@ -206,7 +213,10 @@ const TOUCH_PARRY_MAX_MS = 220;
 const TOUCH_PARRY_MIN_SPEED = 0.48;
 const TOUCH_PARRY_MS = 460;
 const TOUCH_CHARGE_PULL_PX = 58;
-const MOBILE_TEMP_EFFECT_LIMIT = 72;
+const MOBILE_TEMP_EFFECT_LIMIT = 26;
+const MOBILE_EFFECT_SOFT_LIMIT = 18;
+const MOBILE_EFFECT_MAX_LIFETIME = 520;
+const MOBILE_EFFECT_THROTTLE_MS = 42;
 const BOSS_MISSILE_WARNING_MS = 560;
 const BOSS_MISSILE_MIN_INTERVAL = 5600;
 const BOSS_MISSILE_MAX_INTERVAL = 9200;
@@ -215,6 +225,16 @@ const BOSS_MISSILE_MAX_ACTIVE_MOBILE = 1;
 const PARRY_COMBO_WINDOW_MS = 2200;
 const INTRO_SEEN_KEY = 'gaming_web_intro_seen_v1';
 const INTRO_DROP_START_Y = -92;
+const SCORE_STORAGE_VERSION = 1;
+const SCORE_TEXT = {
+    score: '\u30b9\u30b3\u30a2',
+    rank: '\u30e9\u30f3\u30af',
+    best: '\u81ea\u5df1\u30d9\u30b9\u30c8',
+    newBest: '\u81ea\u5df1\u30d9\u30b9\u30c8\u66f4\u65b0\uff01',
+    tries: '\u6311\u6226',
+    time: 'TIME',
+    parry: 'PARRY',
+};
 const BLOOM_COLORS = ['#42e8d4', '#f5d565', '#ff7ab6', '#9f7aea', '#74d680', '#ff9d45', '#7dd3fc', '#f472b6'];
 const RUNNER_CONTROL_DEFS = [
     { control: 'left', label: '\u2190', keys: 'A / \u2190' },
@@ -322,6 +342,9 @@ export class StageOverlay {
         this.treasureStoreTimer = 0;
         this.treasureStoreHeldId = '';
         this.stageStats = createStageStats();
+        this.stageStartedAt = 0;
+        this.stageScoreSummary = null;
+        this.stageAttemptRecorded = false;
         this.lastMissionUpdateAt = 0;
         this.stageCleared = false;
         this.stageFailed = false;
@@ -370,6 +393,10 @@ export class StageOverlay {
         this.playBounds = null;
         this.temporaryEffects = [];
         this.bloomFlowers = [];
+        this.lastMobileEffectAt = 0;
+        this.lastMobileEnemyUpdateAt = 0;
+        this.lastMobileChestUpdateAt = 0;
+        this.lastMobileCameraUiUpdateAt = 0;
         this.handleViewportResize = this.handleViewportResize.bind(this);
         this.handleWindowScroll = this.handleWindowScroll.bind(this);
         this.handleGameWheel = this.handleGameWheel.bind(this);
@@ -394,12 +421,14 @@ export class StageOverlay {
         this.root = document.createElement('div');
         this.root.className = `gw-stage${this.reducedMotion ? ' gw-stage--reduced' : ''}`;
         this.root.classList.toggle('gw-stage--mobile-zoom', this.mobileGameScale < 1);
+        this.root.classList.toggle('gw-stage--mobile-low-power', this.mobilePerformanceMode());
         this.root.style.setProperty('--gw-mobile-stage-scale', String(this.mobileGameScale));
         this.root.setAttribute('data-gaming-web-stage', 'active');
         this.root.tabIndex = -1;
         this.root.dataset.gwVisualStyle = this.visualStyle;
         this.root.dataset.gwPlayStyle = this.playStyle;
         applyThemeTokens(this.root, this.themeTokens);
+        document.body.classList.toggle('gw-game-mobile-low-power', this.mobilePerformanceMode());
 
         this.effectLayer = document.createElement('div');
         this.effectLayer.className = 'gw-effect-layer';
@@ -512,6 +541,8 @@ export class StageOverlay {
         this.endRoll = null;
         this.temporaryEffects = [];
         this.bloomFlowers = [];
+        this.lastMobileEffectAt = 0;
+        document.body.classList.remove('gw-game-mobile-low-power');
         window.removeEventListener('gamepadconnected', this.handleGamepadConnected);
         window.removeEventListener('gamepaddisconnected', this.handleGamepadDisconnected);
         this.unbindGamepadWarmup();
@@ -614,7 +645,8 @@ export class StageOverlay {
         }
 
         const now = currentTime();
-        if (!force && now - this.lastMissionUpdateAt < 180) {
+        const minInterval = this.mobilePerformanceMode() ? 620 : 180;
+        if (!force && now - this.lastMissionUpdateAt < minInterval) {
             return;
         }
 
@@ -771,6 +803,9 @@ export class StageOverlay {
         this.roomCollisionCache = null;
         this.roomTransition = null;
         this.stageStats = createStageStats(this.textBreaker?.countTotalChars?.() || 0);
+        this.stageStartedAt = currentTime();
+        this.stageScoreSummary = null;
+        this.stageAttemptRecorded = false;
         this.treasureLetters = [];
         this.chests = [];
         this.chestSequence = 0;
@@ -1844,7 +1879,10 @@ export class StageOverlay {
             this.maybeSpawnEnemies(time);
             this.maybeSpawnChests(time);
             this.updateEnemies(delta, time);
-            this.updateChests(delta, time);
+            if (!this.mobilePerformanceMode() || time - this.lastMobileChestUpdateAt > 260) {
+                this.updateChests(delta, time);
+                this.lastMobileChestUpdateAt = time;
+            }
             this.syncLockedEnemy();
             this.updateProjectiles(delta);
             this.updateEnemyMissiles(delta, time);
@@ -2496,14 +2534,16 @@ export class StageOverlay {
     spawnItemBurst(rect, itemType = 'jewel') {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
+        const mobileLight = this.mobilePerformanceMode();
         const burst = document.createElement('span');
         burst.className = `gw-item-burst gw-item-burst--${itemType}`;
         burst.textContent = itemGlyph(itemType);
         burst.style.left = `${centerX}px`;
         burst.style.top = `${centerY}px`;
-        this.addTemporaryEffect(burst, 860);
+        this.addTemporaryEffect(burst, 860, { essential: true, mobileLifetime: 520 });
 
-        for (let index = 0; index < 10; index += 1) {
+        const chipCount = mobileLight ? 2 : 10;
+        for (let index = 0; index < chipCount; index += 1) {
             const chip = document.createElement('span');
             chip.className = `gw-jewel-chip gw-jewel-chip--${itemType}`;
             chip.style.left = `${centerX + randomBetween(-12, 12)}px`;
@@ -2512,7 +2552,7 @@ export class StageOverlay {
             chip.style.setProperty('--gw-y', `${randomBetween(-96, 46)}px`);
             chip.style.setProperty('--gw-r', `${randomBetween(-160, 160)}deg`);
             chip.style.setProperty('--gw-d', `${randomBetween(0, 80)}ms`);
-            this.addTemporaryEffect(chip, 760);
+            this.addTemporaryEffect(chip, 760, { mobileLifetime: 360 });
         }
     }
 
@@ -2597,10 +2637,13 @@ export class StageOverlay {
             this.showMessage(UI_TEXT.enemyAppear, 2400);
         }
 
+        const maxMinions = this.mobilePerformanceMode() ? 1 : 2;
+        const spawnInterval = this.mobilePerformanceMode() ? 11800 : 7200;
+
         if (progress > 0.44
             && (!this.customEnemyMode || normalEnemies.length > 0)
-            && activeEnemies.filter((enemy) => enemy.type === 'minion').length < 2
-            && time - this.lastEnemySpawnAt > 7200) {
+            && activeEnemies.filter((enemy) => enemy.type === 'minion').length < maxMinions
+            && time - this.lastEnemySpawnAt > spawnInterval) {
             this.spawnEnemy('minion', this.nextEnemyDefinition('normal'));
             this.lastEnemySpawnAt = time;
         }
@@ -2698,6 +2741,17 @@ export class StageOverlay {
             return;
         }
 
+        const mobileLight = this.mobilePerformanceMode();
+        if (mobileLight && time - this.lastMobileEnemyUpdateAt < 90) {
+            return;
+        }
+
+        if (mobileLight) {
+            this.lastMobileEnemyUpdateAt = time;
+        }
+
+        const enemyDelta = mobileLight ? Math.min(delta, 0.1) : delta;
+
         for (const enemy of this.enemies) {
             if (enemy.defeated) {
                 continue;
@@ -2716,8 +2770,8 @@ export class StageOverlay {
 
             enemy.vx = lerp(enemy.vx, (dx / distance) * speed, 0.04);
             enemy.vy = lerp(enemy.vy, (dy / distance) * speed, 0.035);
-            enemy.x = clamp(enemy.x + enemy.vx * delta, 12, window.innerWidth - enemy.width - 12);
-            enemy.y = clamp(enemy.y + enemy.vy * delta, 58, window.innerHeight - enemy.height - 76);
+            enemy.x = clamp(enemy.x + enemy.vx * enemyDelta, 12, window.innerWidth - enemy.width - 12);
+            enemy.y = clamp(enemy.y + enemy.vy * enemyDelta, 58, window.innerHeight - enemy.height - 76);
 
             if (distance < (enemy.type === 'boss' ? 96 : 72) && time > enemy.nextAttackAt) {
                 this.enemyAttackPage(enemy);
@@ -4056,6 +4110,7 @@ export class StageOverlay {
         const now = currentTime();
         this.parryCombo = now - this.lastParryAt <= PARRY_COMBO_WINDOW_MS ? this.parryCombo + 1 : 1;
         this.lastParryAt = now;
+        this.stageStats.maxParryCombo = Math.max(this.stageStats.maxParryCombo || 0, this.parryCombo);
         missile.parryDamage = Math.min(4, 2 + Math.floor(this.parryCombo / 2));
         missile.element.classList.add('gw-enemy-missile--parried');
         missile.element.style.setProperty('--gw-parry-power', `${Math.min(1.7, 1 + this.parryCombo * 0.12)}`);
@@ -4080,7 +4135,7 @@ export class StageOverlay {
         flash.style.left = `${centerX}px`;
         flash.style.top = `${centerY}px`;
         flash.style.setProperty('--gw-parry-scale', `${Math.min(1.8, 1 + combo * 0.14)}`);
-        this.addTemporaryEffect(flash, 520);
+        this.addTemporaryEffect(flash, 520, { essential: true, mobileLifetime: 320 });
 
         if (combo <= 1) {
             return;
@@ -4091,7 +4146,7 @@ export class StageOverlay {
         label.textContent = `PARRY x${combo}`;
         label.style.left = `${centerX}px`;
         label.style.top = `${centerY - 28}px`;
-        this.addTemporaryEffect(label, 780);
+        this.addTemporaryEffect(label, 780, { essential: true, mobileLifetime: 460 });
     }
 
     missileRect(missile) {
@@ -4699,6 +4754,7 @@ export class StageOverlay {
         }
 
         this.playerLife = Math.max(0, this.playerLife - damage);
+        this.bumpStageStat('damageTaken', damage);
         const rect = this.runnerPhysicsRect();
         this.runner?.classList.add('gw-pixel-runner--damage');
         const timer = window.setTimeout(() => {
@@ -4746,6 +4802,7 @@ export class StageOverlay {
         this.shakeScreen('hard');
         this.onRunnerSound('enemyExplode', { volume: 0.16, rate: 0.92 });
         this.clearRewardPromise = null;
+        this.stageScoreSummary = this.recordStageScore(reason, false);
         this.onStageClear(this.stageResult(reason));
         this.updateMissionHud(true);
         this.showGameOver(reason);
@@ -4796,6 +4853,7 @@ export class StageOverlay {
         this.showMessage(burstCount > 0 ? UI_TEXT.stageClearBurst : UI_TEXT.stageClear, 2400);
         this.shakeScreen(burstCount > 0 ? 'hard' : 'medium');
         this.onRunnerSound('stageClear', { volume: 0.075, cheerVolume: 0.06, fadeMs: 620, rate: 1 });
+        this.stageScoreSummary = this.recordStageScore(reason, true);
         this.clearRewardPromise = Promise.resolve(this.onStageClear(this.stageResult(reason))).catch(() => null);
 
         const timer = window.setTimeout(() => {
@@ -4876,13 +4934,14 @@ export class StageOverlay {
     spawnEnemyBlast(rect, boss = false) {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
+        const mobileLight = this.mobilePerformanceMode();
         const blast = document.createElement('span');
         blast.className = `gw-enemy-blast${boss ? ' gw-enemy-blast--boss' : ''}`;
         blast.style.left = `${centerX}px`;
         blast.style.top = `${centerY}px`;
-        this.addTemporaryEffect(blast, boss ? 820 : 680);
+        this.addTemporaryEffect(blast, boss ? 820 : 680, { essential: true, mobileLifetime: 460 });
 
-        const smokeCount = boss ? 8 : 5;
+        const smokeCount = mobileLight ? (boss ? 2 : 1) : (boss ? 8 : 5);
         for (let index = 0; index < smokeCount; index += 1) {
             const smoke = document.createElement('span');
             smoke.className = 'gw-enemy-smoke';
@@ -4892,7 +4951,7 @@ export class StageOverlay {
             smoke.style.setProperty('--gw-y', `${randomBetween(-74, 46)}px`);
             smoke.style.setProperty('--gw-s', `${randomBetween(0.72, boss ? 1.5 : 1.1)}`);
             smoke.style.setProperty('--gw-d', `${randomBetween(0, 70)}ms`);
-            this.addTemporaryEffect(smoke, boss ? 980 : 820);
+            this.addTemporaryEffect(smoke, boss ? 980 : 820, { mobileLifetime: 420 });
         }
     }
 
@@ -4904,7 +4963,94 @@ export class StageOverlay {
         return gate?.href || '';
     }
 
+    calculateStageScore(cleared = true) {
+        const elapsedMs = Math.max(0, currentTime() - (this.stageStartedAt || currentTime()));
+        const elapsedSeconds = Math.round(elapsedMs / 1000);
+        const stats = this.stageStats || createStageStats();
+        const protectedCount = this.protectedCharCount();
+        const objectiveRatio = this.goalRequiredItems() > 0
+            ? Math.min(1, this.openedChestCount() / this.goalRequiredItems())
+            : 1;
+        const rawScore = Math.round(
+            (cleared ? 1200 : 0)
+            + objectiveRatio * 900
+            + protectedCount * 0.45
+            + (stats.enemiesDefeated || 0) * 330
+            + (stats.maxParryCombo || 0) * 170
+            + (stats.chestsOpened || 0) * 280
+            + (stats.scoreJewels || this.scoreJewels || 0) * 260
+            + (stats.playerBloomed || 0) * 10
+            + (stats.playerBroken || 0) * 7
+            + (stats.gatesBroken || 0) * 90
+            + (stats.imagesDamaged || 0) * 44
+            - (stats.enemyBroken || 0) * 18
+            - (stats.damageTaken || 0) * 280
+            - elapsedSeconds * 4
+        );
+        const total = Math.max(0, rawScore);
+
+        return {
+            total,
+            rank: scoreRank(total, cleared),
+            clear_time_ms: Math.round(elapsedMs),
+            clear_time_label: formatScoreTime(elapsedMs),
+            max_parry_combo: stats.maxParryCombo || 0,
+            damage_taken: stats.damageTaken || 0,
+        };
+    }
+
+    recordStageScore(reason = '', cleared = true) {
+        if (this.stageAttemptRecorded && this.stageScoreSummary) {
+            return this.stageScoreSummary;
+        }
+
+        const score = this.calculateStageScore(cleared);
+        const storageKey = stageScoreStorageKey();
+        const stageId = currentStageScoreId();
+        const board = readStageScoreBoard(storageKey);
+        const previous = board.stages[stageId] || {};
+        const attempts = Math.max(0, Number(previous.attempts || 0)) + 1;
+        const clears = Math.max(0, Number(previous.clears || 0)) + (cleared ? 1 : 0);
+        const previousBest = Math.max(0, Number(previous.bestScore || 0));
+        const newBest = cleared && score.total > previousBest;
+        const bestScore = newBest ? score.total : previousBest;
+        const bestRank = newBest ? score.rank : String(previous.bestRank || '');
+
+        board.version = SCORE_STORAGE_VERSION;
+        board.stages[stageId] = {
+            ...previous,
+            attempts,
+            clears,
+            lastAt: Date.now(),
+            lastReason: String(reason || ''),
+            lastScore: score.total,
+            lastRank: score.rank,
+            lastCleared: Boolean(cleared),
+            lastTimeMs: score.clear_time_ms,
+            bestScore,
+            bestRank,
+            bestAt: newBest ? Date.now() : Number(previous.bestAt || 0),
+        };
+        writeStageScoreBoard(storageKey, board);
+
+        this.stageAttemptRecorded = true;
+        this.stageScoreSummary = {
+            ...score,
+            stage_id: stageId,
+            attempts,
+            clears,
+            best_score: bestScore,
+            best_rank: bestRank,
+            previous_best_score: previousBest,
+            new_best: Boolean(newBest),
+        };
+
+        return this.stageScoreSummary;
+    }
+
     stageResult(reason = '') {
+        const score = this.stageScoreSummary || this.calculateStageScore(!this.stageFailed);
+
         return {
             reason,
             stage_name: window.GamingWebConfig?.stageName || '',
@@ -4932,6 +5078,16 @@ export class StageOverlay {
             player_life: this.playerLife,
             failed: Boolean(this.stageFailed),
             next_href: this.nextGoalHref || '',
+            score,
+            score_total: score.total,
+            score_rank: score.rank,
+            score_best: score.best_score || 0,
+            score_new_best: Boolean(score.new_best),
+            score_attempts: score.attempts || 0,
+            clear_time_ms: score.clear_time_ms,
+            clear_time_label: score.clear_time_label,
+            max_parry_combo: score.max_parry_combo,
+            damage_taken: score.damage_taken,
         };
     }
 
@@ -4964,6 +5120,11 @@ export class StageOverlay {
             : '';
         const actionLabel = this.usesBloomAction({ charged: true }) ? UI_TEXT.bloomedLabel : UI_TEXT.brokenLabel;
         const actionCount = this.usesBloomAction({ charged: true }) ? stats.player_bloomed_count : stats.player_broken_count;
+        const score = stats.score || this.calculateStageScore(true);
+        const scoreRankClass = `gw-end-roll__score--rank-${String(score.rank || 'c').toLowerCase()}`;
+        const bestLine = score.new_best
+            ? SCORE_TEXT.newBest
+            : `${SCORE_TEXT.best} ${Number(score.best_score || score.total || 0).toLocaleString()}`;
 
         this.endRoll.innerHTML = `
             <div class="gw-end-roll__panel">
@@ -4977,6 +5138,23 @@ export class StageOverlay {
                     </dl>
                 </div>
                 <div class="gw-end-roll__body">
+                    <section class="gw-end-roll__score ${scoreRankClass}">
+                        <div>
+                            <span>${SCORE_TEXT.score}</span>
+                            <strong>${Number(score.total || 0).toLocaleString()}</strong>
+                            <small>${escapeHtml(bestLine)}</small>
+                        </div>
+                        <div>
+                            <span>${SCORE_TEXT.rank}</span>
+                            <strong>${escapeHtml(score.rank || 'C')}</strong>
+                            <small>${SCORE_TEXT.time} ${escapeHtml(score.clear_time_label || '0:00')}</small>
+                        </div>
+                        <div>
+                            <span>${SCORE_TEXT.parry}</span>
+                            <strong>${Number(score.max_parry_combo || 0)}</strong>
+                            <small>${SCORE_TEXT.tries} ${Number(score.attempts || 1)}</small>
+                        </div>
+                    </section>
                     ${treasureResult ? `<p class="gw-end-roll__treasure">${treasureResult}</p>` : ''}
                     ${treasureWord ? `<p class="gw-end-roll__letters"><span>${UI_TEXT.collectedLabel}</span><strong>${escapeHtml(treasureWord)}</strong></p>` : ''}
                     ${this.hasReward ? `
@@ -5304,11 +5482,25 @@ export class StageOverlay {
 
         const runnerBottom = this.runnerState.docY + RUNNER_HEIGHT;
         const runnerScreenBottom = runnerBottom - window.scrollY;
-        const followStartY = window.innerHeight * CAMERA_FOLLOW_START_RATIO;
-        const followTargetY = window.innerHeight * CAMERA_FOLLOW_TARGET_RATIO;
-        const desiredScrollY = runnerScreenBottom > followStartY
+        const mobileLight = this.mobilePerformanceMode();
+        const followStartRatio = mobileLight ? MOBILE_CAMERA_FOLLOW_START_RATIO : CAMERA_FOLLOW_START_RATIO;
+        const followTargetRatio = mobileLight ? MOBILE_CAMERA_FOLLOW_TARGET_RATIO : CAMERA_FOLLOW_TARGET_RATIO;
+        const followStartY = window.innerHeight * followStartRatio;
+        const followTargetY = window.innerHeight * followTargetRatio;
+        let desiredScrollY = runnerScreenBottom > followStartY
             ? runnerBottom - followTargetY
             : window.scrollY;
+
+        if (mobileLight) {
+            const guardY = window.innerHeight - MOBILE_CAMERA_BOTTOM_GUARD;
+            if (runnerScreenBottom > guardY) {
+                desiredScrollY = Math.max(desiredScrollY, runnerBottom - guardY);
+            }
+            if (runnerScreenBottom > window.innerHeight + 8) {
+                desiredScrollY = Math.max(desiredScrollY, runnerBottom - window.innerHeight * MOBILE_CAMERA_FOLLOW_TARGET_RATIO);
+            }
+        }
+
         const maxScroll = maxPageScrollY();
         const targetScrollY = clamp(desiredScrollY, 0, maxScroll);
         const distance = targetScrollY - window.scrollY;
@@ -5320,9 +5512,13 @@ export class StageOverlay {
             return false;
         }
 
-        const maxSpeed = CAMERA_FOLLOW_MAX_SPEED + Math.max(0, this.runnerState.vy || 0) * 0.45;
-        const desiredVelocity = clamp(distance * CAMERA_FOLLOW_SPRING, -maxSpeed, maxSpeed);
-        const ease = clamp(delta * CAMERA_FOLLOW_EASE, 0, 1);
+        const fallSpeed = Math.max(0, this.runnerState.vy || 0);
+        const maxSpeed = mobileLight
+            ? MOBILE_CAMERA_FOLLOW_MAX_SPEED + fallSpeed * 1.2
+            : CAMERA_FOLLOW_MAX_SPEED + fallSpeed * 0.45;
+        const spring = mobileLight ? MOBILE_CAMERA_FOLLOW_SPRING : CAMERA_FOLLOW_SPRING;
+        const desiredVelocity = clamp(distance * spring, -maxSpeed, maxSpeed);
+        const ease = clamp(delta * (mobileLight ? MOBILE_CAMERA_FOLLOW_EASE : CAMERA_FOLLOW_EASE), 0, 1);
         this.cameraScrollVelocity = lerp(this.cameraScrollVelocity, desiredVelocity, ease);
         const step = clamp(this.cameraScrollVelocity * delta, -Math.abs(distance), Math.abs(distance));
         const previousScrollY = window.scrollY;
@@ -5335,10 +5531,15 @@ export class StageOverlay {
         this.playBounds = this.calculatePlayBounds();
         this.syncRunnerScreenPosition();
         this.syncRoomToRunner();
-        this.updateBrickRails();
-        this.updateLinkGates();
-        this.updateGoalGate(true);
-        this.updateReturnRoute(true);
+        const now = currentTime();
+        const updateCameraUi = !mobileLight || now - this.lastMobileCameraUiUpdateAt > MOBILE_CAMERA_UI_UPDATE_MS;
+        if (updateCameraUi) {
+            this.updateBrickRails();
+            this.updateLinkGates();
+            this.updateGoalGate(true);
+            this.updateReturnRoute(true);
+            this.lastMobileCameraUiUpdateAt = now;
+        }
         this.syncPlacedLettersToScroll();
         return true;
     }
@@ -5937,7 +6138,7 @@ export class StageOverlay {
     }
 
     spawnRunnerDust(time) {
-        const interval = this.mobilePerformanceMode() ? 190 : 115;
+        const interval = this.mobilePerformanceMode() ? 320 : 115;
         if (time - this.runnerState.lastDustAt < interval) {
             return;
         }
@@ -5951,12 +6152,12 @@ export class StageOverlay {
         dust.style.left = `${behindX}px`;
         dust.style.top = `${this.runnerState.y + RUNNER_HEIGHT - 6}px`;
         dust.style.setProperty('--gw-dust-x', `${this.runnerState.direction > 0 ? -24 : 24}px`);
-        this.addTemporaryEffect(dust, 360);
+        this.addTemporaryEffect(dust, 360, { mobileLifetime: 220 });
     }
 
     spawnFallTrail(time, fastFalling = false) {
         const interval = this.mobilePerformanceMode()
-            ? (fastFalling ? 140 : 220)
+            ? (fastFalling ? 260 : 420)
             : (fastFalling ? 72 : 118);
         if (time - this.runnerState.lastFallTrailAt < interval) {
             return;
@@ -5971,7 +6172,7 @@ export class StageOverlay {
         streak.style.left = `${x}px`;
         streak.style.top = `${y}px`;
         streak.style.setProperty('--gw-fall-drift', `${-drift * 0.6}px`);
-        this.addTemporaryEffect(streak, fastFalling ? 380 : 460);
+        this.addTemporaryEffect(streak, fastFalling ? 380 : 460, { mobileLifetime: fastFalling ? 260 : 240 });
     }
 
     spawnLandingDust(heavy = false) {
@@ -5979,7 +6180,7 @@ export class StageOverlay {
             return;
         }
 
-        const count = heavy ? 5 : 3;
+        const count = this.mobilePerformanceMode() ? (heavy ? 2 : 1) : (heavy ? 5 : 3);
         for (let i = 0; i < count; i += 1) {
             const dust = document.createElement('span');
             dust.className = `gw-run-dust gw-run-dust--landing${heavy ? ' gw-run-dust--heavy' : ''}`;
@@ -5988,7 +6189,7 @@ export class StageOverlay {
             dust.style.left = `${this.runnerState.x + RUNNER_WIDTH / 2 + offset * 0.18}px`;
             dust.style.top = `${this.runnerState.y + RUNNER_HEIGHT - 5}px`;
             dust.style.setProperty('--gw-dust-x', `${offset}px`);
-            this.addTemporaryEffect(dust, heavy ? 460 : 340);
+            this.addTemporaryEffect(dust, heavy ? 460 : 340, { mobileLifetime: heavy ? 300 : 220 });
         }
     }
 
@@ -6303,17 +6504,22 @@ export class StageOverlay {
         }
 
         const full = duration >= CHARGE_FULL_MS;
-        const damage = full ? 3 : 2;
+        const mobileLight = this.mobilePerformanceMode();
+        const damage = full ? (mobileLight ? 4 : 3) : (mobileLight ? 3 : 2);
         const intensity = full ? 'hard' : 'medium';
         this.runnerState.attackLockedUntil = now + (full ? 540 : 430);
         this.playRunnerStrike({ charged: true });
 
         const chargedRects = this.runnerChargedAttackRects(full, { downward: Boolean(options.downward) });
         const chargedRect = unionRects(chargedRects) || this.runnerChargedAttackRect(full);
-        const breakRectLimits = options.downward
-            ? (full ? [2, 2, 1, 1] : [2, 1, 1, 1])
-            : (full ? [2, 1, 1] : [1, 1, 1]);
-        const breakLimit = full ? 4 : 3;
+        const breakRectLimits = mobileLight
+            ? (options.downward
+                ? (full ? [4, 3, 3, 3, 2] : [3, 2, 2, 2, 1])
+                : (full ? [4, 3, 3, 2] : [3, 2, 2, 1]))
+            : (options.downward
+                ? (full ? [2, 2, 1, 1] : [2, 1, 1, 1])
+                : (full ? [2, 1, 1] : [1, 1, 1]));
+        const breakLimit = mobileLight ? (full ? 10 : 7) : (full ? 4 : 3);
         const enemyHit = this.hitEnemyAtRect(chargedRect, {
             minOverlap: 10,
             damage,
@@ -6506,12 +6712,15 @@ export class StageOverlay {
     }
 
     runnerChargedAttackRect(full = false) {
-        const width = full ? 112 : 88;
+        const mobileLight = this.mobilePerformanceMode();
+        const width = mobileLight
+            ? (full ? 158 : 126)
+            : (full ? 112 : 88);
         const left = this.runnerState.direction > 0
             ? this.runnerState.x + RUNNER_WIDTH - 12
             : this.runnerState.x - width + 12;
-        const top = this.runnerState.y - (full ? 4 : 0);
-        const height = RUNNER_HEIGHT + (full ? 20 : 10);
+        const top = this.runnerState.y - (mobileLight ? (full ? 20 : 10) : (full ? 4 : 0));
+        const height = RUNNER_HEIGHT + (mobileLight ? (full ? 48 : 32) : (full ? 20 : 10));
 
         return {
             left,
@@ -6525,20 +6734,22 @@ export class StageOverlay {
 
     runnerChargedAttackRects(full = false, options = {}) {
         const main = this.runnerChargedAttackRect(full);
-        const columnWidth = full ? 72 : 58;
+        const mobileLight = this.mobilePerformanceMode();
+        const rangeBoost = mobileLight ? (full ? 1.46 : 1.3) : 1;
+        const columnWidth = Math.round((full ? 72 : 58) * rangeBoost);
         const columnCenter = this.runnerState.direction > 0
-            ? this.runnerState.x + RUNNER_WIDTH + (full ? 22 : 16)
-            : this.runnerState.x - (full ? 22 : 16);
+            ? this.runnerState.x + RUNNER_WIDTH + Math.round((full ? 22 : 16) * rangeBoost)
+            : this.runnerState.x - Math.round((full ? 22 : 16) * rangeBoost);
         const columnLeft = columnCenter - columnWidth / 2;
-        const upperHeight = full ? 82 : 62;
-        const lowerHeight = full ? 76 : 58;
+        const upperHeight = Math.round((full ? 82 : 62) * rangeBoost);
+        const lowerHeight = Math.round((full ? 76 : 58) * rangeBoost);
         const upper = {
             left: columnLeft,
-            top: this.runnerState.y - upperHeight + 8,
+            top: this.runnerState.y - upperHeight + (mobileLight ? 2 : 8),
             width: columnWidth,
             height: upperHeight,
             right: columnLeft + columnWidth,
-            bottom: this.runnerState.y + 8,
+            bottom: this.runnerState.y + (mobileLight ? 2 : 8),
         };
         const lowerTop = this.runnerState.y + RUNNER_HEIGHT - 6;
         const lower = {
@@ -6552,11 +6763,11 @@ export class StageOverlay {
 
         const rects = [main, upper, lower];
 
-        if (options.downward) {
-            const downWidth = RUNNER_WIDTH + (full ? 54 : 38);
+        if (options.downward || mobileLight) {
+            const downWidth = RUNNER_WIDTH + Math.round((full ? 54 : 38) * rangeBoost);
             const downLeft = this.runnerState.x + RUNNER_WIDTH / 2 - downWidth / 2;
             const downTop = this.runnerState.y + RUNNER_HEIGHT - 4;
-            const downHeight = full ? 98 : 78;
+            const downHeight = Math.round((full ? 98 : 78) * (mobileLight ? 1.22 : 1));
             rects.unshift({
                 left: downLeft,
                 top: downTop,
@@ -6915,8 +7126,9 @@ export class StageOverlay {
         burst.style.color = sourceStyle.color;
         burst.style.textAlign = sourceStyle.textAlign;
 
-        const charLimit = this.mobilePerformanceMode()
-            ? (target.type === 'paragraph' ? 64 : 42)
+        const mobileLight = this.mobilePerformanceMode();
+        const charLimit = mobileLight
+            ? (target.type === 'paragraph' ? 18 : 12)
             : (target.type === 'paragraph' ? 140 : 84);
         const chars = Array.from(text.slice(0, charLimit));
         for (const char of chars) {
@@ -6930,21 +7142,21 @@ export class StageOverlay {
             burst.appendChild(shard);
         }
 
-        this.addTemporaryEffect(burst, options.runner ? 1350 : 1050);
+        this.addTemporaryEffect(burst, options.runner ? 1350 : 1050, { essential: Boolean(options.runner), mobileLifetime: 420 });
     }
 
     impactBurstAt(rect, intensity = 'medium') {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + Math.min(rect.height / 2, 64);
+        const mobileLight = this.mobilePerformanceMode();
         const ring = document.createElement('span');
         ring.className = `gw-impact-ring gw-impact-ring--${intensity}`;
         ring.style.left = `${centerX}px`;
         ring.style.top = `${centerY}px`;
-        this.addTemporaryEffect(ring, 620);
+        this.addTemporaryEffect(ring, 620, { essential: true, mobileLifetime: 320 });
 
-        const mobileLight = this.mobilePerformanceMode();
         const debrisCount = mobileLight
-            ? (intensity === 'hard' ? 12 : (intensity === 'char' ? 5 : 7))
+            ? (intensity === 'hard' ? 3 : (intensity === 'char' ? 1 : 2))
             : (intensity === 'hard' ? 22 : (intensity === 'char' ? 8 : 12));
         for (let index = 0; index < debrisCount; index += 1) {
             const debris = document.createElement('span');
@@ -6955,10 +7167,10 @@ export class StageOverlay {
             debris.style.setProperty('--gw-y', `${randomBetween(-130, 78)}px`);
             debris.style.setProperty('--gw-r', `${randomBetween(-180, 180)}deg`);
             debris.style.setProperty('--gw-d', `${randomBetween(0, 80)}ms`);
-            this.addTemporaryEffect(debris, 780);
+            this.addTemporaryEffect(debris, 780, { mobileLifetime: 360 });
         }
 
-        if (intensity === 'hard') {
+        if (intensity === 'hard' && !mobileLight) {
             const flash = document.createElement('span');
             flash.className = 'gw-impact-flash';
             this.addTemporaryEffect(flash, 180);
@@ -6972,16 +7184,17 @@ export class StageOverlay {
 
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + Math.min(rect.height / 2, 64);
+        const mobileLight = this.mobilePerformanceMode();
         const bloomColor = bloomColorForChar(char || `${Math.round(centerX)}:${Math.round(centerY)}`);
         const burst = document.createElement('span');
         burst.className = `gw-bloom-burst gw-bloom-burst--${intensity}`;
         burst.style.left = `${centerX}px`;
         burst.style.top = `${centerY}px`;
         burst.style.setProperty('--gw-bloom-color', bloomColor);
-        this.addTemporaryEffect(burst, intensity === 'hard' ? 820 : 680);
+        this.addTemporaryEffect(burst, intensity === 'hard' ? 820 : 680, { essential: true, mobileLifetime: 360 });
 
-        const petalCount = this.mobilePerformanceMode()
-            ? (intensity === 'hard' ? 9 : 5)
+        const petalCount = mobileLight
+            ? (intensity === 'hard' ? 2 : 1)
             : (intensity === 'hard' ? 18 : 10);
         for (let index = 0; index < petalCount; index += 1) {
             const petal = document.createElement('span');
@@ -6994,7 +7207,7 @@ export class StageOverlay {
             petal.style.setProperty('--gw-y', `${randomBetween(-150, 42)}px`);
             petal.style.setProperty('--gw-r', `${randomBetween(-160, 160)}deg`);
             petal.style.setProperty('--gw-d', `${randomBetween(0, 90)}ms`);
-            this.addTemporaryEffect(petal, 960);
+            this.addTemporaryEffect(petal, 960, { mobileLifetime: 380 });
         }
     }
 
@@ -7006,8 +7219,9 @@ export class StageOverlay {
         const chars = Array.isArray(options.chars) ? options.chars : [];
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        const flowerCount = Math.min(this.mobilePerformanceMode() ? 2 : 5, Math.max(1, count + 1));
-        const maxFlowers = this.mobilePerformanceMode() ? 30 : 86;
+        const mobileLight = this.mobilePerformanceMode();
+        const flowerCount = Math.min(mobileLight ? 1 : 5, Math.max(1, count + 1));
+        const maxFlowers = mobileLight ? 12 : 86;
         const preferRight = centerX < window.innerWidth * 0.52;
         const laneMin = 22;
         const laneMax = Math.max(laneMin + 20, Math.min(150, window.innerWidth * 0.16));
@@ -7043,6 +7257,14 @@ export class StageOverlay {
             return;
         }
 
+        if (this.mobilePerformanceMode()) {
+            if (strength !== 'hard') {
+                return;
+            }
+
+            strength = 'soft';
+        }
+
         const strengthClass = `gw-screen-shake--${strength}`;
         document.body.classList.remove('gw-screen-shake', 'gw-screen-shake--soft', 'gw-screen-shake--medium', 'gw-screen-shake--hard');
         document.body.classList.add('gw-screen-shake', strengthClass);
@@ -7058,11 +7280,13 @@ export class StageOverlay {
     crackImage(target) {
         const imageHit = this.imageBreaker?.hitTarget(target, { direction: Math.random() > 0.5 ? 1 : -1 });
         const rect = imageHit?.rect || liveRectForTarget(target);
+        const mobileLight = this.mobilePerformanceMode();
         const field = document.createElement('div');
         field.className = 'gw-crack-field';
         placeBox(field, rect);
 
-        for (let index = 0; index < 7; index += 1) {
+        const lineCount = mobileLight ? 3 : 7;
+        for (let index = 0; index < lineCount; index += 1) {
             const line = document.createElement('span');
             line.className = 'gw-crack-line';
             line.style.left = `${20 + Math.random() * 60}%`;
@@ -7072,7 +7296,8 @@ export class StageOverlay {
             field.appendChild(line);
         }
 
-        for (let index = 0; index < 12; index += 1) {
+        const particleCount = mobileLight ? 0 : 12;
+        for (let index = 0; index < particleCount; index += 1) {
             const particle = document.createElement('span');
             particle.className = 'gw-spark-particle';
             particle.style.left = `${35 + Math.random() * 30}%`;
@@ -7082,7 +7307,7 @@ export class StageOverlay {
             field.appendChild(particle);
         }
 
-        this.addTemporaryEffect(field, 900);
+        this.addTemporaryEffect(field, 900, { essential: true, mobileLifetime: 360 });
         this.impactBurstAt(rect, imageHit?.destroyed ? 'hard' : 'medium');
         this.spawnImageChips(rect, imageHit?.target ? (imageHit.stage % 2 === 0 ? -1 : 1) : 1, Boolean(imageHit?.destroyed));
         this.shakeScreen(imageHit?.destroyed ? 'hard' : 'medium');
@@ -7105,7 +7330,7 @@ export class StageOverlay {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const chipCount = this.mobilePerformanceMode()
-            ? (destroyed ? 9 : 5)
+            ? (destroyed ? 3 : 1)
             : (destroyed ? 18 : 9);
 
         for (let index = 0; index < chipCount; index += 1) {
@@ -7117,7 +7342,7 @@ export class StageOverlay {
             chip.style.setProperty('--gw-y', `${randomBetween(-110, 76)}px`);
             chip.style.setProperty('--gw-r', `${randomBetween(-210, 210)}deg`);
             chip.style.setProperty('--gw-d', `${randomBetween(0, 90)}ms`);
-            this.addTemporaryEffect(chip, destroyed ? 940 : 720);
+            this.addTemporaryEffect(chip, destroyed ? 940 : 720, { mobileLifetime: destroyed ? 420 : 320 });
         }
     }
 
@@ -7129,7 +7354,7 @@ export class StageOverlay {
         this.shatterText(target, { soft: true });
         this.impactBurstAt(rect, 'soft');
 
-        const fragmentWords = this.mobilePerformanceMode() ? words.slice(0, 3) : words;
+        const fragmentWords = this.mobilePerformanceMode() ? words.slice(0, 1) : words;
         fragmentWords.forEach((word, index) => {
             const fragment = document.createElement('button');
             fragment.type = 'button';
@@ -7146,7 +7371,7 @@ export class StageOverlay {
                 fragment.classList.add('gw-word-fragment--collected');
                 this.removeLater(fragment, 260);
             });
-            this.addTemporaryEffect(fragment, 7600, { mobileLifetime: 3200 });
+            this.addTemporaryEffect(fragment, 7600, { mobileLifetime: 1300 });
         });
 
         this.showMessage(this.messages.hint || UI_TEXT.hint);
@@ -7230,15 +7455,26 @@ export class StageOverlay {
     }
 
     addTemporaryEffect(element, lifetime, options = {}) {
-        if (this.mobilePerformanceMode() && this.temporaryEffects.length >= MOBILE_TEMP_EFFECT_LIMIT) {
-            const stale = this.temporaryEffects.shift();
-            stale?.remove?.();
+        const mobileLight = this.mobilePerformanceMode();
+        if (mobileLight) {
+            const now = currentTime();
+            if (!options.essential
+                && this.temporaryEffects.length >= MOBILE_EFFECT_SOFT_LIMIT
+                && now - this.lastMobileEffectAt < MOBILE_EFFECT_THROTTLE_MS) {
+                return;
+            }
+
+            this.lastMobileEffectAt = now;
+            while (this.temporaryEffects.length >= MOBILE_TEMP_EFFECT_LIMIT) {
+                const stale = this.temporaryEffects.shift();
+                stale?.remove?.();
+            }
         }
 
         this.temporaryEffects.push(element);
         this.effectLayer?.appendChild(element);
-        const mobileLifetime = this.mobilePerformanceMode()
-            ? Number(options.mobileLifetime ?? Math.min(lifetime, 620))
+        const mobileLifetime = mobileLight
+            ? Number(options.mobileLifetime ?? Math.min(lifetime, MOBILE_EFFECT_MAX_LIFETIME))
             : lifetime;
         this.removeLater(element, this.reducedMotion ? Math.min(mobileLifetime, 260) : mobileLifetime);
     }
@@ -7515,6 +7751,87 @@ function setLocalStorageFlag(key) {
     }
 }
 
+function stageScoreStorageKey() {
+    const config = frontendConfigFromDom();
+    const world = config.worldMap && typeof config.worldMap === 'object' ? config.worldMap : {};
+    if (world.scoreKey) {
+        return String(world.scoreKey);
+    }
+    if (world.progressKey) {
+        return `${world.progressKey}_scores`;
+    }
+
+    return `charabreak_stage_scores_${hashString(window.location.origin || 'local')}`;
+}
+
+function currentStageScoreId() {
+    const config = frontendConfigFromDom();
+    const world = config.worldMap && typeof config.worldMap === 'object' ? config.worldMap : {};
+    if (world.currentStageId) {
+        return String(world.currentStageId);
+    }
+    if (config.pageId) {
+        return `post-${config.pageId}`;
+    }
+
+    return `url-${hashString(window.location.pathname || '/')}`;
+}
+
+function readStageScoreBoard(key) {
+    try {
+        const parsed = JSON.parse(window.localStorage?.getItem(key) || '{}');
+        return {
+            version: SCORE_STORAGE_VERSION,
+            stages: parsed && typeof parsed.stages === 'object' ? parsed.stages : {},
+        };
+    } catch (error) {
+        return { version: SCORE_STORAGE_VERSION, stages: {} };
+    }
+}
+
+function writeStageScoreBoard(key, board) {
+    try {
+        window.localStorage?.setItem(key, JSON.stringify(board));
+    } catch (error) {
+        // High scores are local-only polish; the stage must continue without storage.
+    }
+}
+
+function scoreRank(score, cleared = true) {
+    if (!cleared) {
+        return 'C';
+    }
+    if (score >= 5200) {
+        return 'S';
+    }
+    if (score >= 3600) {
+        return 'A';
+    }
+    if (score >= 2200) {
+        return 'B';
+    }
+
+    return 'C';
+}
+
+function formatScoreTime(ms) {
+    const totalSeconds = Math.max(0, Math.round(ms / 1000));
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+}
+
+function hashString(value) {
+    let hash = 0;
+    const text = String(value || '');
+    for (let index = 0; index < text.length; index += 1) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(index);
+        hash |= 0;
+    }
+
+    return Math.abs(hash).toString(36);
+}
+
 function localizedUiText(defaults, dictionaries = {}) {
     const locale = frontendLocale().toLowerCase().replace('_', '-');
     const language = locale.split('-')[0];
@@ -7574,6 +7891,8 @@ function createStageStats(totalChars = 0) {
         lettersCollected: 0,
         chestsOpened: 0,
         scoreJewels: 0,
+        maxParryCombo: 0,
+        damageTaken: 0,
     };
 }
 

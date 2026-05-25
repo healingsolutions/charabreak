@@ -61,6 +61,12 @@ $assets = array(
         'alt' => 'Pixel character smashing a website into CharaBreak fragments',
     ),
     array(
+        'file' => 'charabreak-og-image.png',
+        'title' => 'CharaBreak Social Share Image',
+        'alt' => 'CharaBreak social share image with Japanese catch copy and Break Bloom Hybrid labels',
+        'social_image' => true,
+    ),
+    array(
         'file' => 'charabreak-feature-dashboard.png',
         'title' => 'CharaBreak Feature Dashboard',
         'alt' => 'Game-like analytics dashboard for CharaBreak features',

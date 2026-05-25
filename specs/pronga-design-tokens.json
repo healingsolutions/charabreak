@@ -6,11 +6,17 @@
   },
   "assets": {
     "logo": "charabreak/assets/brand/charabreak-logo-transparent-hd.png",
+    "ogImage": "charabreak/assets/brand/charabreak-og-image.png",
     "hero": "charabreak/assets/brand/charabreak-hero-smash.png",
     "features": "charabreak/assets/brand/charabreak-feature-dashboard.png",
     "demo": "charabreak/assets/brand/charabreak-demo-world.png",
     "pricing": "charabreak/assets/brand/charabreak-pricing-worlds.png",
     "faq": "charabreak/assets/brand/charabreak-boss-gate.png"
+  },
+  "playStyles": {
+    "break": "Hammer-driven action, cracked letters, impact, screen shake, satisfying collapse.",
+    "bloom": "Magic wand action, flowers, colorful light particles, flower energy arrows, gentle transformation.",
+    "hybrid": "Stage-by-stage mix of Break and Bloom based on brand tone."
   },
   "colors": {
     "ink": "#08141f",

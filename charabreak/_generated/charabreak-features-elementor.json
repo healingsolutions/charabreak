@@ -1,6 +1,6 @@
 [
     {
-        "id": "1298d1d7",
+        "id": "e098c3c4",
         "settings": {
             "html_tag": "header",
             "content_width": "full",
@@ -30,7 +30,7 @@
         },
         "elements": [
             {
-                "id": "7e3b5e29",
+                "id": "581cc153",
                 "settings": {
                     "content_width": "full",
                     "width": {
@@ -56,7 +56,7 @@
                 },
                 "elements": [
                     {
-                        "id": "6aada45e",
+                        "id": "a0eaed3e",
                         "settings": {
                             "image": {
                                 "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-logo-transparent-hd.png",
@@ -84,7 +84,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "3567c2c4",
+                        "id": "272ae136",
                         "settings": {
                             "title": "CharaBreak",
                             "header_size": "h3",
@@ -114,7 +114,7 @@
                 "elType": "container"
             },
             {
-                "id": "8ce71c10",
+                "id": "5c1b2fb3",
                 "settings": {
                     "html_tag": "nav",
                     "content_width": "full",
@@ -132,7 +132,7 @@
                 },
                 "elements": [
                     {
-                        "id": "259f612b",
+                        "id": "eeb349d6",
                         "settings": {
                             "text": "Home",
                             "link": {
@@ -188,7 +188,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "29341019",
+                        "id": "3535ff2b",
                         "settings": {
                             "text": "Features",
                             "link": {
@@ -244,7 +244,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "8e4641db",
+                        "id": "de0bd09a",
                         "settings": {
                             "text": "Pricing",
                             "link": {
@@ -300,7 +300,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "d96f55b6",
+                        "id": "b37d735e",
                         "settings": {
                             "text": "Demo",
                             "link": {
@@ -356,7 +356,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "6d4ba8eb",
+                        "id": "0dffba4a",
                         "settings": {
                             "text": "FAQ",
                             "link": {
@@ -412,7 +412,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "b8fabc14",
+                        "id": "d257aa5a",
                         "settings": {
                             "text": "Play",
                             "link": {
@@ -477,7 +477,7 @@
         "elType": "container"
     },
     {
-        "id": "330eca10",
+        "id": "8a62de82",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -495,7 +495,7 @@
         },
         "elements": [
             {
-                "id": "1f3a40ba",
+                "id": "2de6f5da",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -515,7 +515,7 @@
                 },
                 "elements": [
                     {
-                        "id": "104f14e1",
+                        "id": "aeecdd6e",
                         "settings": {
                             "title": "Features",
                             "header_size": "h6",
@@ -547,7 +547,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "8318888d",
+                        "id": "9f4c0002",
                         "settings": {
                             "title": "ページそのものを、インタラクティブWebにする。",
                             "header_size": "h2",
@@ -573,9 +573,9 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "b8cda2d3",
+                        "id": "c17c0701",
                         "settings": {
-                            "editor": "<p>CharaBreakはWordPressの本文、画像、ボタン、リンクを読み取り、遊べる足場とリアクションに変換します。訪問者はコンテンツを読む前に、コンテンツの中へ入り込みます。</p>",
+                            "editor": "<p>CharaBreakはWordPressの本文、画像、ボタン、リンクを読み取り、遊べる足場とリアクションに変換します。Breakでは爽快に崩し、Bloomでは文字を花や光へ変え、訪問者はコンテンツを読む前にコンテンツの中へ入り込みます。</p>",
                             "text_color": "#607080",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
@@ -601,7 +601,7 @@
                 "elType": "container"
             },
             {
-                "id": "ee1fee5d",
+                "id": "48460c35",
                 "settings": {
                     "image": {
                         "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-feature-dashboard.png",
@@ -641,7 +641,7 @@
                 "elType": "widget"
             },
             {
-                "id": "99d3800e",
+                "id": "5c991a5e",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -665,7 +665,7 @@
                 },
                 "elements": [
                     {
-                        "id": "22348e24",
+                        "id": "55ed25d7",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -723,7 +723,7 @@
                         },
                         "elements": [
                             {
-                                "id": "f4ea6b50",
+                                "id": "57f99c7c",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-font",
@@ -770,7 +770,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "3b01516a",
+                        "id": "fa780dc2",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -824,11 +824,116 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード2・画像やアイコンも遊べる"
+                            "_title": "container:: カード2・Bloomで花に変える"
                         },
                         "elements": [
                             {
-                                "id": "2018fb2c",
+                                "id": "6e2ca8a5",
+                                "settings": {
+                                    "selected_icon": {
+                                        "value": "fas fa-magic",
+                                        "library": "fa-solid"
+                                    },
+                                    "title_text": "Bloomで花に変える",
+                                    "description_text": "文字を壊す代わりに、魔法のステッキで花へ変換。花はひらひら消え、画面の邪魔にならない場所へ色とりどりの花畑を作ります。",
+                                    "position": "top",
+                                    "title_size": "h3",
+                                    "primary_color": "#ff7a66",
+                                    "title_color": "#08141f",
+                                    "description_color": "#607080",
+                                    "icon_space": {
+                                        "unit": "px",
+                                        "size": 14,
+                                        "sizes": []
+                                    },
+                                    "title_bottom_space": {
+                                        "unit": "px",
+                                        "size": 10,
+                                        "sizes": []
+                                    },
+                                    "title_typography_typography": "custom",
+                                    "title_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 20,
+                                        "sizes": []
+                                    },
+                                    "description_typography_typography": "custom",
+                                    "description_typography_font_size": {
+                                        "unit": "px",
+                                        "size": 15,
+                                        "sizes": []
+                                    },
+                                    "_title": "icon-box:: Bloomで花に変える"
+                                },
+                                "elements": [],
+                                "isInner": false,
+                                "widgetType": "icon-box",
+                                "elType": "widget"
+                            }
+                        ],
+                        "isInner": true,
+                        "elType": "container"
+                    },
+                    {
+                        "id": "a517cd4d",
+                        "settings": {
+                            "content_width": "full",
+                            "width": {
+                                "unit": "%",
+                                "size": 31,
+                                "sizes": []
+                            },
+                            "width_tablet": {
+                                "unit": "%",
+                                "size": 48,
+                                "sizes": []
+                            },
+                            "width_mobile": {
+                                "unit": "%",
+                                "size": 100,
+                                "sizes": []
+                            },
+                            "padding": {
+                                "unit": "px",
+                                "top": "24",
+                                "right": "22",
+                                "bottom": "24",
+                                "left": "22",
+                                "isLinked": false
+                            },
+                            "background_background": "classic",
+                            "background_color": "#ffffff",
+                            "border_border": "solid",
+                            "border_color": "#d9e7e3",
+                            "border_width": {
+                                "unit": "px",
+                                "top": "1",
+                                "right": "1",
+                                "bottom": "1",
+                                "left": "1",
+                                "isLinked": false
+                            },
+                            "border_radius": {
+                                "unit": "px",
+                                "top": "8",
+                                "right": "8",
+                                "bottom": "8",
+                                "left": "8",
+                                "isLinked": false
+                            },
+                            "box_shadow_box_shadow_type": "yes",
+                            "box_shadow_box_shadow": {
+                                "horizontal": 0,
+                                "vertical": 18,
+                                "blur": 45,
+                                "spread": 0,
+                                "color": "rgba(8,20,31,0.10)"
+                            },
+                            "_title": "container:: カード3・画像やアイコンも遊べる"
+                        },
+                        "elements": [
+                            {
+                                "id": "d7f73a26",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-image",
@@ -875,7 +980,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "ded7af18",
+                        "id": "726589eb",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -929,11 +1034,11 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード3・リンクをゲートにする"
+                            "_title": "container:: カード4・リンクをゲートにする"
                         },
                         "elements": [
                             {
-                                "id": "34a8e634",
+                                "id": "98ef3064",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-door-open",
@@ -980,7 +1085,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "4da9fa43",
+                        "id": "e755f384",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1034,11 +1139,11 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード4・敵が意味を生む"
+                            "_title": "container:: カード5・敵が意味を生む"
                         },
                         "elements": [
                             {
-                                "id": "1faf914d",
+                                "id": "fa1a1308",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-robot",
@@ -1085,7 +1190,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "17776626",
+                        "id": "6294d491",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1139,11 +1244,11 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード5・クリア後だけの特典"
+                            "_title": "container:: カード6・クリア後だけの特典"
                         },
                         "elements": [
                             {
-                                "id": "68ad17f6",
+                                "id": "6db80e9d",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-ticket-alt",
@@ -1190,7 +1295,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "ff31935d",
+                        "id": "53345828",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1244,11 +1349,11 @@
                                 "spread": 0,
                                 "color": "rgba(8,20,31,0.10)"
                             },
-                            "_title": "container:: カード6・軽量な体験ログ"
+                            "_title": "container:: カード7・軽量な体験ログ"
                         },
                         "elements": [
                             {
-                                "id": "1a43a08b",
+                                "id": "96803f27",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-chart-line",
@@ -1303,7 +1408,7 @@
         "elType": "container"
     },
     {
-        "id": "a2a54c30",
+        "id": "b113c596",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1321,7 +1426,7 @@
         },
         "elements": [
             {
-                "id": "4ba91610",
+                "id": "2064bfa9",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -1341,7 +1446,7 @@
                 },
                 "elements": [
                     {
-                        "id": "19eab07e",
+                        "id": "eb6be08e",
                         "settings": {
                             "title": "Creator Flow",
                             "header_size": "h6",
@@ -1373,7 +1478,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "39fb1d06",
+                        "id": "b72e74f7",
                         "settings": {
                             "title": "Elementorページにも、自然に開始リンクを置ける。",
                             "header_size": "h2",
@@ -1399,9 +1504,9 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "7a0ac89e",
+                        "id": "b4cfc496",
                         "settings": {
-                            "editor": "<p>右下の固定ボタンだけでなく、ヒーローのCTA、料金表のボタン、記事中のリンクからゲームを開始できます。おしゃれなサイトの文脈を壊さず、遊びだけを自然に重ねます。</p>",
+                            "editor": "<p>右下の固定ボタンだけでなく、ヒーローのCTA、料金表のボタン、記事中のリンクからゲームを開始できます。ステージごとにBreak、Bloom、Hybridを選べる設計にすることで、おしゃれなサイトの文脈を壊さず、遊びだけを自然に重ねます。</p>",
                             "text_color": "#607080",
                             "typography_font_family": "Inter",
                             "typography_typography": "custom",
@@ -1427,7 +1532,7 @@
                 "elType": "container"
             },
             {
-                "id": "9ef02a3e",
+                "id": "1558f04b",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -1451,7 +1556,7 @@
                 },
                 "elements": [
                     {
-                        "id": "5dc6bf2c",
+                        "id": "8e7bd0c1",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1509,7 +1614,7 @@
                         },
                         "elements": [
                             {
-                                "id": "4d8c8f5b",
+                                "id": "774dc6b8",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-toggle-on",
@@ -1556,7 +1661,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "e108b0b5",
+                        "id": "aacf43a0",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1614,7 +1719,7 @@
                         },
                         "elements": [
                             {
-                                "id": "c9d7366a",
+                                "id": "293c1d9a",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-pencil-alt",
@@ -1661,7 +1766,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "61f5b389",
+                        "id": "afd5bc60",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1719,7 +1824,7 @@
                         },
                         "elements": [
                             {
-                                "id": "d791f6ca",
+                                "id": "0b717d6d",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-gamepad",
@@ -1774,7 +1879,7 @@
         "elType": "container"
     },
     {
-        "id": "bb7ae108",
+        "id": "815dd856",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1794,7 +1899,7 @@
         },
         "elements": [
             {
-                "id": "3f63af77",
+                "id": "ec4e7300",
                 "settings": {
                     "title": "まずは1ページ、遊べるWebに変えてみる。",
                     "header_size": "h2",
@@ -1821,7 +1926,7 @@
                 "elType": "widget"
             },
             {
-                "id": "e32d1e69",
+                "id": "7ad22989",
                 "settings": {
                     "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
                     "text_color": "rgba(251,250,244,0.78)",
@@ -1846,7 +1951,7 @@
                 "elType": "widget"
             },
             {
-                "id": "fd39e7a1",
+                "id": "eaf1aab8",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -1863,7 +1968,7 @@
                 },
                 "elements": [
                     {
-                        "id": "be0b20f5",
+                        "id": "9a1d7c75",
                         "settings": {
                             "text": "Free Download",
                             "link": {
@@ -1919,7 +2024,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "289fe0d0",
+                        "id": "c0784156",
                         "settings": {
                             "text": "Play Demo",
                             "link": {

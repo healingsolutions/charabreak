@@ -42,6 +42,7 @@ class GW_Plugin
 
         add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
         add_action('send_headers', array($this, 'send_frontend_headers'));
+        add_action('wp_head', array($this, 'print_social_meta'), 5);
         add_action('template_redirect', array($this, 'redirect_attachment_pages'), 0);
         add_filter('script_loader_tag', array($this, 'mark_adapter_as_module'), 10, 3);
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
@@ -115,6 +116,95 @@ class GW_Plugin
         );
 
         echo '<script id="gaming-web-config" type="application/json">' . ($frontend_config ?: '{}') . '</script>' . "\n";
+    }
+
+    public function print_social_meta(): void
+    {
+        if (is_admin() || is_feed() || wp_is_json_request()) {
+            return;
+        }
+
+        $post_id = get_queried_object_id();
+        if ($post_id <= 0 && is_front_page()) {
+            $post_id = (int) get_option('page_on_front');
+        }
+
+        $title = $post_id > 0 ? (string) get_post_meta($post_id, '_charabreak_og_title', true) : '';
+        $description = $post_id > 0 ? (string) get_post_meta($post_id, '_charabreak_og_description', true) : '';
+        $image = $post_id > 0 ? (string) get_post_meta($post_id, '_charabreak_og_image', true) : '';
+
+        $is_charabreak_front = is_front_page() || is_home();
+        if ($title === '' && $description === '' && $image === '' && !$is_charabreak_front) {
+            return;
+        }
+
+        $title = $title !== '' ? $title : $this->default_social_title($post_id);
+        $description = $description !== '' ? $description : $this->default_social_description($post_id);
+        $image = $image !== '' ? $image : $this->default_social_image($post_id);
+        $url = $post_id > 0 ? get_permalink($post_id) : home_url('/');
+
+        echo "\n" . '<!-- CharaBreak social preview -->' . "\n";
+        echo '<meta property="og:type" content="website">' . "\n";
+        echo '<meta property="og:site_name" content="' . esc_attr(get_bloginfo('name')) . '">' . "\n";
+        echo '<meta property="og:title" content="' . esc_attr($title) . '">' . "\n";
+        echo '<meta property="og:description" content="' . esc_attr($description) . '">' . "\n";
+        echo '<meta property="og:url" content="' . esc_url($this->social_url($url)) . '">' . "\n";
+        if ($image) {
+            echo '<meta property="og:image" content="' . esc_url($this->social_url($image)) . '">' . "\n";
+            echo '<meta property="og:image:secure_url" content="' . esc_url($this->social_url($image)) . '">' . "\n";
+            echo '<meta property="og:image:width" content="1200">' . "\n";
+            echo '<meta property="og:image:height" content="630">' . "\n";
+            echo '<meta property="og:image:alt" content="' . esc_attr($title) . '">' . "\n";
+        }
+        echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+        echo '<meta name="twitter:title" content="' . esc_attr($title) . '">' . "\n";
+        echo '<meta name="twitter:description" content="' . esc_attr($description) . '">' . "\n";
+        if ($image) {
+            echo '<meta name="twitter:image" content="' . esc_url($this->social_url($image)) . '">' . "\n";
+        }
+        echo '<!-- /CharaBreak social preview -->' . "\n";
+    }
+
+    private function default_social_title(int $post_id = 0): string
+    {
+        if ($post_id > 0 && !is_front_page()) {
+            return wp_get_document_title();
+        }
+
+        return 'CharaBreak｜読む前に、壊せ。';
+    }
+
+    private function default_social_description(int $post_id = 0): string
+    {
+        if ($post_id > 0 && !is_front_page()) {
+            $excerpt = wp_strip_all_tags(get_the_excerpt($post_id));
+            if ($excerpt !== '') {
+                return $excerpt;
+            }
+        }
+
+        return 'WordPressサイトを、壊す・咲かせる・守るゲームステージに変えるインタラクティブWebプラグイン。';
+    }
+
+    private function default_social_image(int $post_id = 0): string
+    {
+        if ($post_id > 0) {
+            $thumbnail = get_the_post_thumbnail_url($post_id, 'full');
+            if ($thumbnail) {
+                return $thumbnail;
+            }
+        }
+
+        return GAMING_WEB_URL . 'assets/brand/charabreak-og-image.png';
+    }
+
+    private function social_url(string $url): string
+    {
+        if ($url === '') {
+            return '';
+        }
+
+        return is_ssl() ? set_url_scheme($url, 'https') : $url;
     }
 
     public function mark_adapter_as_module(string $tag, string $handle, string $src): string
@@ -541,6 +631,7 @@ class GW_Plugin
             'goalLabel' => (string) GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_GOAL_LABEL),
             'currentStageId' => $current_post_id > 0 ? 'post-' . $current_post_id : '',
             'progressKey' => 'gaming_web_world_progress_' . substr(md5(home_url('/')), 0, 10),
+            'scoreKey' => 'gaming_web_stage_scores_' . substr(md5(home_url('/')), 0, 10),
             'requiredClearCount' => min($required_count, count($stages)),
             'showOnStart' => GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_SHOW_ON_START),
             'showInHud' => GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_SHOW_IN_HUD),

@@ -230,13 +230,20 @@ if (!function_exists('gw_cb_brand_image')) {
         $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : false;
 
         if (!$url) {
-            $url = plugins_url('assets/brand/' . $file, dirname(__DIR__) . '/gaming-web.php');
+            $url = plugins_url('assets/brand/' . $file, dirname(__DIR__) . '/charabreak.php');
         }
 
         return array(
             'url' => $url,
             'id' => $id,
         );
+    }
+}
+
+if (!function_exists('gw_cb_social_image')) {
+    function gw_cb_social_image(): array
+    {
+        return gw_cb_brand_image('charabreak-og-image.png', 'CharaBreak Social Share Image');
     }
 }
 
@@ -536,7 +543,7 @@ if (!function_exists('gw_cb_home_data')) {
                         'typography_font_size' => gw_cb_size(72),
                         'typography_line_height' => gw_cb_size(0.98, 'em'),
                     )),
-                    gw_cb_text('home-lead', 'text:: メインリード', 'ユーザーは、最初から長い文章を読んでくれません。だからCharaBreakは、読む前の数秒をゲームに変えます。文字を攻撃し、画像を揺らし、ページの上を走り回るうちに、訪問者はいつの間にか本文・見出し・ボタンに触れています。壊すことをコンテンツ化し、サイト滞在時間と記憶に残る体験をつくる、WordPress向けインタラクティブWebプラグインです。', array(
+                    gw_cb_text('home-lead', 'text:: メインリード', 'ユーザーは、最初から長い文章を読んでくれません。だからCharaBreakは、読む前の数秒をゲームに変えます。文字を攻撃するBreak、魔法のステッキで文字を花に変えるBloom、両方を混ぜるHybrid。ページの上を走り回るうちに、訪問者はいつの間にか本文・見出し・ボタンに触れています。サイト滞在時間と記憶に残る体験をつくる、WordPress向けインタラクティブWebプラグインです。', array(
                         'text_color' => 'rgba(251,250,244,0.84)',
                         'typography_font_size' => gw_cb_size(18),
                     )),
@@ -585,10 +592,10 @@ if (!function_exists('gw_cb_home_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#fbfaf4',
             ), array(
-                gw_cb_section_title('home-concept-title', 'Concept', '読まれない時代の、読むきっかけを作る。', '広告もLPも、最初の壁は「読まれない」ことです。CharaBreakは文章をいきなり読ませるのではなく、ページそのものを遊べる対象に変えます。触る、攻撃する、守る、進む。その行為の中で、訪問者は自然に言葉へ接触していきます。'),
+                gw_cb_section_title('home-concept-title', 'Concept', '読まれない時代の、読むきっかけを作る。', '広告もLPも、最初の壁は「読まれない」ことです。CharaBreakは文章をいきなり読ませるのではなく、ページそのものを遊べる対象に変えます。触る、攻撃する、花に変える、守る、進む。その行為の中で、訪問者は自然に言葉へ接触していきます。'),
                 gw_cb_card_grid('home-concept-cards', array(
                     array('icon' => 'fas fa-stopwatch', 'title' => '滞在時間を体験に変える', 'body' => 'ただ長く滞在させるのではなく、ページを探索する理由を作ります。訪問者はゲームとして遊びながら、結果的に見出し・本文・CTAを何度も目にします。', 'accent' => '#4edccf'),
-                    array('icon' => 'fas fa-hand-sparkles', 'title' => '読む前の抵抗を下げる', 'body' => '「理解してください」ではなく「触ってみてください」から始めることで、難しい説明や長い文章への心理的な距離を縮めます。', 'accent' => '#f5d565'),
+                    array('icon' => 'fas fa-magic', 'title' => '壊すだけでなく、咲かせる', 'body' => '破壊表現が合わないブランドでは、文字を花や光へ変えるBloomを使えます。ページが自分の手で明るく変わる満足感を作ります。', 'accent' => '#f5d565'),
                     array('icon' => 'fas fa-users', 'title' => 'ファンになる余白を作る', 'body' => 'ゲーム性、爽快感、クリア特典、ページ移動の驚きが、ブランドを覚える理由になります。情報接触を、記憶に残る遊びへ変えます。', 'accent' => '#ff7a66'),
                 )),
             )),
@@ -599,7 +606,7 @@ if (!function_exists('gw_cb_home_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#08141f',
             ), array(
-                gw_cb_section_title('home-business-impact-title', 'Interactive Web', '壊すことを、マーケティング施策にする。', 'CharaBreakは単なるミニゲームではありません。Webサイトの上に、滞在・回遊・読了・特典導線を生むインタラクティブレイヤーを追加します。ビジネスサイトの信頼感はそのままに、遊べる驚きでファンをつかみます。', true),
+                gw_cb_section_title('home-business-impact-title', 'Interactive Web', 'ページを変える行為を、マーケティング施策にする。', 'CharaBreakは単なるミニゲームではありません。Webサイトの上に、滞在・回遊・読了・特典導線を生むインタラクティブレイヤーを追加します。壊す爽快感も、花に変える満足感も、ブランドの温度に合わせて選べます。', true),
                 gw_cb_card_grid('home-business-impact-cards', array(
                     array('icon' => 'fas fa-eye', 'title' => '見られる接点が増える', 'body' => '文字が足場になり、画像が壁になり、リンクがゲートになる。ページの要素そのものが体験に変わるため、通常より多くのコンテンツ接点を作れます。', 'accent' => '#4edccf'),
                     array('icon' => 'fas fa-route', 'title' => 'ページ回遊をゲーム化する', 'body' => 'リンク先への移動をゲートにすることで、複数ページの閲覧を「次のステージへ進む」感覚に変えられます。', 'accent' => '#f5d565'),
@@ -613,10 +620,11 @@ if (!function_exists('gw_cb_home_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#eaf6f3',
             ), array(
-                gw_cb_section_title('home-loop-title', 'Game Loop', '走る、攻撃する、守る、そして読む。', 'プレイヤーはページの上に落ちてきて、文字や画像を足場に進みます。壊した文字、守った文字、敵から守ったページの記憶が、最後に本文の要約と重なります。遊びのあとに、読まれる構造です。'),
+                gw_cb_section_title('home-loop-title', 'Game Loop', '走る、攻撃する、咲かせる、そして読む。', 'プレイヤーはページの上に落ちてきて、文字や画像を足場に進みます。壊した文字、花に変えた文字、敵から守ったページの記憶が、最後に本文の要約と重なります。遊びのあとに、読まれる構造です。'),
                 gw_cb_card_grid('home-loop-cards', array(
                     array('icon' => 'fas fa-running', 'title' => 'Start', 'body' => 'キャラクターが上から落ちてきて、文字の上に着地します。', 'accent' => '#4edccf'),
                     array('icon' => 'fas fa-bolt', 'title' => 'Break', 'body' => '文字を1文字ずつ攻撃し、穴を作って次の足場へ降ります。', 'accent' => '#f5d565'),
+                    array('icon' => 'fas fa-magic', 'title' => 'Bloom', 'body' => '魔法のステッキで文字を花へ変え、花のエネルギーを矢にして放ちます。', 'accent' => '#ff7a66'),
                     array('icon' => 'fas fa-shield-alt', 'title' => 'Guard', 'body' => '守りたい文字を3文字以上集め、敵からページを守ります。', 'accent' => '#a6e35d'),
                     array('icon' => 'fas fa-flag-checkered', 'title' => 'Goal', 'body' => 'クリア後は要約、守った文字、特典、次ページへの導線を表示します。', 'accent' => '#ff7a66'),
                 )),
@@ -656,7 +664,7 @@ if (!function_exists('gw_cb_features_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#fbfaf4',
             ), array(
-                gw_cb_section_title('features-title', 'Features', 'ページそのものを、インタラクティブWebにする。', 'CharaBreakはWordPressの本文、画像、ボタン、リンクを読み取り、遊べる足場とリアクションに変換します。訪問者はコンテンツを読む前に、コンテンツの中へ入り込みます。'),
+                gw_cb_section_title('features-title', 'Features', 'ページそのものを、インタラクティブWebにする。', 'CharaBreakはWordPressの本文、画像、ボタン、リンクを読み取り、遊べる足場とリアクションに変換します。Breakでは爽快に崩し、Bloomでは文字を花や光へ変え、訪問者はコンテンツを読む前にコンテンツの中へ入り込みます。'),
                 gw_cb_image('features-dashboard-image', 'image:: 機能ダッシュボードビジュアル', $dashboard['url'], $dashboard['id'], array(
                     'width' => gw_cb_size(88, '%'),
                     'align' => 'center',
@@ -672,6 +680,7 @@ if (!function_exists('gw_cb_features_data')) {
                 )),
                 gw_cb_card_grid('features-grid', array(
                     array('icon' => 'fas fa-font', 'title' => '文字がステージになる', 'body' => '1文字ずつ攻撃でき、壊れた場所は穴として残ります。本文そのものが、進行と発見のきっかけになります。', 'accent' => '#4edccf'),
+                    array('icon' => 'fas fa-magic', 'title' => 'Bloomで花に変える', 'body' => '文字を壊す代わりに、魔法のステッキで花へ変換。花はひらひら消え、画面の邪魔にならない場所へ色とりどりの花畑を作ります。', 'accent' => '#ff7a66'),
                     array('icon' => 'fas fa-image', 'title' => '画像やアイコンも遊べる', 'body' => '通常画像、アイコン、バー、ボタン枠も足場や攻撃対象になります。ビジュアル要素まで、触れるコンテンツになります。', 'accent' => '#f5d565'),
                     array('icon' => 'fas fa-door-open', 'title' => 'リンクをゲートにする', 'body' => 'サイト内リンクに滞在するとゲージが溜まり、ゲームモードのままページ移動できます。回遊がステージ攻略に変わります。', 'accent' => '#ff7a66'),
                     array('icon' => 'fas fa-robot', 'title' => '敵が意味を生む', 'body' => '下へ進むほど敵が現れ、ページや守りたい文字を守る戦いに変化します。遊びに目的が生まれます。', 'accent' => '#a6e35d'),
@@ -686,7 +695,7 @@ if (!function_exists('gw_cb_features_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#eaf6f3',
             ), array(
-                gw_cb_section_title('features-flow-title', 'Creator Flow', 'Elementorページにも、自然に開始リンクを置ける。', '右下の固定ボタンだけでなく、ヒーローのCTA、料金表のボタン、記事中のリンクからゲームを開始できます。おしゃれなサイトの文脈を壊さず、遊びだけを自然に重ねます。'),
+                gw_cb_section_title('features-flow-title', 'Creator Flow', 'Elementorページにも、自然に開始リンクを置ける。', '右下の固定ボタンだけでなく、ヒーローのCTA、料金表のボタン、記事中のリンクからゲームを開始できます。ステージごとにBreak、Bloom、Hybridを選べる設計にすることで、おしゃれなサイトの文脈を壊さず、遊びだけを自然に重ねます。'),
                 gw_cb_card_grid('features-flow-cards', array(
                     array('icon' => 'fas fa-toggle-on', 'title' => 'ページごとにON', 'body' => '無料版は1ページで検証。Proでは複数ページをステージ化し、サイト全体の回遊施策として使えます。', 'accent' => '#4edccf'),
                     array('icon' => 'fas fa-pencil-alt', 'title' => '守る文字を設定', 'body' => 'ページごとに守りたい文字やステージ名を管理できます。ブランドや記事テーマに合わせたゲーム体験にできます。', 'accent' => '#f5d565'),
@@ -786,10 +795,10 @@ if (!function_exists('gw_cb_demo_data')) {
                     'flex_direction' => 'column',
                     'flex_gap' => array('column' => '16', 'row' => '16', 'isLinked' => true, 'unit' => 'px', 'size' => 16),
                 ), array(
-                    gw_cb_heading('demo-h1', 'title:: デモ見出し', '読む前に、まず壊してみる。', 'h1', array(
+                    gw_cb_heading('demo-h1', 'title:: デモ見出し', '読む前に、まず変えてみる。', 'h1', array(
                         'typography_font_size' => gw_cb_size(62),
                     )),
-                    gw_cb_text('demo-lead', 'text:: デモ説明', 'このページの文章、画像、ボタン、アイコン、ゲートは、ゲームモードで足場にも攻撃対象にもなります。普通なら読み飛ばされる要素が、遊びの対象になる。STARTを押して、Webサイトがインタラクティブなステージに変わる瞬間を試してください。'),
+                    gw_cb_text('demo-lead', 'text:: デモ説明', 'このページの文章、画像、ボタン、アイコン、ゲートは、ゲームモードで足場にも攻撃対象にもなります。Breakなら文字を崩し、Bloomなら文字を花に変える。普通なら読み飛ばされる要素が、遊びの対象になる瞬間を試してください。'),
                     gw_cb_button('demo-start', 'button:: デモ開始', 'Start Demo', '#gaming-web-start', 'primary', 'gw-inline-start'),
                 ), true),
                 gw_cb_image('demo-image', 'image:: CharaBreakデモワールド', $business['url'], $business['id'], array(
@@ -805,9 +814,10 @@ if (!function_exists('gw_cb_demo_data')) {
                 'background_background' => 'classic',
                 'background_color' => '#eaf6f3',
             ), array(
-                gw_cb_section_title('demo-playground-title', 'Playable Elements', 'この下の文章やカードが、ゲームの地形になります。', '普通に読むとプロダクト紹介。ゲームを始めると、文字は足場に、カードは壁に、ボタンはゲートになります。壊すことが、結果的に読むことへつながる体験をここで確認できます。'),
+                gw_cb_section_title('demo-playground-title', 'Playable Elements', 'この下の文章やカードが、ゲームの地形になります。', '普通に読むとプロダクト紹介。ゲームを始めると、文字は足場に、カードは壁に、ボタンはゲートになります。壊すことも、花に変えることも、結果的に読むことへつながる体験をここで確認できます。'),
                 gw_cb_card_grid('demo-cards', array(
                     array('icon' => 'fas fa-mouse-pointer', 'title' => 'クリックではなく操作する', 'body' => 'キャラクターを動かし、目の前の文字を丁寧に攻撃します。訪問者は「読者」ではなく「プレイヤー」になります。', 'accent' => '#4edccf'),
+                    array('icon' => 'fas fa-magic', 'title' => '花に変えて満たす', 'body' => '魔法のステッキで文字を花に変え、花のエネルギーを矢にして放ちます。やさしいブランド体験にも使えます。', 'accent' => '#ff7a66'),
                     array('icon' => 'fas fa-sort-amount-down', 'title' => '落下が進行になる', 'body' => '穴から下へ落ちることで、ページを読み進める感覚が生まれます。スクロールが攻略に変わります。', 'accent' => '#f5d565'),
                     array('icon' => 'fas fa-link', 'title' => 'リンクはゲートになる', 'body' => '触れて待つとリンク先へ。サイト回遊を、次のステージへ向かう行動として演出できます。', 'accent' => '#ff7a66'),
                     array('icon' => 'fas fa-heart', 'title' => '文字を守る', 'body' => '長く持った文字は守る文字になり、クリア条件へ近づきます。', 'accent' => '#a6e35d'),
@@ -851,6 +861,7 @@ if (!function_exists('gw_cb_faq_data')) {
                 gw_cb_accordion('faq-accordion', 'accordion:: CharaBreak FAQ', array(
                     array('title' => 'どんなWordPressページでもゲーム化できますか？', 'body' => '固定ページや投稿を中心に対応します。Elementorなど主要ビルダーは順次互換性を高めますが、複雑なスライダーや特殊な埋め込みは個別調整が必要です。'),
                     array('title' => 'ビジネス上の狙いは何ですか？', 'body' => '文章を最初から読ませるのではなく、壊す・進む・守るという行為を通じてページとの接触時間を増やすことです。結果的に見出しや本文、CTAへの接触回数が増え、ブランド記憶や回遊につながります。'),
+                    array('title' => '壊される表現が合わないサイトでも使えますか？', 'body' => 'はい。Bloomでは、文字を壊す代わりに魔法のステッキで花や光へ変えます。花はひらひら消え、世界の邪魔にならない場所に花畑のような満足感を残します。医療、教育、ブランドサイトなど、やさしい体験にしたいページにも合わせやすい設計です。'),
                     array('title' => '無料版では何ができますか？', 'body' => '1ページだけゲーム化できます。基本操作、文字攻撃、守る文字、GOAL、簡単なログを試せます。'),
                     array('title' => 'Pro版は何が違いますか？', 'body' => 'ページ数制限を外し、複数ページをリンクゲートでつなぐ冒険、特典やクーポン、ステージ設定の拡張を想定しています。'),
                     array('title' => 'Freemiusで販売する理由は？', 'body' => '海外販売、ライセンス、自動アップデート、決済、購入者管理を早く整え、開発リソースをゲーム体験に集中するためです。'),
@@ -889,6 +900,94 @@ if (!function_exists('gw_cb_upsert_page')) {
     }
 }
 
+if (!function_exists('gw_cb_social_meta')) {
+    function gw_cb_social_meta(string $slug): array
+    {
+        $defaults = array(
+            'title' => 'CharaBreak｜読む前に、壊せ。',
+            'description' => 'WordPressページをゲームステージに変えるプラグイン。Break、Bloom、Hybridで、読まれる前の数秒を体験に変えます。',
+        );
+
+        $items = array(
+            'charabreak' => array(
+                'title' => 'CharaBreak｜読む前に、壊せ。',
+                'description' => 'WordPressページをゲームステージに変えるプラグイン。文字を壊すBreak、花に変えるBloom、複数ページのワールドマップで、サイト滞在と回遊を遊びに変えます。',
+            ),
+            'charabreak-features' => array(
+                'title' => 'CharaBreak Features｜壊す、咲かせる、守るWeb体験',
+                'description' => '文字攻撃、魔法のステッキで花に変えるBloom、リンクゲート、敵、ワールドマップ、クリア特典まで。WordPressページを触れるコンテンツに変えます。',
+            ),
+            'charabreak-pricing' => array(
+                'title' => 'CharaBreak Pricing｜無料で試してProでサイト全体を冒険に',
+                'description' => '無料版は1ページから。Proでは複数ページのステージ化、ワールドマップ、報酬、ステージ別演出を開放する想定です。',
+            ),
+            'charabreak-demo' => array(
+                'title' => 'CharaBreak Demo｜ページを遊べるステージに',
+                'description' => '読む前に、まず触る。BreakとBloomを通じて、普通のWebページがプレイヤーの手で変わっていく体験を試せます。',
+            ),
+            'charabreak-faq' => array(
+                'title' => 'CharaBreak FAQ｜配布、販売、導入の質問',
+                'description' => '無料配布、Freemius販売、WordPress互換性、Break/Bloom/Hybrid、ビジネス活用についてのよくある質問をまとめています。',
+            ),
+        );
+
+        return array_merge($defaults, $items[$slug] ?? array());
+    }
+}
+
+if (!function_exists('gw_cb_apply_social_meta')) {
+    function gw_cb_apply_social_meta(int $post_id, string $slug): void
+    {
+        $meta = gw_cb_social_meta($slug);
+        $image = gw_cb_social_image();
+        $title = $meta['title'];
+        $description = $meta['description'];
+        $image_url = $image['url'];
+
+        wp_update_post(array(
+            'ID' => $post_id,
+            'post_excerpt' => $description,
+        ));
+
+        if (!empty($image['id'])) {
+            set_post_thumbnail($post_id, (int) $image['id']);
+        }
+
+        update_post_meta($post_id, '_charabreak_og_title', $title);
+        update_post_meta($post_id, '_charabreak_og_description', $description);
+        update_post_meta($post_id, '_charabreak_og_image', $image_url);
+
+        update_post_meta($post_id, '_yoast_wpseo_title', $title);
+        update_post_meta($post_id, '_yoast_wpseo_metadesc', $description);
+        update_post_meta($post_id, '_yoast_wpseo_opengraph-title', $title);
+        update_post_meta($post_id, '_yoast_wpseo_opengraph-description', $description);
+        update_post_meta($post_id, '_yoast_wpseo_opengraph-image', $image_url);
+        update_post_meta($post_id, '_yoast_wpseo_twitter-title', $title);
+        update_post_meta($post_id, '_yoast_wpseo_twitter-description', $description);
+        update_post_meta($post_id, '_yoast_wpseo_twitter-image', $image_url);
+
+        update_post_meta($post_id, 'rank_math_title', $title);
+        update_post_meta($post_id, 'rank_math_description', $description);
+        update_post_meta($post_id, 'rank_math_facebook_title', $title);
+        update_post_meta($post_id, 'rank_math_facebook_description', $description);
+        update_post_meta($post_id, 'rank_math_facebook_image', $image_url);
+        update_post_meta($post_id, 'rank_math_twitter_title', $title);
+        update_post_meta($post_id, 'rank_math_twitter_description', $description);
+        update_post_meta($post_id, 'rank_math_twitter_image', $image_url);
+
+        update_post_meta($post_id, '_aioseo_title', $title);
+        update_post_meta($post_id, '_aioseo_description', $description);
+        update_post_meta($post_id, '_aioseo_og_title', $title);
+        update_post_meta($post_id, '_aioseo_og_description', $description);
+        update_post_meta($post_id, '_aioseo_og_image_type', 'custom_image');
+        update_post_meta($post_id, '_aioseo_og_image_custom_url', $image_url);
+        update_post_meta($post_id, '_aioseo_twitter_title', $title);
+        update_post_meta($post_id, '_aioseo_twitter_description', $description);
+        update_post_meta($post_id, '_aioseo_twitter_image_type', 'custom_image');
+        update_post_meta($post_id, '_aioseo_twitter_image_custom_url', $image_url);
+    }
+}
+
 if (!function_exists('gw_cb_apply_elementor')) {
     function gw_cb_apply_elementor(int $post_id, string $slug, array $data): void
     {
@@ -905,6 +1004,7 @@ if (!function_exists('gw_cb_apply_elementor')) {
         update_post_meta($post_id, '_gaming_web_reward_message', 'このページを遊び切った人だけに見える、CharaBreakデモ用の特典です。');
         update_post_meta($post_id, '_gaming_web_reward_coupon_code', 'CHARABREAK-CLEAR');
         update_post_meta($post_id, '_gaming_web_reward_url', home_url('/charabreak-pricing/'));
+        gw_cb_apply_social_meta($post_id, $slug);
 
         $export_dir = dirname(__DIR__) . '/_generated';
         if (!is_dir($export_dir)) {
@@ -948,6 +1048,15 @@ foreach ($builders as $key => $callback) {
     $data = $callback($links);
     gw_cb_apply_elementor($ids[$key], $pages[$key]['slug'], $data);
     gw_cb_log('Built ' . $pages[$key]['title'] . ' #' . $ids[$key]);
+}
+
+if (did_action('elementor/loaded') && class_exists('\Elementor\Plugin')) {
+    try {
+        \Elementor\Plugin::$instance->files_manager->clear_cache();
+        gw_cb_log('Flushed Elementor generated files cache.');
+    } catch (Throwable $e) {
+        gw_cb_log('Elementor cache flush skipped: ' . $e->getMessage());
+    }
 }
 
 update_option('blogname', 'CharaBreak');

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CharaBreak
  * Description: WordPressページを、文字や画像を足場にして遊べるインタラクティブなステージへ変えるプラグインです。
- * Version: 0.2.38
+ * Version: 0.2.41
  * Author: CharaBreak
  * Requires at least: 6.0
  * Requires PHP: 7.4
@@ -56,7 +56,7 @@ if (!function_exists('cha_fs')) {
     do_action('cha_fs_loaded');
 }
 
-define('GAMING_WEB_VERSION', '0.2.38');
+define('GAMING_WEB_VERSION', '0.2.41');
 define('GAMING_WEB_FILE', __FILE__);
 define('GAMING_WEB_DIR', plugin_dir_path(__FILE__));
 define('GAMING_WEB_URL', plugin_dir_url(__FILE__));

@@ -1,6 +1,6 @@
 [
     {
-        "id": "c998483d",
+        "id": "6a440bae",
         "settings": {
             "html_tag": "header",
             "content_width": "full",
@@ -30,7 +30,7 @@
         },
         "elements": [
             {
-                "id": "7df3778a",
+                "id": "aeed41eb",
                 "settings": {
                     "content_width": "full",
                     "width": {
@@ -56,7 +56,7 @@
                 },
                 "elements": [
                     {
-                        "id": "ab3afeca",
+                        "id": "f42072f3",
                         "settings": {
                             "image": {
                                 "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-logo-transparent-hd.png",
@@ -84,7 +84,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "656dccdd",
+                        "id": "cddba797",
                         "settings": {
                             "title": "CharaBreak",
                             "header_size": "h3",
@@ -114,7 +114,7 @@
                 "elType": "container"
             },
             {
-                "id": "01ce3345",
+                "id": "0a0acfa9",
                 "settings": {
                     "html_tag": "nav",
                     "content_width": "full",
@@ -132,7 +132,7 @@
                 },
                 "elements": [
                     {
-                        "id": "63cb3bf8",
+                        "id": "d613e0ae",
                         "settings": {
                             "text": "Home",
                             "link": {
@@ -188,7 +188,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "55f07d63",
+                        "id": "52b055c0",
                         "settings": {
                             "text": "Features",
                             "link": {
@@ -244,7 +244,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "f57376da",
+                        "id": "7048b8e0",
                         "settings": {
                             "text": "Pricing",
                             "link": {
@@ -300,7 +300,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "681dad1a",
+                        "id": "67d39766",
                         "settings": {
                             "text": "Demo",
                             "link": {
@@ -356,7 +356,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "75a8f5ed",
+                        "id": "c9bfab68",
                         "settings": {
                             "text": "FAQ",
                             "link": {
@@ -412,7 +412,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "818fbaea",
+                        "id": "2a642e9a",
                         "settings": {
                             "text": "Play",
                             "link": {
@@ -477,7 +477,7 @@
         "elType": "container"
     },
     {
-        "id": "8abf5e8f",
+        "id": "9cfd466c",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -495,7 +495,7 @@
         },
         "elements": [
             {
-                "id": "86e36548",
+                "id": "7eb0ee12",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -515,7 +515,7 @@
                 },
                 "elements": [
                     {
-                        "id": "3f2c69dd",
+                        "id": "56c527ce",
                         "settings": {
                             "title": "Pricing",
                             "header_size": "h6",
@@ -547,7 +547,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "d098cca3",
+                        "id": "cbfd11bb",
                         "settings": {
                             "title": "無料で試して、Proでサイト全体を冒険に。",
                             "header_size": "h2",
@@ -573,7 +573,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "ea65f43a",
+                        "id": "e0953fe5",
                         "settings": {
                             "editor": "<p>無料版は誰でもダウンロードでき、1ページだけゲーム化できます。Proは1サイトごとの単発販売としてFreemiusで提供し、複数ページの回遊、特典導線、より深いステージ設定を開放する想定です。</p>",
                             "text_color": "rgba(251,250,244,0.82)",
@@ -601,7 +601,7 @@
                 "elType": "container"
             },
             {
-                "id": "a1d2e6a5",
+                "id": "57949beb",
                 "settings": {
                     "image": {
                         "url": "http://localhost:8089/wp-content/uploads/2026/05/charabreak-pricing-worlds.png",
@@ -641,7 +641,7 @@
                 "elType": "widget"
             },
             {
-                "id": "3da39a87",
+                "id": "94ea63ae",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -665,7 +665,7 @@
                 },
                 "elements": [
                     {
-                        "id": "21961fdb",
+                        "id": "748be8ce",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -723,7 +723,7 @@
                         },
                         "elements": [
                             {
-                                "id": "977bcc68",
+                                "id": "7f1e0639",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-leaf",
@@ -770,7 +770,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "93f58846",
+                        "id": "5beef613",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -828,7 +828,7 @@
                         },
                         "elements": [
                             {
-                                "id": "c24ea9b5",
+                                "id": "f7c34e51",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-gem",
@@ -875,7 +875,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "1b0f925a",
+                        "id": "32e3352e",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -933,7 +933,7 @@
                         },
                         "elements": [
                             {
-                                "id": "48773820",
+                                "id": "472b2099",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-store",
@@ -984,7 +984,7 @@
                 "elType": "container"
             },
             {
-                "id": "40c9dcb7",
+                "id": "3d073d7c",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -1009,7 +1009,7 @@
                 },
                 "elements": [
                     {
-                        "id": "ef7e94b2",
+                        "id": "c59612bf",
                         "settings": {
                             "text": "GitHub",
                             "link": {
@@ -1065,7 +1065,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "231c6915",
+                        "id": "3f2d1540",
                         "settings": {
                             "text": "Play Pricing Page",
                             "link": {
@@ -1130,7 +1130,7 @@
         "elType": "container"
     },
     {
-        "id": "97773984",
+        "id": "63889c9e",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1148,7 +1148,7 @@
         },
         "elements": [
             {
-                "id": "eb752721",
+                "id": "b6271caa",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "column",
@@ -1168,7 +1168,7 @@
                 },
                 "elements": [
                     {
-                        "id": "db093140",
+                        "id": "2f6113f3",
                         "settings": {
                             "title": "Plan Difference",
                             "header_size": "h6",
@@ -1200,7 +1200,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "4da81fab",
+                        "id": "ac229a16",
                         "settings": {
                             "title": "無料は体験、Proはビジネス施策。",
                             "header_size": "h2",
@@ -1226,7 +1226,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "54b3fc75",
+                        "id": "914ec5be",
                         "settings": {
                             "editor": "<p>無料版はCharaBreakの面白さを1ページで試す入口。Proはサイト内リンクをゲームのゲートにして、複数ページを渡り歩く体験、クリア後特典、回遊導線を作ります。</p>",
                             "text_color": "#607080",
@@ -1254,7 +1254,7 @@
                 "elType": "container"
             },
             {
-                "id": "e3e98dc7",
+                "id": "a6c0b699",
                 "settings": {
                     "content_width": "boxed",
                     "flex_direction": "row",
@@ -1278,7 +1278,7 @@
                 },
                 "elements": [
                     {
-                        "id": "abaa9025",
+                        "id": "d1d9bd9a",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1336,7 +1336,7 @@
                         },
                         "elements": [
                             {
-                                "id": "0dc1377d",
+                                "id": "a07e9e07",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-file-alt",
@@ -1383,7 +1383,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "663442ee",
+                        "id": "e8a38e3e",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1441,7 +1441,7 @@
                         },
                         "elements": [
                             {
-                                "id": "0d8f3969",
+                                "id": "900ab511",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-sitemap",
@@ -1488,7 +1488,7 @@
                         "elType": "container"
                     },
                     {
-                        "id": "f6bebefd",
+                        "id": "0d42e81f",
                         "settings": {
                             "content_width": "full",
                             "width": {
@@ -1546,7 +1546,7 @@
                         },
                         "elements": [
                             {
-                                "id": "de78ccd7",
+                                "id": "0431373e",
                                 "settings": {
                                     "selected_icon": {
                                         "value": "fas fa-key",
@@ -1601,7 +1601,7 @@
         "elType": "container"
     },
     {
-        "id": "de40f755",
+        "id": "4f86badf",
         "settings": {
             "content_width": "boxed",
             "flex_direction": "column",
@@ -1621,7 +1621,7 @@
         },
         "elements": [
             {
-                "id": "ee73c6c1",
+                "id": "3ab15994",
                 "settings": {
                     "title": "まずは1ページ、遊べるWebに変えてみる。",
                     "header_size": "h2",
@@ -1648,7 +1648,7 @@
                 "elType": "widget"
             },
             {
-                "id": "8b7eab6b",
+                "id": "ee577d2a",
                 "settings": {
                     "editor": "<p>無料版は1ページから。Pro版では複数ページをリンクゲートでつなぎ、サイト全体をひとつの冒険にできます。</p>",
                     "text_color": "rgba(251,250,244,0.78)",
@@ -1673,7 +1673,7 @@
                 "elType": "widget"
             },
             {
-                "id": "9a79fd66",
+                "id": "85141d87",
                 "settings": {
                     "content_width": "full",
                     "flex_direction": "row",
@@ -1690,7 +1690,7 @@
                 },
                 "elements": [
                     {
-                        "id": "1a7478a6",
+                        "id": "daadf4a7",
                         "settings": {
                             "text": "Free Download",
                             "link": {
@@ -1746,7 +1746,7 @@
                         "elType": "widget"
                     },
                     {
-                        "id": "ec4d585a",
+                        "id": "ca0a0d96",
                         "settings": {
                             "text": "Play Demo",
                             "link": {
