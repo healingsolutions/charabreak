@@ -1,4 +1,4 @@
-import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.41';
+import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.45';
 
 const BREAKABLE_TYPES = new Set(['heading', 'paragraph', 'action']);
 const SKIP_SELECTOR = 'script,style,noscript,svg,canvas,input,textarea,select,.gw-stage,.gw-stage *,.gw-break-char,.cb-nav,.cb-nav *';
@@ -16,6 +16,8 @@ export class TextBreaker {
         this.charSpans = [];
         this.breakTimers = new Set();
         this.maxChars = Math.max(0, Number(options.maxChars || 0));
+        this.lowPower = Boolean(options.lowPower);
+        this.activeCharSpans = [];
         this.prepared = false;
     }
 
@@ -62,7 +64,34 @@ export class TextBreaker {
 
         this.records = [];
         this.charSpans = [];
+        this.activeCharSpans = [];
         this.prepared = false;
+    }
+
+    invalidateRectCache() {
+        for (const span of this.charSpans) {
+            delete span.__gwDocRect;
+        }
+
+        this.activeCharSpans = [];
+    }
+
+    setLowPowerActiveSpans(items = []) {
+        if (!this.lowPower) {
+            return;
+        }
+
+        this.activeCharSpans = items
+            .map((item) => item?.span)
+            .filter((span) => span instanceof Element && span.isConnected);
+    }
+
+    candidateSpans() {
+        if (this.lowPower && this.activeCharSpans.length) {
+            return this.activeCharSpans;
+        }
+
+        return this.charSpans;
     }
 
     destroyAtRect(rect, options = {}) {
@@ -71,8 +100,12 @@ export class TextBreaker {
         const centerY = rect.top + rect.height / 2;
         const candidates = [];
 
-        for (const span of this.charSpans) {
+        for (const span of this.candidateSpans()) {
             if (span.dataset.gwBroken === '1' || !span.isConnected) {
+                continue;
+            }
+
+            if (this.lowPower && span.__gwDocRect && !docRectMayOverlapScreenRect(span.__gwDocRect, rect, 96)) {
                 continue;
             }
 
@@ -110,8 +143,12 @@ export class TextBreaker {
         const centerY = rect.top + rect.height / 2;
         const candidates = [];
 
-        for (const span of this.charSpans) {
+        for (const span of this.candidateSpans()) {
             if (span.dataset.gwBroken === '1' || span.dataset.gwBloomed === '1' || !span.isConnected) {
+                continue;
+            }
+
+            if (this.lowPower && span.__gwDocRect && !docRectMayOverlapScreenRect(span.__gwDocRect, rect, 96)) {
                 continue;
             }
 
@@ -148,8 +185,12 @@ export class TextBreaker {
         const centerY = options.centerY || rect.top + rect.height / 2;
         const candidates = [];
 
-        for (const span of this.charSpans) {
+        for (const span of this.candidateSpans()) {
             if (span.dataset.gwBroken === '1' || !span.isConnected) {
+                continue;
+            }
+
+            if (this.lowPower && span.__gwDocRect && !docRectMayOverlapScreenRect(span.__gwDocRect, rect, 84)) {
                 continue;
             }
 
@@ -298,6 +339,7 @@ export class TextBreaker {
                 continue;
             }
 
+            span.__gwDocRect = rect;
             rects.push({
                 rect,
                 span,
@@ -465,9 +507,21 @@ export class TextBreaker {
         span.style.width = `${Math.max(rect.width, 6)}px`;
         span.style.minWidth = `${Math.max(rect.width, 6)}px`;
         span.style.height = `${Math.max(rect.height, 8)}px`;
-        span.classList.add('gw-break-char--breaking');
         span.setAttribute('aria-hidden', 'true');
 
+        if (this.lowPower) {
+            span.textContent = '';
+            span.classList.add('gw-break-char--broken');
+            return {
+                char,
+                rect,
+                target: span.__gwTargetElement || null,
+                critical: span.dataset.gwCritical === '1',
+                criticalWord: span.dataset.gwCriticalWord || '',
+            };
+        }
+
+        span.classList.add('gw-break-char--breaking');
         const timer = window.setTimeout(() => {
             span.textContent = '';
             span.classList.remove('gw-break-char--breaking');
@@ -497,9 +551,22 @@ export class TextBreaker {
         span.style.minWidth = `${Math.max(rect.width, 6)}px`;
         span.style.height = `${Math.max(rect.height, 8)}px`;
         span.style.setProperty('--gw-bloom-color', color);
-        span.classList.add('gw-break-char--blooming');
         span.setAttribute('aria-label', `${char} bloom`);
 
+        if (this.lowPower) {
+            span.textContent = '';
+            span.classList.add('gw-break-char--broken');
+            span.setAttribute('aria-hidden', 'true');
+            return {
+                char,
+                rect: plainRect(rect),
+                target: span.__gwTargetElement || null,
+                critical: false,
+                criticalWord: '',
+            };
+        }
+
+        span.classList.add('gw-break-char--blooming');
         const timer = window.setTimeout(() => {
             span.textContent = bloomGlyphForChar(char);
             span.classList.remove('gw-break-char--blooming');
@@ -534,9 +601,22 @@ export class TextBreaker {
         span.style.width = `${Math.max(rect.width, 6)}px`;
         span.style.minWidth = `${Math.max(rect.width, 6)}px`;
         span.style.height = `${Math.max(rect.height, 8)}px`;
-        span.classList.add('gw-break-char--breaking', 'gw-break-char--picked');
         span.setAttribute('aria-hidden', 'true');
 
+        if (this.lowPower) {
+            span.textContent = '';
+            span.classList.add('gw-break-char--broken', 'gw-break-char--picked');
+            return {
+                char,
+                rect: plainRect(rect),
+                style,
+                target: span.__gwTargetElement || null,
+                critical: span.dataset.gwCritical === '1',
+                criticalWord: span.dataset.gwCriticalWord || '',
+            };
+        }
+
+        span.classList.add('gw-break-char--breaking', 'gw-break-char--picked');
         const timer = window.setTimeout(() => {
             span.textContent = '';
             span.classList.remove('gw-break-char--breaking', 'gw-break-char--picked');
@@ -596,6 +676,18 @@ function rectOverlapArea(first, second) {
     }
 
     return (right - left) * (bottom - top);
+}
+
+function docRectMayOverlapScreenRect(docRect, screenRect, padding = 64) {
+    const left = docRect.left - window.scrollX;
+    const right = docRect.right - window.scrollX;
+    const top = docRect.top - window.scrollY;
+    const bottom = docRect.bottom - window.scrollY;
+
+    return right >= screenRect.left - padding
+        && left <= screenRect.right + padding
+        && bottom >= screenRect.top - padding
+        && top <= screenRect.bottom + padding;
 }
 
 function horizontalOverlap(first, second) {

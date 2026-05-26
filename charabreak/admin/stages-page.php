@@ -5,6 +5,9 @@ if (!defined('ABSPATH')) {
 }
 
 $enemy_choices = is_array($enemies ?? null) ? $enemies : array();
+$is_pro = GW_License::is_pro();
+$stage_limit = GW_License::stage_limit();
+$upgrade_url = GW_License::pro_upgrade_url();
 $stage_types = array(
     'normal' => __('通常ステージ', 'gaming-web'),
     'reward' => __('報酬ステージ', 'gaming-web'),
@@ -46,6 +49,18 @@ $clear_effects = GW_Enemies::clear_effect_choices();
     <p class="gaming-web-admin__lead">
         <?php esc_html_e('ゲーム化するページ、ワールドマップの並び、敵キャラ、報酬、クリア条件をまとめて設定します。', 'gaming-web'); ?>
     </p>
+
+    <?php if (!$is_pro) : ?>
+        <div class="notice notice-info">
+            <p>
+                <strong><?php esc_html_e('Free plan: 1 playable stage / 無料版は1ステージのみ', 'gaming-web'); ?></strong><br>
+                <?php echo esc_html(sprintf(__('現在の有効ステージ上限は%dページです。複数ページのワールドマップ、敵キャラ割り当て、ステージ別BGM、商品・アイテム収集条件はProで有効になります。', 'gaming-web'), $stage_limit)); ?>
+                <?php if ($upgrade_url !== '') : ?>
+                    <a href="<?php echo esc_url($upgrade_url); ?>"><?php esc_html_e('Proにアップグレード', 'gaming-web'); ?></a>
+                <?php endif; ?>
+            </p>
+        </div>
+    <?php endif; ?>
 
     <?php if (isset($_GET['gaming_web_updated'])) : ?>
         <div class="notice notice-success is-dismissible"><p><?php esc_html_e('ステージ設定を保存しました。', 'gaming-web'); ?></p></div>
@@ -165,7 +180,7 @@ $clear_effects = GW_Enemies::clear_effect_choices();
                                 </label>
                                 <label>
                                     <span><?php esc_html_e('難易度', 'gaming-web'); ?></span>
-                                    <select name="gaming_web_stage_difficulty[<?php echo esc_attr($post_id); ?>]">
+                                    <select name="gaming_web_stage_difficulty[<?php echo esc_attr($post_id); ?>]" <?php disabled(!$is_pro); ?>>
                                         <?php for ($level = 1; $level <= 8; $level++) : ?>
                                             <option value="<?php echo esc_attr((string) $level); ?>" <?php selected($difficulty, $level); ?>><?php echo esc_html((string) $level); ?></option>
                                         <?php endfor; ?>
@@ -184,7 +199,7 @@ $clear_effects = GW_Enemies::clear_effect_choices();
                         <td>
                             <label>
                                 <span><?php esc_html_e('通常敵', 'gaming-web'); ?></span>
-                                <select name="gaming_web_stage_enemy_ids[<?php echo esc_attr($post_id); ?>][]" class="widefat" multiple size="4">
+                                <select name="gaming_web_stage_enemy_ids[<?php echo esc_attr($post_id); ?>][]" class="widefat" multiple size="4" <?php disabled(!$is_pro); ?>>
                                     <?php foreach ($enemy_choices as $enemy) : ?>
                                         <?php
                                         $enemy_id = (string) ($enemy['enemy_id'] ?? '');
@@ -201,7 +216,7 @@ $clear_effects = GW_Enemies::clear_effect_choices();
                             </label>
                             <label>
                                 <span><?php esc_html_e('ボス敵', 'gaming-web'); ?></span>
-                                <select name="gaming_web_stage_boss_enemy_id[<?php echo esc_attr($post_id); ?>]" class="widefat">
+                                <select name="gaming_web_stage_boss_enemy_id[<?php echo esc_attr($post_id); ?>]" class="widefat" <?php disabled(!$is_pro); ?>>
                                     <option value=""><?php esc_html_e('デフォルト / なし', 'gaming-web'); ?></option>
                                     <?php foreach ($enemy_choices as $enemy) : ?>
                                         <?php
@@ -225,18 +240,18 @@ $clear_effects = GW_Enemies::clear_effect_choices();
                             </label>
                             <label>
                                 <span><?php esc_html_e('クリア演出', 'gaming-web'); ?></span>
-                                <select name="gaming_web_stage_clear_effect[<?php echo esc_attr($post_id); ?>]" class="widefat">
+                                <select name="gaming_web_stage_clear_effect[<?php echo esc_attr($post_id); ?>]" class="widefat" <?php disabled(!$is_pro); ?>>
                                     <?php foreach ($clear_effects as $value => $text) : ?>
                                         <option value="<?php echo esc_attr($value); ?>" <?php selected($effect, $value); ?>><?php echo esc_html($text); ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </label>
-                            <details class="gaming-web-stage-advanced">
+                            <details class="gaming-web-stage-advanced" <?php echo $is_pro ? '' : 'data-gw-pro-locked="1"'; ?>>
                                 <summary><?php esc_html_e('Pro設定：BGM・クリア条件', 'gaming-web'); ?></summary>
                                 <div class="gaming-web-admin__inline-fields gaming-web-admin__inline-fields--objective">
                                     <label>
                                         <span><?php esc_html_e('クリア条件', 'gaming-web'); ?></span>
-                                        <select name="gaming_web_stage_objective_type[<?php echo esc_attr($post_id); ?>]">
+                                        <select name="gaming_web_stage_objective_type[<?php echo esc_attr($post_id); ?>]" <?php disabled(!$is_pro); ?>>
                                             <?php foreach ($objective_types as $value => $text) : ?>
                                                 <option value="<?php echo esc_attr($value); ?>" <?php selected($objective_type, $value); ?>><?php echo esc_html($text); ?></option>
                                             <?php endforeach; ?>
@@ -244,11 +259,11 @@ $clear_effects = GW_Enemies::clear_effect_choices();
                                     </label>
                                     <label>
                                         <span><?php esc_html_e('集めるものの名前', 'gaming-web'); ?></span>
-                                        <input type="text" name="gaming_web_stage_objective_label[<?php echo esc_attr($post_id); ?>]" value="<?php echo esc_attr($objective_label); ?>" placeholder="<?php esc_attr_e('自社製品', 'gaming-web'); ?>">
+                                        <input type="text" name="gaming_web_stage_objective_label[<?php echo esc_attr($post_id); ?>]" value="<?php echo esc_attr($objective_label); ?>" placeholder="<?php esc_attr_e('自社製品', 'gaming-web'); ?>" <?php disabled(!$is_pro); ?>>
                                     </label>
                                     <label>
                                         <span><?php esc_html_e('必要数', 'gaming-web'); ?></span>
-                                        <input type="number" min="1" max="9" step="1" name="gaming_web_stage_objective_count[<?php echo esc_attr($post_id); ?>]" value="<?php echo esc_attr((string) $objective_count); ?>">
+                                        <input type="number" min="1" max="9" step="1" name="gaming_web_stage_objective_count[<?php echo esc_attr($post_id); ?>]" value="<?php echo esc_attr((string) $objective_count); ?>" <?php disabled(!$is_pro); ?>>
                                     </label>
                                 </div>
                                 <div class="gaming-web-audio-grid">
@@ -262,8 +277,8 @@ $clear_effects = GW_Enemies::clear_effect_choices();
                                             <span><?php echo esc_html($audio_field['label']); ?></span>
                                             <input type="hidden" class="gaming-web-media-field__input" name="<?php echo esc_attr($audio_field['name']); ?>[<?php echo esc_attr($post_id); ?>]" value="<?php echo esc_attr((string) $audio_id); ?>">
                                             <div class="gaming-web-media-field__preview"><span><?php echo esc_html($audio_label); ?></span></div>
-                                            <button type="button" class="button gaming-web-media-field__choose"><?php esc_html_e('選択', 'gaming-web'); ?></button>
-                                            <button type="button" class="button-link gaming-web-media-field__clear"><?php esc_html_e('解除', 'gaming-web'); ?></button>
+                                            <button type="button" class="button gaming-web-media-field__choose" <?php disabled(!$is_pro); ?>><?php esc_html_e('選択', 'gaming-web'); ?></button>
+                                            <button type="button" class="button-link gaming-web-media-field__clear" <?php disabled(!$is_pro); ?>><?php esc_html_e('解除', 'gaming-web'); ?></button>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>

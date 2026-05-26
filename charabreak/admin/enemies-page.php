@@ -7,6 +7,8 @@ if (!defined('ABSPATH')) {
 $role_choices = GW_Enemies::role_choices();
 $behavior_choices = GW_Enemies::behavior_choices();
 $rows = array_values(is_array($enemies ?? null) ? $enemies : array());
+$is_pro = GW_License::is_pro();
+$upgrade_url = GW_License::pro_upgrade_url();
 $rows[] = array(
     'enemy_id' => '',
     'name' => '',
@@ -23,8 +25,23 @@ $rows[] = array(
         <?php esc_html_e('プレイヤー、案内役、通常敵、ボスを登録します。運営者は画像、役割、動き、難易度1〜8を選ぶだけで使えます。', 'gaming-web'); ?>
     </p>
 
+    <?php if (!$is_pro) : ?>
+        <div class="notice notice-info">
+            <p>
+                <strong><?php esc_html_e('Pro機能: キャラクター・敵キャラ台帳', 'gaming-web'); ?></strong><br>
+                <?php esc_html_e('無料版では標準キャラクターと標準敵で1ステージを遊べます。画像付きキャラクター、ボス、難易度プリセット、ステージ別の敵割り当てはProで編集できます。', 'gaming-web'); ?>
+                <?php if ($upgrade_url !== '') : ?>
+                    <a href="<?php echo esc_url($upgrade_url); ?>"><?php esc_html_e('Proにアップグレード', 'gaming-web'); ?></a>
+                <?php endif; ?>
+            </p>
+        </div>
+    <?php endif; ?>
+
     <?php if (isset($_GET['gaming_web_updated'])) : ?>
         <div class="notice notice-success is-dismissible"><p><?php esc_html_e('キャラクター・敵キャラ台帳を保存しました。', 'gaming-web'); ?></p></div>
+    <?php endif; ?>
+    <?php if (isset($_GET['gaming_web_pro_required'])) : ?>
+        <div class="notice notice-warning is-dismissible"><p><?php esc_html_e('敵キャラ台帳の保存にはProライセンスが必要です。', 'gaming-web'); ?></p></div>
     <?php endif; ?>
 
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -33,7 +50,7 @@ $rows[] = array(
 
         <div class="gaming-web-admin__toolbar">
             <p><?php esc_html_e('名前が空の行は保存されません。新しいキャラは一番下の空欄に入力してください。', 'gaming-web'); ?></p>
-            <?php submit_button(__('台帳を保存', 'gaming-web'), 'primary', 'submit', false); ?>
+            <?php submit_button(__('台帳を保存', 'gaming-web'), 'primary', 'submit', false, $is_pro ? array() : array('disabled' => 'disabled')); ?>
         </div>
 
         <div class="gaming-web-admin__filters" data-gw-admin-filters="enemies">
@@ -97,7 +114,7 @@ $rows[] = array(
                             <input type="hidden" name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][enemy_id]" value="<?php echo esc_attr($enemy_id); ?>">
                             <label>
                                 <span><?php esc_html_e('名前', 'gaming-web'); ?></span>
-                                <input type="text" name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][name]" value="<?php echo esc_attr($name); ?>" class="widefat" placeholder="<?php esc_attr_e('クリスタルインプ', 'gaming-web'); ?>">
+                                <input type="text" name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][name]" value="<?php echo esc_attr($name); ?>" class="widefat" placeholder="<?php esc_attr_e('クリスタルインプ', 'gaming-web'); ?>" <?php disabled(!$is_pro); ?>>
                             </label>
                             <?php if ($enemy_id !== '') : ?>
                                 <p class="description"><?php echo esc_html($enemy_id); ?></p>
@@ -113,14 +130,14 @@ $rows[] = array(
                                         <span><?php esc_html_e('標準ドット表示', 'gaming-web'); ?></span>
                                     <?php endif; ?>
                                 </div>
-                                <button type="button" class="button gaming-web-media-field__choose"><?php esc_html_e('画像を選択', 'gaming-web'); ?></button>
-                                <button type="button" class="button-link gaming-web-media-field__clear"><?php esc_html_e('解除', 'gaming-web'); ?></button>
+                                <button type="button" class="button gaming-web-media-field__choose" <?php disabled(!$is_pro); ?>><?php esc_html_e('画像を選択', 'gaming-web'); ?></button>
+                                <button type="button" class="button-link gaming-web-media-field__clear" <?php disabled(!$is_pro); ?>><?php esc_html_e('解除', 'gaming-web'); ?></button>
                             </div>
                         </td>
                         <td>
                             <label>
                                 <span><?php esc_html_e('役割', 'gaming-web'); ?></span>
-                                <select name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][role]" class="widefat">
+                                <select name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][role]" class="widefat" <?php disabled(!$is_pro); ?>>
                                     <?php foreach ($role_choices as $value => $text) : ?>
                                         <option value="<?php echo esc_attr($value); ?>" <?php selected($role, $value); ?>><?php echo esc_html($text); ?></option>
                                     <?php endforeach; ?>
@@ -128,7 +145,7 @@ $rows[] = array(
                             </label>
                             <label>
                                 <span><?php esc_html_e('動き', 'gaming-web'); ?></span>
-                                <select name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][behavior]" class="widefat">
+                                <select name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][behavior]" class="widefat" <?php disabled(!$is_pro); ?>>
                                     <?php foreach ($behavior_choices as $value => $text) : ?>
                                         <option value="<?php echo esc_attr($value); ?>" <?php selected($behavior, $value); ?>><?php echo esc_html($text); ?></option>
                                     <?php endforeach; ?>
@@ -136,7 +153,7 @@ $rows[] = array(
                             </label>
                         </td>
                         <td>
-                            <select name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][difficulty]" class="widefat">
+                            <select name="gaming_web_enemies[<?php echo esc_attr((string) $index); ?>][difficulty]" class="widefat" <?php disabled(!$is_pro); ?>>
                                 <?php for ($level = 1; $level <= 8; $level++) : ?>
                                     <option value="<?php echo esc_attr((string) $level); ?>" <?php selected($difficulty, $level); ?>>Lv.<?php echo esc_html((string) $level); ?></option>
                                 <?php endfor; ?>
@@ -155,6 +172,6 @@ $rows[] = array(
             </tbody>
         </table>
 
-        <p class="submit"><?php submit_button(__('台帳を保存', 'gaming-web'), 'primary', 'submit', false); ?></p>
+        <p class="submit"><?php submit_button(__('台帳を保存', 'gaming-web'), 'primary', 'submit', false, $is_pro ? array() : array('disabled' => 'disabled')); ?></p>
     </form>
 </div>

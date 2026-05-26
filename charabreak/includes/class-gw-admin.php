@@ -132,6 +132,8 @@ class GW_Admin
         $enemy_ids = isset($_POST['gaming_web_stage_enemy_ids']) && is_array($_POST['gaming_web_stage_enemy_ids']) ? $_POST['gaming_web_stage_enemy_ids'] : array();
         $boss_ids = isset($_POST['gaming_web_stage_boss_enemy_id']) && is_array($_POST['gaming_web_stage_boss_enemy_id']) ? $_POST['gaming_web_stage_boss_enemy_id'] : array();
         $known_enemy_ids = array_map(static fn(array $enemy): string => (string) ($enemy['enemy_id'] ?? ''), GW_Enemies::all());
+        $is_pro = GW_License::is_pro();
+        $enabled_ids = GW_License::limit_stage_ids($enabled_ids);
 
         foreach ($post_ids as $post_id) {
             if ($post_id <= 0 || !current_user_can('edit_post', $post_id)) {
@@ -157,6 +159,11 @@ class GW_Admin
             update_post_meta($post_id, '_gaming_web_play_style', $play_style);
 
             update_post_meta($post_id, '_gaming_web_world_map_reward_label', sanitize_text_field(wp_unslash((string) ($rewards[$post_id] ?? ''))));
+
+            if (!$is_pro) {
+                continue;
+            }
+
             update_post_meta($post_id, '_gaming_web_stage_difficulty', (string) GW_Enemies::difficulty($difficulties[$post_id] ?? 3));
 
             $effect = sanitize_key((string) ($effects[$post_id] ?? 'auto'));
@@ -202,6 +209,11 @@ class GW_Admin
         }
 
         check_admin_referer('gaming_web_save_enemies');
+        if (!GW_License::is_pro()) {
+            wp_safe_redirect(add_query_arg('gaming_web_pro_required', '1', admin_url('admin.php?page=gaming-web-enemies')));
+            exit;
+        }
+
         GW_Enemies::save_from_request($_POST['gaming_web_enemies'] ?? array());
         wp_safe_redirect(add_query_arg('gaming_web_updated', '1', admin_url('admin.php?page=gaming-web-enemies')));
         exit;

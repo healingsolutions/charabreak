@@ -1,4 +1,4 @@
-import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.41';
+import { isGameIgnoredElement, liveRectForTarget } from './dom-scanner.js?v=0.2.45';
 
 const UI_TEXT_EN = {};
 const UI_TEXT_JA = {
@@ -181,7 +181,7 @@ const MOBILE_CAMERA_FOLLOW_MAX_SPEED = 2600;
 const MOBILE_CAMERA_FOLLOW_SPRING = 7.4;
 const MOBILE_CAMERA_FOLLOW_EASE = 15;
 const MOBILE_CAMERA_BOTTOM_GUARD = 108;
-const MOBILE_CAMERA_UI_UPDATE_MS = 120;
+const MOBILE_CAMERA_UI_UPDATE_MS = 220;
 const LINK_GATE_DWELL_MS = 980;
 const LINK_GATE_STILL_SPEED = 54;
 const LINK_GATE_MAX_VERTICAL_SPEED = 90;
@@ -213,10 +213,11 @@ const TOUCH_PARRY_MAX_MS = 220;
 const TOUCH_PARRY_MIN_SPEED = 0.48;
 const TOUCH_PARRY_MS = 460;
 const TOUCH_CHARGE_PULL_PX = 58;
-const MOBILE_TEMP_EFFECT_LIMIT = 26;
-const MOBILE_EFFECT_SOFT_LIMIT = 18;
-const MOBILE_EFFECT_MAX_LIFETIME = 520;
-const MOBILE_EFFECT_THROTTLE_MS = 42;
+const MOBILE_TEMP_EFFECT_LIMIT = 5;
+const MOBILE_EFFECT_SOFT_LIMIT = 3;
+const MOBILE_EFFECT_MAX_LIFETIME = 190;
+const MOBILE_EFFECT_THROTTLE_MS = 180;
+const MOBILE_SECONDARY_UPDATE_MS = 260;
 const BOSS_MISSILE_WARNING_MS = 560;
 const BOSS_MISSILE_MIN_INTERVAL = 5600;
 const BOSS_MISSILE_MAX_INTERVAL = 9200;
@@ -397,6 +398,9 @@ export class StageOverlay {
         this.lastMobileEnemyUpdateAt = 0;
         this.lastMobileChestUpdateAt = 0;
         this.lastMobileCameraUiUpdateAt = 0;
+        this.lastMobileSecondaryUpdateAt = 0;
+        this.mobileSecondaryDelta = 0;
+        this.suppressMobileScrollSyncUntil = 0;
         this.handleViewportResize = this.handleViewportResize.bind(this);
         this.handleWindowScroll = this.handleWindowScroll.bind(this);
         this.handleGameWheel = this.handleGameWheel.bind(this);
@@ -645,7 +649,7 @@ export class StageOverlay {
         }
 
         const now = currentTime();
-        const minInterval = this.mobilePerformanceMode() ? 620 : 180;
+        const minInterval = this.mobilePerformanceMode() ? 950 : 180;
         if (!force && now - this.lastMissionUpdateAt < minInterval) {
             return;
         }
@@ -1340,6 +1344,7 @@ export class StageOverlay {
     }
 
     handleViewportResize() {
+        this.textBreaker?.invalidateRectCache?.();
         this.playBounds = this.calculatePlayBounds();
         this.rooms = this.buildRooms();
         if (this.runnerState) {
@@ -1363,6 +1368,11 @@ export class StageOverlay {
 
     handleWindowScroll() {
         if (!this.runnerState) {
+            return;
+        }
+
+        if (this.mobilePerformanceMode() && currentTime() < this.suppressMobileScrollSyncUntil) {
+            this.syncRunnerScreenPosition();
             return;
         }
 
@@ -1876,23 +1886,43 @@ export class StageOverlay {
                 this.runnerRaf = requestFrame((nextTime) => this.updateRunner(nextTime));
                 return;
             }
-            this.maybeSpawnEnemies(time);
-            this.maybeSpawnChests(time);
-            this.updateEnemies(delta, time);
-            if (!this.mobilePerformanceMode() || time - this.lastMobileChestUpdateAt > 260) {
-                this.updateChests(delta, time);
-                this.lastMobileChestUpdateAt = time;
+            const mobileLight = this.mobilePerformanceMode();
+            let secondaryDelta = delta;
+            let updateSecondarySystems = true;
+
+        if (mobileLight) {
+            this.mobileSecondaryDelta = Math.min(0.22, (this.mobileSecondaryDelta || 0) + delta);
+            updateSecondarySystems = time - this.lastMobileSecondaryUpdateAt > MOBILE_SECONDARY_UPDATE_MS
+                || this.projectiles.length > 0
+                || this.enemyMissiles.length > 0;
+            secondaryDelta = this.mobileSecondaryDelta;
+        }
+
+            if (updateSecondarySystems) {
+                this.maybeSpawnEnemies(time);
+                this.maybeSpawnChests(time);
+                this.updateEnemies(secondaryDelta, time);
+                if (!mobileLight || time - this.lastMobileChestUpdateAt > 420) {
+                    this.updateChests(secondaryDelta, time);
+                    this.lastMobileChestUpdateAt = time;
+                }
+                this.syncLockedEnemy();
+                this.updateProjectiles(secondaryDelta);
+                this.updateEnemyMissiles(secondaryDelta, time);
+                this.updateGoalGate();
+                this.updateReturnRoute();
+                this.checkGateEntry();
+                this.checkGoalEntry();
+                this.checkReturnRouteEntry();
+
+                if (mobileLight) {
+                    this.lastMobileSecondaryUpdateAt = time;
+                    this.mobileSecondaryDelta = 0;
+                }
             }
-            this.syncLockedEnemy();
-            this.updateProjectiles(delta);
-            this.updateEnemyMissiles(delta, time);
+
             this.renderRunner(time);
             this.updateMissionHud();
-            this.updateGoalGate();
-            this.updateReturnRoute();
-            this.checkGateEntry();
-            this.checkGoalEntry();
-            this.checkReturnRouteEntry();
         } catch (error) {
             window.__GamingWebRunnerError = {
                 message: error?.message || String(error),
@@ -2104,6 +2134,8 @@ export class StageOverlay {
     rebuildRoomCollisionCache() {
         const room = this.currentRoom();
         this.roomCollisionCache = this.collisionCacheForRoom(room);
+        this.textBreaker?.setLowPowerActiveSpans?.(this.roomCollisionCache.textRects || []);
+        this.imageBreaker?.setLowPowerActiveRecords?.(this.roomCollisionCache.imageRects || []);
 
         if (this.runnerState) {
             this.runnerState.cachedPlatforms = this.roomCollisionCache;
@@ -3404,7 +3436,8 @@ export class StageOverlay {
         this.positionPlacedLetter(placed);
         this.rebuildRoomCollisionCache();
 
-        while (this.placedLetters.length > 12) {
+        const placedLimit = this.mobilePerformanceMode() ? 6 : 12;
+        while (this.placedLetters.length > placedLimit) {
             const old = this.placedLetters.shift();
             old?.element?.remove();
         }
@@ -5522,6 +5555,9 @@ export class StageOverlay {
         this.cameraScrollVelocity = lerp(this.cameraScrollVelocity, desiredVelocity, ease);
         const step = clamp(this.cameraScrollVelocity * delta, -Math.abs(distance), Math.abs(distance));
         const previousScrollY = window.scrollY;
+        if (mobileLight) {
+            this.suppressMobileScrollSyncUntil = currentTime() + 140;
+        }
         window.scrollTo(0, clamp(previousScrollY + step, 0, maxScroll));
         const actualScroll = window.scrollY - previousScrollY;
         if (Math.abs(actualScroll) < 0.5) {
@@ -6138,6 +6174,10 @@ export class StageOverlay {
     }
 
     spawnRunnerDust(time) {
+        if (this.mobilePerformanceMode()) {
+            return;
+        }
+
         const interval = this.mobilePerformanceMode() ? 320 : 115;
         if (time - this.runnerState.lastDustAt < interval) {
             return;
@@ -6156,8 +6196,12 @@ export class StageOverlay {
     }
 
     spawnFallTrail(time, fastFalling = false) {
+        if (this.mobilePerformanceMode() && !fastFalling) {
+            return;
+        }
+
         const interval = this.mobilePerformanceMode()
-            ? (fastFalling ? 260 : 420)
+            ? 560
             : (fastFalling ? 72 : 118);
         if (time - this.runnerState.lastFallTrailAt < interval) {
             return;
@@ -6180,7 +6224,12 @@ export class StageOverlay {
             return;
         }
 
-        const count = this.mobilePerformanceMode() ? (heavy ? 2 : 1) : (heavy ? 5 : 3);
+        const mobileLight = this.mobilePerformanceMode();
+        if (mobileLight && !heavy) {
+            return;
+        }
+
+        const count = mobileLight ? 1 : (heavy ? 5 : 3);
         for (let i = 0; i < count; i += 1) {
             const dust = document.createElement('span');
             dust.className = `gw-run-dust gw-run-dust--landing${heavy ? ' gw-run-dust--heavy' : ''}`;
@@ -7128,7 +7177,7 @@ export class StageOverlay {
 
         const mobileLight = this.mobilePerformanceMode();
         const charLimit = mobileLight
-            ? (target.type === 'paragraph' ? 18 : 12)
+            ? (target.type === 'paragraph' ? 6 : 4)
             : (target.type === 'paragraph' ? 140 : 84);
         const chars = Array.from(text.slice(0, charLimit));
         for (const char of chars) {
@@ -7156,7 +7205,7 @@ export class StageOverlay {
         this.addTemporaryEffect(ring, 620, { essential: true, mobileLifetime: 320 });
 
         const debrisCount = mobileLight
-            ? (intensity === 'hard' ? 3 : (intensity === 'char' ? 1 : 2))
+            ? (intensity === 'hard' ? 1 : 0)
             : (intensity === 'hard' ? 22 : (intensity === 'char' ? 8 : 12));
         for (let index = 0; index < debrisCount; index += 1) {
             const debris = document.createElement('span');
@@ -7194,7 +7243,7 @@ export class StageOverlay {
         this.addTemporaryEffect(burst, intensity === 'hard' ? 820 : 680, { essential: true, mobileLifetime: 360 });
 
         const petalCount = mobileLight
-            ? (intensity === 'hard' ? 2 : 1)
+            ? (intensity === 'hard' ? 1 : 0)
             : (intensity === 'hard' ? 18 : 10);
         for (let index = 0; index < petalCount; index += 1) {
             const petal = document.createElement('span');
@@ -7221,7 +7270,7 @@ export class StageOverlay {
         const centerY = rect.top + rect.height / 2;
         const mobileLight = this.mobilePerformanceMode();
         const flowerCount = Math.min(mobileLight ? 1 : 5, Math.max(1, count + 1));
-        const maxFlowers = mobileLight ? 12 : 86;
+        const maxFlowers = mobileLight ? 3 : 86;
         const preferRight = centerX < window.innerWidth * 0.52;
         const laneMin = 22;
         const laneMax = Math.max(laneMin + 20, Math.min(150, window.innerWidth * 0.16));
@@ -7258,11 +7307,7 @@ export class StageOverlay {
         }
 
         if (this.mobilePerformanceMode()) {
-            if (strength !== 'hard') {
-                return;
-            }
-
-            strength = 'soft';
+            return;
         }
 
         const strengthClass = `gw-screen-shake--${strength}`;
@@ -7330,7 +7375,7 @@ export class StageOverlay {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const chipCount = this.mobilePerformanceMode()
-            ? (destroyed ? 3 : 1)
+            ? (destroyed ? 1 : 0)
             : (destroyed ? 18 : 9);
 
         for (let index = 0; index < chipCount; index += 1) {

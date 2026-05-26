@@ -32,7 +32,12 @@ try {
         Where-Object {
             $relative = $_.FullName.Substring($sourceRoot.Path.Length).TrimStart("\", "/")
             $segments = $relative -split '[\\/]'
-            -not ($segments -contains "_notes" -or $segments -contains "_tmp" -or $segments -contains "_tmp_apollo")
+            -not (
+                $segments -contains "_notes" -or
+                $segments -contains "_tmp" -or
+                $segments -contains "_generated" -or
+                $segments -contains "scripts"
+            )
         } |
         ForEach-Object {
             $relative = $_.FullName.Substring($sourceRoot.Path.Length).TrimStart("\", "/")

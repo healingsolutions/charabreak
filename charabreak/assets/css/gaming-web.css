@@ -70,47 +70,6 @@
     pointer-events: none;
 }
 
-.gw-apollo-start {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    width: min(1120px, calc(100vw - 40px));
-    min-height: 66px;
-    padding: 10px 0;
-    color: #ffffff;
-    font-family: Inter, "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-.gw-apollo-start strong,
-.gw-apollo-start span {
-    display: block;
-    letter-spacing: 0;
-}
-
-.gw-apollo-start strong {
-    color: #f0cf5d;
-    font-size: 14px;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.gw-apollo-start span {
-    margin-top: 4px;
-    color: rgba(255, 255, 255, 0.82);
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.45;
-}
-
-.gw-apollo-start__button {
-    flex: 0 0 auto;
-    border-color: rgba(240, 207, 93, 0.7);
-    background: #f0cf5d;
-    color: #071723;
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
-}
-
 .gw-game-active {
     cursor: crosshair;
 }
@@ -5322,28 +5281,42 @@
         animation-duration: 620ms !important;
     }
 
+    .gw-stage--mobile-low-power .gw-world-flower {
+        animation: none !important;
+        opacity: 0.86;
+    }
+
     .gw-stage--mobile-low-power .gw-word-fragment,
     .gw-stage--mobile-low-power .gw-action-echo,
     .gw-stage--mobile-low-power .gw-heading-echo {
         filter: none !important;
         box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2) !important;
     }
+
+    body.gw-game-mobile-low-power .gw-break-char,
+    body.gw-game-mobile-low-power .gw-break-char--critical,
+    body.gw-game-mobile-low-power .gw-break-char--breaking,
+    body.gw-game-mobile-low-power .gw-break-char--blooming,
+    body.gw-game-mobile-low-power .gw-break-char--bloomed {
+        text-shadow: none !important;
+        transition: none !important;
+    }
+
+    body.gw-game-mobile-low-power .gw-break-char--breaking,
+    body.gw-game-mobile-low-power .gw-break-char--blooming,
+    body.gw-game-mobile-low-power .gw-break-char--bloomed {
+        animation: none !important;
+    }
+
+    body.gw-game-mobile-low-power .gw-image-breakable,
+    body.gw-game-mobile-low-power .gw-icon-breakable,
+    body.gw-game-mobile-low-power .gw-platform-support {
+        will-change: auto !important;
+        transition-duration: 90ms !important;
+    }
 }
 
 @media (max-width: 640px) {
-    .gw-apollo-start {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-        width: min(100% - 28px, 1120px);
-        min-height: 0;
-        text-align: left;
-    }
-
-    .gw-apollo-start__button {
-        width: 100%;
-    }
-
     .gw-demo-hero,
     .gw-demo-band,
     .gw-demo-split {

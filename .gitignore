@@ -7,7 +7,9 @@ node_modules/
 /vendor/
 *.log
 **/_tmp/
-**/_tmp_apollo/
+**/_generated/
+charabreak/scripts/
+.pronga/
 exports/
 **/_notes/
 *.wpress

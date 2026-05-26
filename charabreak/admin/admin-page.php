@@ -25,6 +25,8 @@ $world_map_show_in_hud = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_SHOW_IN_
 $world_map_show_after_clear = GW_Settings::get(GW_Settings::OPTION_WORLD_MAP_SHOW_AFTER_CLEAR);
 $logging_enabled = GW_Settings::get(GW_Settings::OPTION_LOGGING_ENABLED);
 $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
+$is_pro = GW_License::is_pro();
+$upgrade_url = GW_License::pro_upgrade_url();
 ?>
 
 <div class="wrap gaming-web-admin">
@@ -32,6 +34,20 @@ $debug = GW_Settings::get(GW_Settings::OPTION_DEBUG);
     <p class="gaming-web-admin__lead">
         <?php esc_html_e('ページを壊して遊べるゲーム体験を追加します。通常のHTMLやSEO、アクセシビリティを壊さず、ゲーム終了後は元のページに戻れます。', 'gaming-web'); ?>
     </p>
+
+    <div class="notice <?php echo $is_pro ? 'notice-success' : 'notice-info'; ?>">
+        <p>
+            <strong><?php echo esc_html($is_pro ? __('CharaBreak Pro is active / Proが有効です', 'gaming-web') : __('CharaBreak Free / 無料版', 'gaming-web')); ?></strong><br>
+            <?php if ($is_pro) : ?>
+                <?php esc_html_e('複数ステージ、ワールドマップ、敵キャラ台帳、ステージ別BGM、商品・アイテム収集条件を利用できます。', 'gaming-web'); ?>
+            <?php else : ?>
+                <?php esc_html_e('無料版ではゲーム化できるページは1つです。Proでは複数ページのワールドマップ、敵キャラ台帳、ステージ別BGM、商品・アイテム収集条件を開放できます。', 'gaming-web'); ?>
+                <?php if ($upgrade_url !== '') : ?>
+                    <a href="<?php echo esc_url($upgrade_url); ?>"><?php esc_html_e('Proにアップグレード', 'gaming-web'); ?></a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </p>
+    </div>
 
     <form method="post" action="options.php" class="gaming-web-admin__form">
         <?php settings_fields('gaming_web_settings'); ?>

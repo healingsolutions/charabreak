@@ -4,7 +4,7 @@ Tags: gamification, interactive web, engagement, elementor, game
 Requires at least: 6.0
 Tested up to: 6.9.4
 Requires PHP: 7.4
-Stable tag: 0.2.41
+Stable tag: 0.2.45
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,6 +44,14 @@ CharaBreak is built around the message "読む前に、壊せ。" Visitors can p
 * Set difficulty with simple levels.
 * Add stage clear rewards such as coupon codes, secret messages, or bonus URLs.
 * Enable or disable lightweight event logging.
+
+= Free And Pro =
+
+The Free plan lets a site owner make one selected page playable with the core CharaBreak experience.
+
+Pro unlocks multi-page adventures, the world map, custom enemy and boss assignment, enemy difficulty presets, stage-specific BGM, final-stage BGM, advanced objectives, and campaign-style rewards.
+
+Freemius handles license activation and upgrades. Do not install a second plugin folder for Pro; a valid Pro license unlocks the Pro features inside the same `charabreak` plugin.
 
 = Social Sharing / OG Image =
 
@@ -120,6 +128,38 @@ The MVP event logger stores gameplay events such as stage start, element hit, wo
 
 == Changelog ==
 
+= 0.2.45 =
+
+* Added explicit Free/Pro feature gates for the public package.
+* Limited Free plan gameplay to one enabled stage.
+* Locked world map, custom enemies, stage audio, and advanced objectives behind Pro.
+* Kept stage clear rewards available for the playable Free stage.
+* Removed development-only builder logs, generated Elementor JSON, and old demo import scripts from the distribution package.
+
+= 0.2.44 =
+
+* Restored a safer mobile text platform budget so phones still have enough letters to stand on in later sections.
+* Kept mobile attack hit detection limited to the active room cache to avoid returning to full-page scans.
+* Rebuilt text platform rectangles from live layout when the room cache refreshes, preventing stale mobile font/layout coordinates from making letters non-solid.
+
+= 0.2.43 =
+
+* Explicitly bumped frontend module cache-busting versions for the next mobile performance build.
+* Restricted mobile text and image hit checks to the active room cache instead of scanning the full page on every attack.
+* Reduced mobile target and text budgets again to lower late-stage memory pressure.
+* Further throttled mobile HUD, camera UI, enemy, projectile, gate, and route refreshes.
+* Disabled costly page-text shadows, text break animations, image `will-change`, and page-wide shake during mobile play.
+* Reduced mobile flower and temporary effect caps so long sessions do not accumulate visual load.
+
+= 0.2.42 =
+
+* Added a more aggressive mobile ultra-light mode for long pages and lower-page play.
+* Reduced mobile scan and wrapped-character budgets to lower memory use on phones.
+* Suppressed page-wide shake and nonessential particle effects on mobile.
+* Cached mobile text collision rectangles so scrolling and falling do not repeatedly measure every letter.
+* Suppressed duplicate scroll-sync work while the game camera scrolls the page.
+* Slowed nonessential mobile enemy, chest, projectile, gate, and route checks while keeping runner input responsive.
+
 = 0.2.41 =
 
 * Expanded charged attack hit areas on mobile so saved-up attacks break a visibly wider space.
@@ -154,6 +194,22 @@ The MVP event logger stores gameplay events such as stage start, element hit, wo
 * Improved stage clear UI and frontend playability.
 
 == Upgrade Notice ==
+
+= 0.2.45 =
+
+Public distribution build. Free sites can play one stage, while Pro unlocks multi-page maps, custom enemies, stage audio, and advanced objectives.
+
+= 0.2.44 =
+
+Recommended for mobile gameplay. This build restores reliable text platforms while preserving the active-room performance optimizations.
+
+= 0.2.43 =
+
+Recommended for mobile sites. This build further limits late-stage hit detection and GPU-heavy effects on phones.
+
+= 0.2.42 =
+
+Recommended for mobile-heavy sites. This release reduces mobile memory pressure and scroll-related jank during long-page gameplay.
 
 = 0.2.41 =
 

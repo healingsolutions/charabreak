@@ -495,7 +495,11 @@ class GW_Plugin
             return false;
         }
 
-        return get_post_meta($post->ID, '_gaming_web_mode', true) !== 'disabled';
+        if (get_post_meta($post->ID, '_gaming_web_mode', true) === 'disabled') {
+            return false;
+        }
+
+        return GW_License::can_use_stage((int) $post->ID);
     }
 
     private function frontend_config(): array
@@ -529,6 +533,11 @@ class GW_Plugin
             'debug' => GW_Settings::is_truthy(GW_Settings::OPTION_DEBUG),
             'locale' => determine_locale(),
             'messages' => array(),
+            'license' => array(
+                'plan' => GW_License::plan_slug(),
+                'isPro' => GW_License::is_pro(),
+                'stageLimit' => GW_License::stage_limit(),
+            ),
         );
     }
 
@@ -611,6 +620,14 @@ class GW_Plugin
 
     private function world_map_config(int $current_post_id): array
     {
+        if (!GW_License::is_pro()) {
+            return array(
+                'enabled' => false,
+                'plan' => 'free',
+                'stageLimit' => GW_License::stage_limit(),
+            );
+        }
+
         if (!GW_Settings::is_truthy(GW_Settings::OPTION_WORLD_MAP_ENABLED)) {
             return array('enabled' => false);
         }
@@ -703,6 +720,9 @@ class GW_Plugin
         }
 
         $stages = array_slice($stages, 0, 24);
+        if (!GW_License::is_pro()) {
+            $stages = array_slice($stages, 0, 1);
+        }
 
         foreach ($stages as $index => &$stage) {
             $stage['index'] = $index;
@@ -761,7 +781,7 @@ class GW_Plugin
 
     private function enemy_config_for_post(int $post_id): array
     {
-        if ($post_id <= 0) {
+        if ($post_id <= 0 || !GW_License::is_pro()) {
             return array('enabled' => false);
         }
 
@@ -854,6 +874,17 @@ class GW_Plugin
             return array();
         }
 
+        if (!GW_License::is_pro()) {
+            return array(
+                'stageType' => $this->stage_type_for_post($post_id),
+                'normalBgmUrl' => '',
+                'stageBgmUrl' => '',
+                'finalBgmUrl' => '',
+                'bossBgmUrl' => '',
+                'clearSoundUrl' => '',
+            );
+        }
+
         $stage_bgm_url = $this->attachment_url_meta($post_id, '_gaming_web_stage_bgm_id');
         $final_bgm_url = $this->attachment_url_from_id(absint(GW_Settings::get(GW_Settings::OPTION_AUDIO_FINAL_BGM_ID)));
         $normal_bgm_url = $this->attachment_url_meta($post_id, '_gaming_web_stage_normal_bgm_id');
@@ -894,6 +925,14 @@ class GW_Plugin
 
     private function objective_config_for_post(int $post_id): array
     {
+        if (!GW_License::is_pro()) {
+            return array(
+                'type' => 'chests',
+                'label' => __('宝箱', 'gaming-web'),
+                'requiredCount' => 3,
+            );
+        }
+
         $type = sanitize_key((string) get_post_meta($post_id, '_gaming_web_stage_objective_type', true));
         if (!in_array($type, array('chests', 'products'), true)) {
             $type = 'chests';

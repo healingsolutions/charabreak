@@ -1,4 +1,4 @@
-import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.41';
+import { isGameIgnoredElement } from './dom-scanner.js?v=0.2.45';
 
 const IMAGE_TYPES = new Set(['image', 'icon', 'platform', 'action']);
 const IMAGE_BREAK_STAGE = 5;
@@ -8,9 +8,11 @@ const IMAGE_SUPPORT_MIN_OVERLAP = 22;
 const IMAGE_SUPPORT_TOLERANCE = 18;
 
 export class ImageBreaker {
-    constructor() {
+    constructor(options = {}) {
         this.records = new Map();
         this.timers = new Set();
+        this.lowPower = Boolean(options.lowPower);
+        this.activeRecords = [];
         this.prepared = false;
     }
 
@@ -68,7 +70,26 @@ export class ImageBreaker {
         }
 
         this.records.clear();
+        this.activeRecords = [];
         this.prepared = false;
+    }
+
+    setLowPowerActiveRecords(items = []) {
+        if (!this.lowPower) {
+            return;
+        }
+
+        this.activeRecords = items
+            .map((item) => item?.record)
+            .filter((record) => record && record.element instanceof Element && record.element.isConnected);
+    }
+
+    candidateRecords() {
+        if (this.lowPower && this.activeRecords.length) {
+            return this.activeRecords;
+        }
+
+        return this.records.values();
     }
 
     hitTarget(target, options = {}) {
@@ -85,7 +106,7 @@ export class ImageBreaker {
         const centerY = rect.top + rect.height / 2;
         let best = null;
 
-        for (const record of this.records.values()) {
+        for (const record of this.candidateRecords()) {
             if (!canHit(record) || !record.element.isConnected) {
                 continue;
             }

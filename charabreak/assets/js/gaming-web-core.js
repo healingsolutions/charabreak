@@ -1,8 +1,8 @@
-import { scanGameTargets } from './dom-scanner.js?v=0.2.41';
-import { StageOverlay } from './stage-overlay.js?v=0.2.41';
-import { InteractionEngine } from './interaction-engine.js?v=0.2.41';
-import { TextBreaker } from './text-breaker.js?v=0.2.41';
-import { ImageBreaker } from './image-breaker.js?v=0.2.41';
+import { scanGameTargets } from './dom-scanner.js?v=0.2.45';
+import { StageOverlay } from './stage-overlay.js?v=0.2.45';
+import { InteractionEngine } from './interaction-engine.js?v=0.2.45';
+import { TextBreaker } from './text-breaker.js?v=0.2.45';
+import { ImageBreaker } from './image-breaker.js?v=0.2.45';
 
 const MOBILE_GAME_SCALE = 0.75;
 
@@ -39,10 +39,13 @@ export class GamingWebCore {
         this.audio?.play('start', { volume: 0.24 });
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const targets = scanGameTargets(document, { limit: mobileGameMode ? 130 : 320 });
-        this.textBreaker = new TextBreaker({ maxChars: mobileGameMode ? 1500 : 7200 });
+        const targets = scanGameTargets(document, { limit: mobileGameMode ? 110 : 320 });
+        this.textBreaker = new TextBreaker({
+            maxChars: mobileGameMode ? 1400 : 7200,
+            lowPower: mobileGameMode,
+        });
         this.textBreaker.prepare(targets);
-        this.imageBreaker = new ImageBreaker();
+        this.imageBreaker = new ImageBreaker({ lowPower: mobileGameMode });
         this.imageBreaker.prepare(targets);
 
         this.overlay = new StageOverlay({

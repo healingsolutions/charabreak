@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CharaBreak
  * Description: WordPressページを、文字や画像を足場にして遊べるインタラクティブなステージへ変えるプラグインです。
- * Version: 0.2.41
+ * Version: 0.2.45
  * Author: CharaBreak
  * Requires at least: 6.0
  * Requires PHP: 7.4
@@ -42,7 +42,6 @@ if (!function_exists('cha_fs')) {
                 'has_addons'          => false,
                 'has_paid_plans'      => true,
                 'is_org_compliant'    => true,
-                'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
                 'menu'                => array(
                     'support' => false,
                 ),
@@ -56,12 +55,13 @@ if (!function_exists('cha_fs')) {
     do_action('cha_fs_loaded');
 }
 
-define('GAMING_WEB_VERSION', '0.2.41');
+define('GAMING_WEB_VERSION', '0.2.45');
 define('GAMING_WEB_FILE', __FILE__);
 define('GAMING_WEB_DIR', plugin_dir_path(__FILE__));
 define('GAMING_WEB_URL', plugin_dir_url(__FILE__));
 
 require_once GAMING_WEB_DIR . 'includes/class-gw-settings.php';
+require_once GAMING_WEB_DIR . 'includes/class-gw-license.php';
 require_once GAMING_WEB_DIR . 'includes/class-gw-enemies.php';
 require_once GAMING_WEB_DIR . 'includes/class-gw-admin.php';
 require_once GAMING_WEB_DIR . 'includes/class-gw-logger.php';
